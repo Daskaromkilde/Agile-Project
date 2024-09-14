@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertest/avatar_select_page.dart';
-import 'quest_info_screen.dart'; // Import your QuestInfoScreen
 
 void main() {
   runApp(QuestApp());
 }
 
 class QuestApp extends StatelessWidget {
+  const QuestApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +17,7 @@ class QuestApp extends StatelessWidget {
         primaryColor: Colors.blueGrey[900],
         scaffoldBackgroundColor: Colors.blueGrey[900],
       ),
-      home: AvatarSelectPage(), // Set QuestInfoScreen as the home screen
+      home: AvatarSelectPage(), // Avatar selection is the first screen
     );
   }
 }

@@ -1,32 +1,52 @@
 import 'package:flutter/material.dart';
-import 'avatar_select_page.dart'; // Import the AvatarSelectPage
+
+class QuestTask {
+  String name;
+  bool isCompleted;
+  String progress;
+
+  QuestTask({required this.name, this.isCompleted = false, required this.progress});
+}
 
 class QuestInfoScreen extends StatefulWidget {
+  final String selectedAvatar;
+
+  const QuestInfoScreen({Key? key, required this.selectedAvatar}) : super(key: key);
+
   @override
   _QuestInfoScreenState createState() => _QuestInfoScreenState();
-  String selectedAvatar;
-
-  // Constructor to accept the selectedAvatar parameter
-  QuestInfoScreen({required this.selectedAvatar});
 }
 
 class _QuestInfoScreenState extends State<QuestInfoScreen> {
-  // Boolean values to track whether tasks are completed
-  bool _pushUpsDone = false;
-  bool _sitUpsDone = false;
-  bool _squatsDone = false;
-  bool _runDone = false;
+  List<QuestTask> tasks = [
+    QuestTask(name: 'Push-ups', progress: '[0/100]'),
+    QuestTask(name: 'Sit-ups', progress: '[0/100]'),
+    QuestTask(name: 'Squats', progress: '[0/100]'),
+    QuestTask(name: 'Run', progress: '[0/10KM]'),
+  ];
+
+  bool allTasksDone() {
+    return tasks.every((task) => task.isCompleted);
+  }
+
+  void updateTask(QuestTask task, bool? isCompleted) {
+    setState(() {
+      task.isCompleted = isCompleted ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
+          const SizedBox(height: 40), // Added space to move the quest info section down
+
           // Title section with background and icon
           Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-            decoration: BoxDecoration(
-              color: Colors.blue[800],
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 6, 38, 64),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(10),
                 bottomRight: Radius.circular(10),
@@ -34,102 +54,68 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Icon(Icons.info_outline, color: Colors.white, size: 28),
                 SizedBox(width: 10),
                 Text(
                   'QUEST INFO',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ],
             ),
           ),
 
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           // Subtitle section
-          Text(
-            'Daily Quest - Train to Evolve\nin Game and in Real Life',
+          const Text(
+            'Daily Quest - Train to Evolve',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              color: Colors.white,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
+          ),
+
+          const SizedBox(height: 30),
+
+          // Goals list section with checkboxes
+          Expanded(
+            child: ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                return QuestItem(
+                  task: tasks[index],
+                  onChanged: (value) => updateTask(tasks[index], value),
+                );
+              },
             ),
           ),
 
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
 
-          // Goals list section with checkboxes
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              QuestItem(
-                title: 'Push-ups',
-                progress: '[0/100]',
-                isChecked: _pushUpsDone,
-                onChanged: (value) {
-                  setState(() {
-                    _pushUpsDone = value!;
-                  });
-                },
+          // Conditionally display the button if all tasks are done
+          if (allTasksDone())
+            ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      title: Text('Congratulations!'),
+                      content: Text('You have earned your rewards!'),
+                    );
+                  },
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                textStyle: const TextStyle(fontSize: 18), // Making the button text bigger
               ),
-              QuestItem(
-                title: 'Sit-ups',
-                progress: '[0/100]',
-                isChecked: _sitUpsDone,
-                onChanged: (value) {
-                  setState(() {
-                    _sitUpsDone = value!;
-                  });
-                },
-              ),
-              QuestItem(
-                title: 'Squats',
-                progress: '[0/100]',
-                isChecked: _squatsDone,
-                onChanged: (value) {
-                  setState(() {
-                    _squatsDone = value!;
-                  });
-                },
-              ),
-              QuestItem(
-                title: 'Run',
-                progress: '[0/10KM]',
-                isChecked: _runDone,
-                onChanged: (value) {
-                  setState(() {
-                    _runDone = value!;
-                  });
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: Center(
-                      child: Image.asset(
-                        widget.selectedAvatar,
-                        height: 200,
-                        width: 200,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
+              child: const Text('Receive Rewards'),
+            ),
 
-          SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           // Caution text section
-          Text(
+          const Text(
             'CAUTION! - If the daily quest\nremains incomplete, penalties\nwill be given accordingly.',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -139,18 +125,11 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             ),
           ),
 
-          Spacer(),
+          const SizedBox(height: 30),
 
-          // Button to navigate to AvatarSelectPage
-          // ElevatedButton(
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => AvatarSelectPage()),
-          //     );
-          //   },
-          //   child: Text('Go to Avatar Page'),
-          // ),
+          // Timer icon at the bottom
+          const Icon(Icons.timer, color: Colors.white, size: 48),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -158,17 +137,10 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
 }
 
 class QuestItem extends StatelessWidget {
-  final String title;
-  final String progress;
-  final bool isChecked;
+  final QuestTask task;
   final Function(bool?)? onChanged;
 
-  const QuestItem({
-    required this.title,
-    required this.progress,
-    required this.isChecked,
-    required this.onChanged,
-  });
+  const QuestItem({Key? key, required this.task, required this.onChanged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -180,24 +152,18 @@ class QuestItem extends StatelessWidget {
           Row(
             children: [
               Checkbox(
-                value: isChecked,
+                value: task.isCompleted,
                 onChanged: onChanged,
               ),
               Text(
-                title,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
+                task.name,
+                style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
             ],
           ),
           Text(
-            progress,
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-            ),
+            task.progress,
+            style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ],
       ),

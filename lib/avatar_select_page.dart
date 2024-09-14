@@ -2,32 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:fluttertest/quest_info_screen.dart';
 
 class AvatarSelectPage extends StatefulWidget {
+  const AvatarSelectPage({super.key});
+
   @override
   _AvatarSelectPageState createState() => _AvatarSelectPageState();
 }
 
 class _AvatarSelectPageState extends State<AvatarSelectPage> {
-  // List of avatar image paths
   final List<String> _avatars = [
-    'lib/assets/mushu.png', // Replace with your actual image paths
-    'lib/assets/dragon.png',
     'lib/assets/egg.png',
-    'lib/assets/egg.png'
+    'lib/assets/mushu.png',
+    'lib/assets/dragon.png',
   ];
 
-  String selectedAvatar = '';
-
+  String selectedAvatar = 'lib/assets/egg.png';
   int _currentIndex = 0;
 
   void _nextAvatar() {
     setState(() {
       _currentIndex = (_currentIndex + 1) % _avatars.length;
+      selectedAvatar = _avatars[_currentIndex];
     });
   }
 
   void _previousAvatar() {
     setState(() {
       _currentIndex = (_currentIndex - 1 + _avatars.length) % _avatars.length;
+      selectedAvatar = _avatars[_currentIndex];
     });
   }
 
@@ -35,41 +36,34 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Your Avatar'),
+        title: const Text('Select Your Avatar'),
         backgroundColor: Colors.blueGrey[900],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Navigation buttons and character image
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_left, size: 32, color: Colors.white),
+                icon: const Icon(Icons.arrow_left, size: 32, color: Colors.white),
                 onPressed: _previousAvatar,
               ),
-              SizedBox(width: 20),
-              Expanded(
-                child: Center(
-                  child: Image.asset(
-                    _avatars[_currentIndex],
-                    height: 200,
-                    width: 200,
-                  ),
-                ),
+              const SizedBox(width: 20),
+              Image.asset(
+                _avatars[_currentIndex],
+                height: 200,
+                width: 200,
               ),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               IconButton(
-                icon: Icon(Icons.arrow_right, size: 32, color: Colors.white),
+                icon: const Icon(Icons.arrow_right, size: 32, color: Colors.white),
                 onPressed: _nextAvatar,
               ),
             ],
           ),
-          SizedBox(height: 20),
-
-          // Title and description
-          Text(
+          const SizedBox(height: 20),
+          const Text(
             'Choose Your Avatar',
             style: TextStyle(
               fontSize: 24,
@@ -77,36 +71,28 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 10),
-          Text(
-            'Select an avatar to represent you in the game. Customize it to match your style and preferences.',
+          const SizedBox(height: 10),
+          const Text(
+            'Select an avatar to represent you in the game.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white70,
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.white70),
           ),
-          SizedBox(height: 30),
-
-          // Button to confirm selection
+          const SizedBox(height: 30),
           ElevatedButton(
             onPressed: () {
-              // Navigate to the QuestInfoScreen
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        QuestInfoScreen(selectedAvatar: selectedAvatar)),
+                  builder: (context) => QuestInfoScreen(selectedAvatar: selectedAvatar),
+                ),
               );
-              selectedAvatar = _avatars[_currentIndex];
             },
-            child: Text('Confirm Selection'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Colors.blueGrey[800],
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              textStyle: TextStyle(fontSize: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             ),
+            child: const Text('Confirm Selection'),
           ),
         ],
       ),

@@ -4,6 +4,10 @@ import 'avatar_select_page.dart'; // Import the AvatarSelectPage
 class QuestInfoScreen extends StatefulWidget {
   @override
   _QuestInfoScreenState createState() => _QuestInfoScreenState();
+  String selectedAvatar;
+
+  // Constructor to accept the selectedAvatar parameter
+  QuestInfoScreen({required this.selectedAvatar});
 }
 
 class _QuestInfoScreenState extends State<QuestInfoScreen> {
@@ -104,6 +108,21 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                   });
                 },
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Center(
+                      child: Image.asset(
+                        widget.selectedAvatar,
+                        height: 200,
+                        width: 200,
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
 
@@ -123,15 +142,15 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
           Spacer(),
 
           // Button to navigate to AvatarSelectPage
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AvatarSelectPage()),
-              );
-            },
-            child: Text('Go to Avatar Page'),
-          ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => AvatarSelectPage()),
+          //     );
+          //   },
+          //   child: Text('Go to Avatar Page'),
+          // ),
         ],
       ),
     );

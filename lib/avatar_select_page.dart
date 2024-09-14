@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertest/quest_info_screen.dart';
 
 class AvatarSelectPage extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
     'lib/assets/egg.png',
     'lib/assets/egg.png'
   ];
+
+  String selectedAvatar = '';
 
   int _currentIndex = 0;
 
@@ -88,11 +91,19 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
           // Button to confirm selection
           ElevatedButton(
             onPressed: () {
-              // Handle avatar selection confirmation
+              // Navigate to the QuestInfoScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        QuestInfoScreen(selectedAvatar: selectedAvatar)),
+              );
+              selectedAvatar = _avatars[_currentIndex];
             },
             child: Text('Confirm Selection'),
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: Colors.blueGrey[800],
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blueGrey[800],
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               textStyle: TextStyle(fontSize: 16),
             ),

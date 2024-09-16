@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertest/quest_info_screen.dart';
+import 'quest_info_screen.dart';
 
 class AvatarSelectPage extends StatefulWidget {
   const AvatarSelectPage({super.key});
@@ -46,7 +46,8 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: const Icon(Icons.arrow_left, size: 32, color: Colors.white),
+                icon:
+                    const Icon(Icons.arrow_left, size: 32, color: Colors.white),
                 onPressed: _previousAvatar,
               ),
               const SizedBox(width: 20),
@@ -57,7 +58,8 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
               ),
               const SizedBox(width: 20),
               IconButton(
-                icon: const Icon(Icons.arrow_right, size: 32, color: Colors.white),
+                icon: const Icon(Icons.arrow_right,
+                    size: 32, color: Colors.white),
                 onPressed: _nextAvatar,
               ),
             ],
@@ -83,7 +85,8 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => QuestInfoScreen(selectedAvatar: selectedAvatar),
+                  builder: (context) =>
+                      QuestInfoScreen(selectedAvatar: selectedAvatar),
                 ),
               );
             },

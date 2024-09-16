@@ -5,13 +5,14 @@ class QuestTask {
   bool isCompleted;
   String progress;
 
-  QuestTask({required this.name, this.isCompleted = false, required this.progress});
+  QuestTask(
+      {required this.name, this.isCompleted = false, required this.progress});
 }
 
 class QuestInfoScreen extends StatefulWidget {
   final String selectedAvatar;
 
-  const QuestInfoScreen({Key? key, required this.selectedAvatar}) : super(key: key);
+  const QuestInfoScreen({super.key, required this.selectedAvatar});
 
   @override
   _QuestInfoScreenState createState() => _QuestInfoScreenState();
@@ -40,7 +41,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 40), // Added space to move the quest info section down
+          const SizedBox(
+              height: 40), // Added space to move the quest info section down
 
           // Title section with background and icon
           Container(
@@ -52,14 +54,17 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 bottomRight: Radius.circular(10),
               ),
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.info_outline, color: Colors.white, size: 28),
                 SizedBox(width: 10),
                 Text(
                   'QUEST INFO',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
               ],
             ),
@@ -71,7 +76,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
           const Text(
             'Daily Quest - Train to Evolve',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
           ),
 
           const SizedBox(height: 30),
@@ -106,8 +112,10 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                textStyle: const TextStyle(fontSize: 18), // Making the button text bigger
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                textStyle: const TextStyle(
+                    fontSize: 18), // Making the button text bigger
               ),
               child: const Text('Receive Rewards'),
             ),
@@ -140,7 +148,7 @@ class QuestItem extends StatelessWidget {
   final QuestTask task;
   final Function(bool?)? onChanged;
 
-  const QuestItem({Key? key, required this.task, required this.onChanged}) : super(key: key);
+  const QuestItem({super.key, required this.task, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,8 @@
+import 'package:first_app/avatar_select_page.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertest/avatar_select_page.dart';
 
 void main() {
-  runApp(QuestApp());
+  runApp(const QuestApp());
 }
 
 class QuestApp extends StatelessWidget {

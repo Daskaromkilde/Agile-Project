@@ -1,39 +1,85 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
-class QuestTask {
-  String name;
-  bool isCompleted;
-  String progress;
-
-  QuestTask(
-      {required this.name, this.isCompleted = false, required this.progress});
-}
+import 'quest_task.dart';
+import 'task_selection_screen.dart';
 
 class QuestInfoScreen extends StatefulWidget {
   final String selectedAvatar;
+  final List<QuestTask> tasks;
 
-  const QuestInfoScreen({super.key, required this.selectedAvatar});
+  const QuestInfoScreen(
+      {super.key, required this.selectedAvatar, required this.tasks});
 
   @override
   _QuestInfoScreenState createState() => _QuestInfoScreenState();
 }
 
 class _QuestInfoScreenState extends State<QuestInfoScreen> {
-  List<QuestTask> tasks = [
-    QuestTask(name: 'Push-ups', progress: '[0/100]'),
-    QuestTask(name: 'Sit-ups', progress: '[0/100]'),
-    QuestTask(name: 'Squats', progress: '[0/100]'),
-    QuestTask(name: 'Run', progress: '[0/10KM]'),
+  // List<QuestTask> tasks = [
+  //   //workout exercises
+  //   QuestTask(name: 'Push-ups', progress: '[0/100]'),
+  //   QuestTask(name: 'Sit-ups', progress: '[0/100]'),
+  //   QuestTask(name: 'Squats', progress: '[0/100]'),
+  //   QuestTask(name: 'Run', progress: '[0/7KM]'),
+  //   QuestTask(name: 'Sprint', progress: '[1KM]'),
+  //   QuestTask(name: 'Walk', progress: '[0/10KM]'),
+  //   QuestTask(name: 'Intervalls', progress: '[0/5KM]'),
+  //   QuestTask(name: 'Stretch', progress: '[0/30MIN]'),
+  //   QuestTask(name: 'Yoga', progress: '[0/30MIN]'),
+  // ];
+
+  List<QuestTask> todoTasks = [
+    //todo exercises
   ];
 
+  int taskAmount = 4;
+
   bool allTasksDone() {
-    return tasks.every((task) => task.isCompleted);
+    return todoTasks.every((task) => task.isCompleted);
   }
 
   void updateTask(QuestTask task, bool? isCompleted) {
     setState(() {
       task.isCompleted = isCompleted ?? false;
     });
+  }
+
+  void newTasks() {
+    setState(() {
+      createTasks();
+      for (var task in widget.tasks) {
+        task.isCompleted = false;
+        task.progress = '[0/100]';
+      }
+    });
+  }
+
+  void createTasks() {
+    if (widget.tasks.length < taskAmount) {
+      taskAmount = widget.tasks.length;
+    }
+    if (widget.tasks.isEmpty) {
+      return;
+    }
+    Random random = Random();
+    List<int> randomInts = [];
+    todoTasks.clear(); // Clear the list before adding new tasks
+    for (var i = 0; i < taskAmount; i++) {
+      int randomIndex = random.nextInt(widget.tasks.length);
+      while (randomInts.contains(randomIndex)) {
+        randomIndex = random.nextInt(widget.tasks.length);
+      }
+      randomInts.add(randomIndex);
+      todoTasks.add(widget.tasks[randomIndex]);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    createTasks(); // Generate initial tasks
   }
 
   @override
@@ -85,11 +131,11 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
           // Goals list section with checkboxes
           Expanded(
             child: ListView.builder(
-              itemCount: tasks.length,
+              itemCount: todoTasks.length,
               itemBuilder: (context, index) {
                 return QuestItem(
-                  task: tasks[index],
-                  onChanged: (value) => updateTask(tasks[index], value),
+                  task: todoTasks[index],
+                  onChanged: (value) => updateTask(todoTasks[index], value),
                 );
               },
             ),
@@ -101,6 +147,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
           if (allTasksDone())
             ElevatedButton(
               onPressed: () {
+                newTasks();
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {

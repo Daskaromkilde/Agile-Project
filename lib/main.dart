@@ -17,7 +17,7 @@ class QuestApp extends StatelessWidget {
         primaryColor: Colors.blueGrey[900],
         scaffoldBackgroundColor: Colors.blueGrey[900],
       ),
-      home: AvatarSelectPage(), // Avatar selection is the first screen
+      home: const AvatarSelectPage(), // Avatar selection is the first screen
     );
   }
 }

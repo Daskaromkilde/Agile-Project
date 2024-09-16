@@ -1,5 +1,7 @@
+import 'package:first_app/task_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
+import 'quest_task.dart';
 
 class AvatarSelectPage extends StatefulWidget {
   const AvatarSelectPage({super.key});
@@ -86,7 +88,7 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      QuestInfoScreen(selectedAvatar: selectedAvatar),
+                      task_selection_screen(selectedAvatar: selectedAvatar),
                 ),
               );
             },

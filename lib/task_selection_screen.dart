@@ -1,4 +1,3 @@
-import 'quest_task.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
 
@@ -55,7 +54,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Tasks You Cannot Do'),
+        title: const Text('Select Tasks You Cannot Do'),
       ),
       body: ListView.builder(
         itemCount: tasks.length,
@@ -74,7 +73,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: proceedToQuestInfoScreen,
-        child: Icon(Icons.arrow_forward),
+        child: const Icon(Icons.arrow_forward),
       ),
     );
   }

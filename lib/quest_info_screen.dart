@@ -2,8 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'quest_task.dart';
-import 'task_selection_screen.dart';
+class QuestTask {
+  String name;
+  bool isCompleted;
+  String progress;
+
+  QuestTask(
+      {required this.name, this.isCompleted = false, required this.progress});
+}
 
 class QuestInfoScreen extends StatefulWidget {
   final String selectedAvatar;

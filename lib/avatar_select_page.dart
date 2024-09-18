@@ -1,7 +1,5 @@
 import 'package:first_app/task_selection_screen.dart';
 import 'package:flutter/material.dart';
-import 'quest_info_screen.dart';
-import 'quest_task.dart';
 
 class AvatarSelectPage extends StatefulWidget {
   const AvatarSelectPage({super.key});

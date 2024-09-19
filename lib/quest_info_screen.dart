@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -40,6 +41,9 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     //todo exercises
   ];
 
+  Duration remainingTime = Duration.zero;
+  Timer? countdownTimer;
+
   int taskAmount = 4;
 
   bool allTasksDone() {
@@ -51,6 +55,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
       task.isCompleted = isCompleted ?? false;
     });
   }
+
+
 
   void newTasks() {
     setState(() {
@@ -82,9 +88,33 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     }
   }
 
+// Calculates the remaining time to midnight from the inital time on app startup
+
+  Duration timeUntilMidnight() {
+    final now = DateTime.now();
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    return tomorrow.difference(now);
+  }
+
+  void startCountdown() {
+  countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    setState(() {
+      remainingTime = timeUntilMidnight();
+
+      if (remainingTime.isNegative || remainingTime == Duration.zero) {
+        countdownTimer?.cancel();
+       
+      }
+    });
+  });
+  }
+
+
+
   @override
   void initState() {
     super.initState();
+    startCountdown(); // Start the 24 hour daily task countdown
     createTasks(); // Generate initial tasks
   }
 
@@ -133,6 +163,12 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
           ),
 
           const SizedBox(height: 30),
+
+          // Countdown timer display
+          Text(
+            'Time Until Midnight: ${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
+            style: const TextStyle(fontSize: 18, color: Colors.white),
+          ), 
 
           // Goals list section with checkboxes
           Expanded(

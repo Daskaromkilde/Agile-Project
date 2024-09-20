@@ -135,19 +135,21 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 bottomRight: Radius.circular(10),
               ),
             ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.info_outline, color: Colors.white, size: 28),
-                SizedBox(width: 10),
-                Text(
-                  'QUEST INFO',
-                  style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
+            child: const Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.info_outline, color: Colors.white, size: 28),
+                  SizedBox(width: 10),
+                  Text(
+                    'QUEST INFO',
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -160,8 +162,43 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             style: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
           ),
-
-          const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AvatarViewPage(
+                          selectedAvatar: widget.selectedAvatar,
+                          avatarName: widget.avatarName,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color.fromARGB(
+                            255, 1, 8, 14), // Outline color
+                        width: 3.0, // Outline width
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 35,
+                      backgroundImage: AssetImage(widget.selectedAvatar),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 0),
 
           // Goals list section with checkboxes
           Expanded(
@@ -173,37 +210,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                   onChanged: (value) => updateTask(todoTasks[index], value),
                 );
               },
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AvatarViewPage(
-                          selectedAvatar: widget.selectedAvatar,
-                          avatarName: widget.avatarName)),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueGrey[800], // Background color
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                'View Avatar',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
             ),
           ),
 

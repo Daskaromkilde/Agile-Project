@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'quest_info_screen.dart';
 
 class AvatarViewPage extends StatefulWidget {
   final String selectedAvatar;

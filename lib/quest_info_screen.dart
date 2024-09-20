@@ -156,17 +156,23 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
           const SizedBox(height: 20),
 
           // Subtitle section
-          const Text(
-            'Daily Quest - Train to Evolve',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
-          ),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment
+                  .spaceBetween, // Align text and button on opposite ends
               children: [
+                // Title and avatar section (centered)
+                const Padding(
+                  padding: EdgeInsets.only(left: 80),
+                  child: Text('Daily Quest - Train to Evolve',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                      )),
+                ),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -194,7 +200,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                       backgroundColor: Colors.transparent,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

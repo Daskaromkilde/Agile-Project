@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'avatar_view_page.dart';
-
 import 'package:flutter/material.dart';
 
 class QuestTask {
@@ -9,8 +8,11 @@ class QuestTask {
   bool isCompleted;
   String progress;
 
-  QuestTask(
-      {required this.name, this.isCompleted = false, required this.progress});
+  QuestTask({
+    required this.name,
+    this.isCompleted = false,
+    required this.progress,
+  });
 }
 
 class QuestInfoScreen extends StatefulWidget {
@@ -18,34 +20,19 @@ class QuestInfoScreen extends StatefulWidget {
   final String avatarName;
   final List<QuestTask> tasks;
 
-  const QuestInfoScreen(
-      {super.key,
-      required this.selectedAvatar,
-      required this.tasks,
-      required this.avatarName});
+  const QuestInfoScreen({
+    super.key,
+    required this.selectedAvatar,
+    required this.tasks,
+    required this.avatarName,
+  });
 
   @override
   _QuestInfoScreenState createState() => _QuestInfoScreenState();
 }
 
 class _QuestInfoScreenState extends State<QuestInfoScreen> {
-  // List<QuestTask> tasks = [
-  //   //workout exercises
-  //   QuestTask(name: 'Push-ups', progress: '[0/100]'),
-  //   QuestTask(name: 'Sit-ups', progress: '[0/100]'),
-  //   QuestTask(name: 'Squats', progress: '[0/100]'),
-  //   QuestTask(name: 'Run', progress: '[0/7KM]'),
-  //   QuestTask(name: 'Sprint', progress: '[1KM]'),
-  //   QuestTask(name: 'Walk', progress: '[0/10KM]'),
-  //   QuestTask(name: 'Intervalls', progress: '[0/5KM]'),
-  //   QuestTask(name: 'Stretch', progress: '[0/30MIN]'),
-  //   QuestTask(name: 'Yoga', progress: '[0/30MIN]'),
-  // ];
-
-  List<QuestTask> todoTasks = [
-    //todo exercises
-  ];
-
+  List<QuestTask> todoTasks = [];
   Duration remainingTime = Duration.zero;
   Timer? countdownTimer;
 
@@ -91,7 +78,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     }
   }
 
-// Calculates the remaining time to midnight from the inital time on app startup
+  // Calculates the remaining time to midnight
   Duration timeUntilMidnight() {
     final now = DateTime.now();
     final tomorrow = DateTime(now.year, now.month, now.day + 1);
@@ -102,7 +89,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         remainingTime = timeUntilMidnight();
-
         if (remainingTime.isNegative || remainingTime == Duration.zero) {
           countdownTimer?.cancel();
         }
@@ -113,166 +99,174 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   @override
   void initState() {
     super.initState();
-    startCountdown(); // Start the 24 hour daily task countdown
+    startCountdown(); // Start the 24-hour daily task countdown
     createTasks(); // Generate initial tasks
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          const SizedBox(
-              height: 40), // Added space to move the quest info section down
+          Column(
+            children: [
+              const SizedBox(height: 40), // Added space to move the quest info section down
 
-          // Title section with background and icon
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 6, 38, 64),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
+              // Title section with background and icon
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 6, 38, 64),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.white, size: 30),
+                        SizedBox(width: 10),
+                        Text(
+                          'QUEST INFO',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Daily Quest - Train to Evolve',
+                      style: TextStyle(
+                        fontSize: 16, // Smaller font size
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            child: const Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+
+              const SizedBox(height: 20),
+
+              // "Goals" heading in green
+              const Text(
+                'Goals',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // Goals list section with checkboxes
+              Expanded(
+                child: ListView.builder(
+                  itemCount: todoTasks.length,
+                  itemBuilder: (context, index) {
+                    return QuestItem(
+                      task: todoTasks[index],
+                      onChanged: (value) => updateTask(todoTasks[index], value),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // Conditionally display the button if all tasks are done
+              if (allTasksDone())
+                ElevatedButton(
+                  onPressed: () {
+                    newTasks();
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          title: Text('Congratulations!'),
+                          content: Text('You have earned your rewards!'),
+                        );
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                    textStyle: const TextStyle(fontSize: 18), // Making the button text bigger
+                  ),
+                  child: const Text('Receive Rewards'),
+                ),
+
+              const SizedBox(height: 20),
+
+              // Caution text section
+              const Text(
+                'CAUTION! - If the daily quest\nremains incomplete, penalties\nwill be given accordingly.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.redAccent,
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // Timer row at the bottom
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.info_outline, color: Colors.white, size: 28),
-                  SizedBox(width: 10),
+                  const Icon(Icons.timer, color: Colors.white, size: 28),
+                  const SizedBox(width: 10), // Space between timer and countdown
                   Text(
-                    'QUEST INFO',
-                    style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                    '${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ],
               ),
-            ),
+              const SizedBox(height: 20),
+            ],
           ),
 
-          const SizedBox(height: 20),
-
-          // Subtitle section
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .spaceBetween, // Align text and button on opposite ends
-              children: [
-                // Title and avatar section (centered)
-                const Padding(
-                  padding: EdgeInsets.only(left: 80),
-                  child: Text('Daily Quest - Train to Evolve',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      )),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AvatarViewPage(
-                          selectedAvatar: widget.selectedAvatar,
-                          avatarName: widget.avatarName,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color.fromARGB(
-                            255, 1, 8, 14), // Outline color
-                        width: 3.0, // Outline width
-                      ),
-                    ),
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundImage: AssetImage(widget.selectedAvatar),
-                      backgroundColor: Colors.transparent,
+          // Avatar positioned in the top-right corner
+          Positioned(
+            top: 170,
+            right: 10,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AvatarViewPage(
+                      selectedAvatar: widget.selectedAvatar,
+                      avatarName: widget.avatarName,
                     ),
                   ),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 1, 8, 14), // Outline color
+                    width: 3.0, // Outline width
+                  ),
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 0),
-
-          // Goals list section with checkboxes
-          Expanded(
-            child: ListView.builder(
-              itemCount: todoTasks.length,
-              itemBuilder: (context, index) {
-                return QuestItem(
-                  task: todoTasks[index],
-                  onChanged: (value) => updateTask(todoTasks[index], value),
-                );
-              },
-            ),
-          ),
-
-          const SizedBox(height: 30),
-
-          // Conditionally display the button if all tasks are done
-          if (allTasksDone())
-            ElevatedButton(
-              onPressed: () {
-                newTasks();
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const AlertDialog(
-                      title: Text('Congratulations!'),
-                      content: Text('You have earned your rewards!'),
-                    );
-                  },
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                textStyle: const TextStyle(
-                    fontSize: 18), // Making the button text bigger
+                child: CircleAvatar(
+                  radius: 35,
+                  backgroundImage: AssetImage(widget.selectedAvatar),
+                  backgroundColor: Colors.transparent,
+                ),
               ),
-              child: const Text('Receive Rewards'),
-            ),
-
-          const SizedBox(height: 20),
-
-          // Caution text section
-          const Text(
-            'CAUTION! - If the daily quest\nremains incomplete, penalties\nwill be given accordingly.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.redAccent,
             ),
           ),
-
-          const SizedBox(height: 30),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.timer, color: Colors.white, size: 48),
-              const SizedBox(height: 20), // Timer icon
-
-              Text(
-                'Time Until Midnight: ${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
-                style: const TextStyle(fontSize: 18, color: Colors.white),
-              ),
-              // const Icon(Icons.timer, color: Colors.white, size: 48),
-            ],
-          )
         ],
       ),
     );

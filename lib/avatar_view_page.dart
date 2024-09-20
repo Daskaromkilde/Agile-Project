@@ -102,4 +102,85 @@ class _AvatarViewPage extends State<AvatarViewPage> {
       ),
     );
   }
+
+  // Widget to create a progress bar for each stat
+  Widget statProgressBar(String statName, Stat stat) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Stat Name and Value
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                statName,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                '${stat.currentValue} / ${stat.maxValue}', // Display current and max value
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+
+          // Progress bar (using LinearProgressIndicator)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: LinearProgressIndicator(
+              value: stat.currentValue /
+                  stat.maxValue, // Calculate the progress (between 0.0 and 1.0)
+              minHeight: 15, // Height of the progress bar
+              backgroundColor: Colors.grey[800], // Background color of the bar
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                  Color.fromARGB(255, 15, 191, 255)), // Progress color
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Function to simulate leveling up, increasing max values
+  void levelUp() {
+    setState(() {
+      // Increase the max values of stats when leveling up
+      xp.increaseMaxValue(100);
+      strength.increaseMaxValue(20);
+      intelligence.increaseMaxValue(20);
+      stamina.increaseMaxValue(20);
+      hp.increaseMaxValue(50); // HP gets a bigger boost
+    });
+  }
+
+  // Function to apply a reward to certain stats
+  void applyReward(Map<String, int> rewards) {
+    setState(() {
+      // Map the stat names to the corresponding Stat objects
+      final Map<String, Stat> statMap = {
+        'xp': xp,
+        'strength': strength,
+        'intelligence': intelligence,
+        'stamina': stamina,
+        'hp': hp,
+      };
+
+      // Iterate through the rewards and apply them to the correct stat
+      rewards.forEach((statName, rewardValue) {
+        if (statMap.containsKey(statName)) {
+          statMap[statName]!.increase(rewardValue); // Apply the increase
+        }
+      });
+    });
+  }
 }

@@ -9,6 +9,7 @@ class AvatarSelectPage extends StatefulWidget {
 }
 
 class _AvatarSelectPageState extends State<AvatarSelectPage> {
+  final TextEditingController _nameController = TextEditingController();
   final List<String> _avatars = [
     'lib/assets/egg.png',
     'lib/assets/mushu.png',
@@ -79,14 +80,25 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16, color: Colors.white70),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30.0),
+            child: TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Enter your avatar name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
           const SizedBox(height: 30),
           ElevatedButton(
             onPressed: () {
+              String enteredName = _nameController.text;
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      task_selection_screen(selectedAvatar: selectedAvatar),
+                  builder: (context) => task_selection_screen(
+                      selectedAvatar: selectedAvatar, avatarName: enteredName),
                 ),
               );
             },

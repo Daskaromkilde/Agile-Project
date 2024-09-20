@@ -3,8 +3,10 @@ import 'quest_info_screen.dart';
 
 class task_selection_screen extends StatefulWidget {
   final String selectedAvatar;
+  final String avatarName;
 
-  const task_selection_screen({super.key, required this.selectedAvatar});
+  const task_selection_screen(
+      {super.key, required this.selectedAvatar, required this.avatarName});
   @override
   // ignore: library_private_types_in_public_api
   _TaskSelectionScreenState createState() => _TaskSelectionScreenState();
@@ -45,6 +47,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
         builder: (context) => QuestInfoScreen(
           selectedAvatar: widget.selectedAvatar,
           tasks: tasks,
+          avatarName: widget.avatarName,
         ),
       ),
     );

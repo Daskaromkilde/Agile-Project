@@ -15,10 +15,14 @@ class QuestTask {
 
 class QuestInfoScreen extends StatefulWidget {
   final String selectedAvatar;
+  final String avatarName;
   final List<QuestTask> tasks;
 
   const QuestInfoScreen(
-      {super.key, required this.selectedAvatar, required this.tasks});
+      {super.key,
+      required this.selectedAvatar,
+      required this.tasks,
+      required this.avatarName});
 
   @override
   _QuestInfoScreenState createState() => _QuestInfoScreenState();
@@ -180,7 +184,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => AvatarViewPage(
-                          selectedAvatar: widget.selectedAvatar)),
+                          selectedAvatar: widget.selectedAvatar,
+                          avatarName: widget.avatarName)),
                 );
               },
               style: ElevatedButton.styleFrom(

@@ -3,8 +3,10 @@ import 'quest_info_screen.dart';
 
 class AvatarViewPage extends StatefulWidget {
   final String selectedAvatar;
+  final String avatarName;
 
-  const AvatarViewPage({super.key, required this.selectedAvatar});
+  const AvatarViewPage(
+      {super.key, required this.selectedAvatar, required this.avatarName});
 
   @override
   _AvatarViewPage createState() => _AvatarViewPage();
@@ -28,9 +30,9 @@ class _AvatarViewPage extends State<AvatarViewPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Text(
-              'NAME',
-              style: TextStyle(
+            Text(
+              widget.avatarName,
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.white, // Changed to black for better visibility

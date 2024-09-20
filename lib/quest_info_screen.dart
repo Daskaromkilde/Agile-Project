@@ -110,11 +110,14 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
         children: [
           Column(
             children: [
-              const SizedBox(height: 40), // Added space to move the quest info section down
+              const SizedBox(
+                  height:
+                      40), // Added space to move the quest info section down
 
               // Title section with background and icon
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 6, 38, 64),
                   borderRadius: BorderRadius.only(
@@ -122,9 +125,9 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                     bottomRight: Radius.circular(10),
                   ),
                 ),
-                child: Column(
+                child: const Column(
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.info_outline, color: Colors.white, size: 30),
@@ -139,8 +142,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
+                    SizedBox(height: 10),
+                    Text(
                       'Daily Quest - Train to Evolve',
                       style: TextStyle(
                         fontSize: 16, // Smaller font size
@@ -198,8 +201,10 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                    textStyle: const TextStyle(fontSize: 18), // Making the button text bigger
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 20),
+                    textStyle: const TextStyle(
+                        fontSize: 18), // Making the button text bigger
                   ),
                   child: const Text('Receive Rewards'),
                 ),
@@ -224,7 +229,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.timer, color: Colors.white, size: 28),
-                  const SizedBox(width: 10), // Space between timer and countdown
+                  const SizedBox(
+                      width: 10), // Space between timer and countdown
                   Text(
                     '${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
                     style: const TextStyle(fontSize: 18, color: Colors.white),

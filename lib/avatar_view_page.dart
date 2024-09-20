@@ -148,7 +148,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
               value: stat.currentValue / stat.maxValue, // Calculate the progress (between 0.0 and 1.0)
               minHeight: 15, // Height of the progress bar
               backgroundColor: Colors.grey[800], // Background color of the bar
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.green), // Progress color
+              valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 15, 191, 255)), // Progress color
             ),
           ),
         ],

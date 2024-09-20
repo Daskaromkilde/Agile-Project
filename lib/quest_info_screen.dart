@@ -89,7 +89,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   }
 
 // Calculates the remaining time to midnight from the inital time on app startup
-
   Duration timeUntilMidnight() {
     final now = DateTime.now();
     final tomorrow = DateTime(now.year, now.month, now.day + 1);
@@ -164,11 +163,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
 
           const SizedBox(height: 30),
 
-          // Countdown timer display
-          Text(
-            'Time Until Midnight: ${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
-            style: const TextStyle(fontSize: 18, color: Colors.white),
-          ), 
 
           // Goals list section with checkboxes
           Expanded(
@@ -224,9 +218,26 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
 
           const SizedBox(height: 30),
 
-          // Timer icon at the bottom
-          const Icon(Icons.timer, color: Colors.white, size: 48),
-          const SizedBox(height: 20),
+
+           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.timer, color: Colors.white, size: 48),
+              const SizedBox(height: 20), // Timer icon
+              
+              Text(
+                'Time Until Midnight: ${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+              ),
+             // const Icon(Icons.timer, color: Colors.white, size: 48),
+            
+            
+          ],)
+
+
+        
+
+
         ],
       ),
     );

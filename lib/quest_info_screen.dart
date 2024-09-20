@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'avatar_view_page.dart';
 
 import 'package:flutter/material.dart';
 
@@ -56,8 +57,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     });
   }
 
-
-
   void newTasks() {
     setState(() {
       createTasks();
@@ -96,19 +95,16 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   }
 
   void startCountdown() {
-  countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-    setState(() {
-      remainingTime = timeUntilMidnight();
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        remainingTime = timeUntilMidnight();
 
-      if (remainingTime.isNegative || remainingTime == Duration.zero) {
-        countdownTimer?.cancel();
-       
-      }
+        if (remainingTime.isNegative || remainingTime == Duration.zero) {
+          countdownTimer?.cancel();
+        }
+      });
     });
-  });
   }
-
-
 
   @override
   void initState() {
@@ -163,7 +159,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
 
           const SizedBox(height: 30),
 
-
           // Goals list section with checkboxes
           Expanded(
             child: ListView.builder(
@@ -174,6 +169,36 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                   onChanged: (value) => updateTask(todoTasks[index], value),
                 );
               },
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AvatarViewPage(
+                          selectedAvatar: widget.selectedAvatar)),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueGrey[800], // Background color
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'View Avatar',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
 
@@ -218,26 +243,19 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
 
           const SizedBox(height: 30),
 
-
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(Icons.timer, color: Colors.white, size: 48),
               const SizedBox(height: 20), // Timer icon
-              
+
               Text(
                 'Time Until Midnight: ${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
-              style: const TextStyle(fontSize: 18, color: Colors.white),
+                style: const TextStyle(fontSize: 18, color: Colors.white),
               ),
-             // const Icon(Icons.timer, color: Colors.white, size: 48),
-            
-            
-          ],)
-
-
-        
-
-
+              // const Icon(Icons.timer, color: Colors.white, size: 48),
+            ],
+          )
         ],
       ),
     );

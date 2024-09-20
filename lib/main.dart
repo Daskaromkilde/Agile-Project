@@ -1,7 +1,11 @@
 import 'package:first_app/avatar_select_page.dart';
+import 'package:first_app/notifications_file.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // säkring, vid start av appen medans notif försöker init kan bli bugg
+  await NotificationsFile.init();
+  await NotificationsFile.reqPerm();
   runApp(const QuestApp());
 }
 

@@ -122,9 +122,9 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                     bottomRight: Radius.circular(10),
                   ),
                 ),
-                child: Column(
+                child: const Column(
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.info_outline, color: Colors.white, size: 30),
@@ -139,8 +139,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
+                    SizedBox(height: 10),
+                    Text(
                       'Daily Quest - Train to Evolve',
                       style: TextStyle(
                         fontSize: 16, // Smaller font size
@@ -218,7 +218,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
               ),
 
               const SizedBox(height: 30),
-
+                   
               // Timer row at the bottom
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

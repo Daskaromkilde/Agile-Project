@@ -24,5 +24,6 @@ flutter:
     - lib/assets/mushu.png
     - lib/assets/dragon.png
     - lib/assets/background.png 
+    - lib/assets/aura.png
 
 

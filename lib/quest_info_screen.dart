@@ -126,11 +126,14 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
           // Your content
           Column(
             children: [
-              const SizedBox(height: 40), // Added space to move the quest info section down
+              const SizedBox(
+                  height:
+                      40), // Added space to move the quest info section down
 
               // Title section with background and icon
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 decoration: const BoxDecoration(
                 color: Color.fromARGB(128, 6, 38, 64),  // This is 50% opacity (alpha value = 128),
                   borderRadius: BorderRadius.only(
@@ -214,8 +217,10 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                    textStyle: const TextStyle(fontSize: 18), // Making the button text bigger
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 20),
+                    textStyle: const TextStyle(
+                        fontSize: 18), // Making the button text bigger
                   ),
                   child: const Text('Receive Rewards'),
                 ),
@@ -234,13 +239,14 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
               ),
 
               const SizedBox(height: 30),
-                   
+
               // Timer row at the bottom
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.timer, color: Colors.white, size: 28),
-                  const SizedBox(width: 10), // Space between timer and countdown
+                  const SizedBox(
+                      width: 10), // Space between timer and countdown
                   Text(
                     '${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
                     style: const TextStyle(fontSize: 18, color: Colors.white),

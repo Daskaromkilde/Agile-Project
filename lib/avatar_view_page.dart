@@ -1,23 +1,6 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-
-// Class to represent each Stat with current and maximum value
-class Stat {
-  int currentValue;
-  int maxValue;
-
-  Stat({required this.currentValue, required this.maxValue});
-
-  // Increases the current value of the stat, but not beyond the max value
-  void increase(int amount) {
-    currentValue = (currentValue + amount).clamp(0, maxValue);
-  }
-
-  // Increases the max value (for leveling up) and adjusts the current value accordingly
-  void increaseMaxValue(int amount) {
-    maxValue += amount;
-    currentValue = maxValue; // Optional: Heal or fully restore stat on level up
-  }
-}
 
 class AvatarViewPage extends StatefulWidget {
   final String selectedAvatar;
@@ -30,26 +13,34 @@ class AvatarViewPage extends StatefulWidget {
   _AvatarViewPage createState() => _AvatarViewPage();
 }
 
-class _AvatarViewPage extends State<AvatarViewPage> {
-  // Stats are represented as instances of Stat class
-  late Stat xp;
-  late Stat strength;
-  late Stat intelligence;
-  late Stat stamina;
-  late Stat hp;
+class _AvatarLevel {
+  int level = 0;
+  int experience = 0;
+  int experienceToNextLevel = 100;
 
-  @override
-  void initState() {
-    super.initState();
-
-    // Initialize stats in initState to ensure they're properly set up
-    xp = Stat(currentValue: 150, maxValue: 500);
-    strength = Stat(currentValue: 70, maxValue: 100);
-    intelligence = Stat(currentValue: 80, maxValue: 100);
-    stamina = Stat(currentValue: 90, maxValue: 100);
-    hp = Stat(currentValue: 100, maxValue: 200);
+  int getLevel() {
+    return level;
   }
 
+  _AvatarLevel(this.level, this.experience);
+
+  void increaseLevel() {
+    experience = 0;
+    level++;
+    Random random = Random();
+    int nextRandom = random.nextInt(level); // exponential growth
+    experienceToNextLevel = level * 2 ^ nextRandom;
+  }
+
+  void increaseExperience(int exp) {
+    experience += exp;
+    if (experience >= experienceToNextLevel) {
+      increaseLevel();
+    }
+  }
+}
+
+class _AvatarViewPage extends State<AvatarViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,18 +57,14 @@ class _AvatarViewPage extends State<AvatarViewPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Avatar Name
             Text(
               widget.avatarName,
               style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.white, // Changed to black for better visibility
               ),
             ),
-            const SizedBox(height: 20),
-
-            // Avatar Image
             Center(
               child: Image.asset(
                 widget.selectedAvatar,
@@ -85,25 +72,31 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                 width: 200,
               ),
             ),
-            const SizedBox(height: 30),
-
-            // Stats Section
-            const Text(
-              'Avatar Stats',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Level : ',
+                    style: TextStyle(
+                      fontSize: 21,
+                      color: Colors
+                          .white, // Changed to black for better visibility
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: LinearProgressIndicator(
+                      value: 0.7, // Set the progress value (0.0 to 1.0)
+                      backgroundColor: Colors.grey[300],
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(Colors.blue),
+                      minHeight: 15, // Set the height of the progress bar
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-
-            // Progress Bars for Stats (XP, Strength, etc.)
-            statProgressBar('XP', xp),
-            statProgressBar('Strength', strength),
-            statProgressBar('Intelligence', intelligence),
-            statProgressBar('Stamina', stamina),
-            statProgressBar('HP', hp),
           ],
         ),
       ),
@@ -145,10 +138,12 @@ class _AvatarViewPage extends State<AvatarViewPage> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
-              value: stat.currentValue / stat.maxValue, // Calculate the progress (between 0.0 and 1.0)
+              value: stat.currentValue /
+                  stat.maxValue, // Calculate the progress (between 0.0 and 1.0)
               minHeight: 15, // Height of the progress bar
               backgroundColor: Colors.grey[800], // Background color of the bar
-              valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 15, 191, 255)), // Progress color
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                  Color.fromARGB(255, 15, 191, 255)), // Progress color
             ),
           ),
         ],

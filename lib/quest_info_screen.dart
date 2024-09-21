@@ -108,6 +108,22 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     return Scaffold(
       body: Stack(
         children: [
+          // Background Image
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/assets/background.png'),  // Your background image
+                fit: BoxFit.cover,  // Covers the whole screen
+              ),
+            ),
+          ),
+
+          // Semi-Transparent Background for the entire screen
+          Container(
+            color: Colors.black.withOpacity(0.3),  // Covers the whole screen with 50% opacity
+          ),
+
+          // Your content
           Column(
             children: [
               const SizedBox(height: 40), // Added space to move the quest info section down
@@ -116,11 +132,11 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 6, 38, 64),
+                color: Color.fromARGB(128, 6, 38, 64),  // This is 50% opacity (alpha value = 128),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10),
-                  ),
+                  ), 
                 ),
                 child: const Column(
                   children: [
@@ -152,7 +168,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 45),
 
               // "Goals" heading in green
               const Text(
@@ -161,7 +177,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green,
+                  color: Color.fromRGBO(57, 233, 63, 1),
                 ),
               ),
 

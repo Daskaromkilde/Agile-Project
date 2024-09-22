@@ -1,5 +1,5 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'battle_arena.dart'; // Import the BattleArena screen
 
 class Stat {
   int currentValue;
@@ -89,7 +89,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Avatar Image (Magic Circle Removed)
+                  // Avatar Image
                   Center(
                     child: Image.asset(
                       widget.selectedAvatar,  // Avatar image
@@ -109,7 +109,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                   ),
                   const SizedBox(height: 20),
 
-                  // GridView for Stats (Wrapped in a Column with shrinkWrap)
+                  // GridView for Stats
                   GridView.count(
                     crossAxisCount: 2,
                     childAspectRatio: 1.3,
@@ -125,7 +125,30 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                       statCard('HP', hp, Colors.greenAccent),
                     ],
                   ),
-                  const SizedBox(height: 20), // Padding at the bottom if necessary
+                  const SizedBox(height: 20),
+
+                  // "All tasks complete" Battle Button
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const BattleArena()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 2, 11, 41),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 15,
+                        ),
+                      ),
+                      child: const Text(
+                        'All tasks complete, you may challenge the boss',
+                        style: TextStyle(fontSize: 23, color: Color.fromARGB(255, 21, 202, 27)),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

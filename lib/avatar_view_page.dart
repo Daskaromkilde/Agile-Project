@@ -1,5 +1,12 @@
 import 'package:first_app/battle_arena.dart';
 import 'package:flutter/material.dart';
+import 'package:flame/game.dart';
+import 'necromancer_game.dart'; // Import avatars from other game files
+import 'fire_warrior_game.dart';
+import 'wind_warrior_game.dart';
+import 'female_knight_game.dart';
+import 'blue_witch_game.dart';
+import 'task_selection_screen.dart';
 
 class Stat {
   int currentValue;
@@ -20,11 +27,13 @@ class Stat {
 class AvatarViewPage extends StatefulWidget {
   final String selectedAvatar;
   final String avatarName;
+  final GameWidget game;
 
   const AvatarViewPage({
     super.key,
     required this.selectedAvatar,
     required this.avatarName,
+    required this.game,
   });
 
   @override
@@ -49,19 +58,10 @@ class _AvatarViewPage extends State<AvatarViewPage> {
   }
 
   // Method to display the correct avatar (either animated or static)
-  Widget _getAvatarWidget() {
-    return Center(
-      child: Image.asset(
-        widget.selectedAvatar,
-        height: 220,
-        width: 220,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
 
   // Function to create a circular interactive stat
-  Widget statCard(String statName, Stat stat, Color color, IconData icon, VoidCallback onTap) {
+  Widget statCard(String statName, Stat stat, Color color, IconData icon,
+      VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap, // Functionality to open the stat detail
       child: Column(
@@ -156,8 +156,12 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                 Positioned.fill(
                   child: Column(
                     children: [
-                      // Avatar image centered on the screen
-                      _getAvatarWidget(),
+                      // Wrap GameWidget in a Container with constraints
+                      Container(
+                        width: 300, // Set a specific width
+                        height: 300, // Set a specific height
+                        child: widget.game,
+                      ),
                       const SizedBox(height: 20),
                     ],
                   ),
@@ -166,35 +170,40 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                 Positioned(
                   top: 50,
                   left: 16,
-                  child: statCard('XP', xp, Colors.blue, Icons.auto_awesome, () {
+                  child:
+                      statCard('XP', xp, Colors.blue, Icons.auto_awesome, () {
                     _showStatDetail(context, 'XP', xp);
                   }),
                 ),
                 Positioned(
                   top: 50,
                   right: 16,
-                  child: statCard('HP', hp, Colors.greenAccent, Icons.favorite, () {
+                  child: statCard('HP', hp, Colors.greenAccent, Icons.favorite,
+                      () {
                     _showStatDetail(context, 'HP', hp);
                   }),
                 ),
                 Positioned(
                   top: 160,
                   left: 16,
-                  child: statCard('Intelligence', intelligence, Colors.purpleAccent, Icons.psychology, () {
+                  child: statCard('Intelligence', intelligence,
+                      Colors.purpleAccent, Icons.psychology, () {
                     _showStatDetail(context, 'Intelligence', intelligence);
                   }),
                 ),
                 Positioned(
                   top: 160,
                   right: 16,
-                  child: statCard('Strength', strength, Colors.redAccent, Icons.fitness_center, () {
+                  child: statCard('Strength', strength, Colors.redAccent,
+                      Icons.fitness_center, () {
                     _showStatDetail(context, 'Strength', strength);
                   }),
                 ),
                 Positioned(
                   bottom: 30,
                   right: 16,
-                  child: statCard('Stamina', stamina, Colors.orangeAccent, Icons.directions_run, () {
+                  child: statCard('Stamina', stamina, Colors.orangeAccent,
+                      Icons.directions_run, () {
                     _showStatDetail(context, 'Stamina', stamina);
                   }),
                 ),
@@ -220,7 +229,8 @@ class _AvatarViewPage extends State<AvatarViewPage> {
               ),
               child: const Text(
                 'Challenge the boss!',
-                style: TextStyle(fontSize: 23, color: Color.fromARGB(255, 21, 202, 27)),
+                style: TextStyle(
+                    fontSize: 23, color: Color.fromARGB(255, 21, 202, 27)),
               ),
             ),
           ),

@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
-import 'avatar_select_page.dart';  // Import the AvatarSelectPage
+import 'avatar_select_page.dart'; // Import the AvatarSelectPage
+import 'package:flame/game.dart';
 
 class QuestTask {
   String name;
@@ -20,12 +21,14 @@ class QuestInfoScreen extends StatefulWidget {
   final String selectedAvatar;
   final String avatarName;
   final List<QuestTask> tasks;
+  final GameWidget game;
 
   const QuestInfoScreen({
     super.key,
     required this.selectedAvatar,
     required this.tasks,
     required this.avatarName,
+    required this.game,
   });
 
   @override
@@ -100,8 +103,18 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   @override
   void initState() {
     super.initState();
+
     startCountdown(); // Start the 24-hour daily task countdown
     createTasks(); // Generate initial tasks
+
+    // Set the size of the game
+    // Adjust the size as needed
+  }
+
+  @override
+  void dispose() {
+    countdownTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -115,7 +128,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const AvatarSelectPage(),  // Navigates back to AvatarSelectPage
+                builder: (context) =>
+                    const AvatarSelectPage(), // Navigates back to AvatarSelectPage
               ),
             );
           },
@@ -129,20 +143,23 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/background.png'),  // Your background image
-                fit: BoxFit.cover,  // Covers the whole screen
+                image: AssetImage(
+                    'assets/images/background.png'), // Your background image
+                fit: BoxFit.cover, // Covers the whole screen
               ),
             ),
           ),
 
           // Semi-Transparent Background for the entire screen
           Container(
-            color: Colors.black.withOpacity(0.3),  // Covers the whole screen with 50% opacity
+            color: Colors.black
+                .withOpacity(0.3), // Covers the whole screen with 50% opacity
           ),
 
           // Your content
           Column(
             children: [
+              // Add the game widget here
               const SizedBox(
                   height:
                       40), // Added space to move the quest info section down
@@ -152,7 +169,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(128, 6, 38, 64),  // This is 50% opacity (alpha value = 128),
+                  color: Color.fromARGB(128, 6, 38,
+                      64), // This is 50% opacity (alpha value = 128),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10),
@@ -280,12 +298,14 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             right: 10,
             child: GestureDetector(
               onTap: () {
+                widget.game.game?.detach();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => AvatarViewPage(
                       selectedAvatar: widget.selectedAvatar,
                       avatarName: widget.avatarName,
+                      game: widget.game,
                     ),
                   ),
                 );
@@ -300,8 +320,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 ),
                 child: CircleAvatar(
                   radius: 35,
-                  backgroundImage: AssetImage(widget.selectedAvatar),
                   backgroundColor: Colors.transparent,
+                  child: widget.game,
                 ),
               ),
             ),

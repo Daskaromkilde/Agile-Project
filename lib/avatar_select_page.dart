@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'necromancer_game.dart';  // Import avatars from other game files
-import 'fire_warrior_game.dart';  
+import 'necromancer_game.dart'; // Import avatars from other game files
+import 'fire_warrior_game.dart';
 import 'wind_warrior_game.dart';
 import 'female_knight_game.dart';
-import 'blue_witch_game.dart';  
-import 'task_selection_screen.dart'; 
+import 'blue_witch_game.dart';
+import 'task_selection_screen.dart';
 
 class AvatarSelectPage extends StatefulWidget {
   const AvatarSelectPage({super.key});
@@ -19,11 +19,11 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
 
   // List all the avatars
   final List<String> _avatars = [
-    'necromancer',   // Necromancer animation
-    'fire_warrior',  // Fire Warrior animation
-    'wind_warrior',  // Wind Warrior animation
+    'necromancer', // Necromancer animation
+    'fire_warrior', // Fire Warrior animation
+    'wind_warrior', // Wind Warrior animation
     'female_knight', // Female Knight animation
-    'blue_witch',    // Blue Witch animation  
+    'blue_witch', // Blue Witch animation
   ];
 
   String selectedAvatar = 'necromancer';
@@ -46,12 +46,12 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
   }
 
   // Get the correct avatar widget based on the selected avatar
-    // Get the correct avatar widget based on the selected avatar
-  Widget _getAvatarWidget() {
+  // Get the correct avatar widget based on the selected avatar
+  GameWidget _getAvatarWidget() {
     switch (selectedAvatar) {
       case 'blue_witch':
         return GameWidget(game: BlueWitchGame());
-      case 'female_knight':  // Correct case name for Female Knight
+      case 'female_knight': // Correct case name for Female Knight
         return GameWidget(game: FemaleKnightGame());
       case 'necromancer':
         return GameWidget(game: NecromancerGame());
@@ -60,10 +60,11 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
       case 'wind_warrior':
         return GameWidget(game: WindWarriorGame());
       default:
-        return const SizedBox.shrink();  // If no avatar is selected
+        return GameWidget(
+            game:
+                NecromancerGame()); // Default to NecromancerGame if no avatar is selected
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,20 +80,20 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: const Icon(Icons.arrow_left, size: 32, color: Colors.white),
+                icon:
+                    const Icon(Icons.arrow_left, size: 32, color: Colors.white),
                 onPressed: _previousAvatar,
               ),
               const SizedBox(width: 20),
-
               SizedBox(
                 width: 256,
                 height: 256,
                 child: _getAvatarWidget(),
               ),
-
               const SizedBox(width: 20),
               IconButton(
-                icon: const Icon(Icons.arrow_right, size: 32, color: Colors.white),
+                icon: const Icon(Icons.arrow_right,
+                    size: 32, color: Colors.white),
                 onPressed: _nextAvatar,
               ),
             ],
@@ -134,6 +135,8 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
                   builder: (context) => task_selection_screen(
                     selectedAvatar: selectedAvatar,
                     avatarName: enteredName,
+                    game:
+                        _getAvatarWidget(), // Get the game object from the widget
                   ),
                 ),
               );

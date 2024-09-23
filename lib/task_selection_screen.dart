@@ -1,12 +1,17 @@
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
 
 class task_selection_screen extends StatefulWidget {
   final String selectedAvatar;
   final String avatarName;
+  final GameWidget game;
 
   const task_selection_screen(
-      {super.key, required this.selectedAvatar, required this.avatarName});
+      {super.key,
+      required this.selectedAvatar,
+      required this.avatarName,
+      required this.game});
   @override
   // ignore: library_private_types_in_public_api
   _TaskSelectionScreenState createState() => _TaskSelectionScreenState();
@@ -48,6 +53,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
           selectedAvatar: widget.selectedAvatar,
           tasks: tasks,
           avatarName: widget.avatarName,
+          game: widget.game,
         ),
       ),
     );

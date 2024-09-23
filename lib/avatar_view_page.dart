@@ -228,7 +228,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                 ),
               ),
               child: const Text(
-                'Challenge the boss!',
+                'Challenge the boss b!',
                 style: TextStyle(
                     fontSize: 23, color: Color.fromARGB(255, 21, 202, 27)),
               ),

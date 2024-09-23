@@ -96,6 +96,24 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
         if (remainingTime.isNegative || remainingTime == Duration.zero) {
           countdownTimer?.cancel();
         }
+
+        final now = DateTime.now();
+        if ((now.hour == 14 || now.hour == 20) && !allTasksDone()){
+          final hours = remainingTime.inHours;
+          final minutes = remainingTime.inMinutes.remainder(60);
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Daily Quest Incomplete!'),
+                content: Text(
+                  'You haven\'t forgotten about your daily tasks right?\n\n'
+                  'Time is running out!, you have $hours hours and $minutes minutes left!',),
+              );
+            },
+          );
+        }
+
       });
     });
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
+import 'avatar_select_page.dart';  // Import the AvatarSelectPage
 
 class QuestTask {
   String name;
@@ -106,13 +107,29 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // Back button at the top-left corner
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AvatarSelectPage(),  // Navigates back to AvatarSelectPage
+              ),
+            );
+          },
+        ),
+        title: const Text('Quest Info'),
+        backgroundColor: Colors.blueGrey[900],
+      ),
       body: Stack(
         children: [
           // Background Image
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('lib/assets/background.png'),  // Your background image
+                image: AssetImage('assets/images/background.png'),  // Your background image
                 fit: BoxFit.cover,  // Covers the whole screen
               ),
             ),
@@ -135,11 +152,11 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 decoration: const BoxDecoration(
-                color: Color.fromARGB(128, 6, 38, 64),  // This is 50% opacity (alpha value = 128),
+                  color: Color.fromARGB(128, 6, 38, 64),  // This is 50% opacity (alpha value = 128),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10),
-                  ), 
+                  ),
                 ),
                 child: const Column(
                   children: [

@@ -6,10 +6,18 @@ version: 0.1.0
 environment:
   sdk: '>=3.4.3 <4.0.0'
 
+fonts:
+  - family: MysticFont
+    fonts:
+      - asset: fonts/MysticFont-Regular.ttf
+
+
 dependencies:
+  font_awesome_flutter: ^10.1.0
   awesome_notifications: ^0.9.3+1
   flutter:
     sdk: flutter
+  flame: ^1.19.0
   google_fonts: ^6.2.1
 
 dev_dependencies:
@@ -20,9 +28,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/assets/egg.png
-    - lib/assets/mushu.png
-    - lib/assets/dragon.png
-    - lib/assets/background.png
+    - assets/images/background.png # background pic
+    - assets/images/Necromancer.png  # Necromancer sprite sheet
+    - assets/images/Fire_WarriorFireSword-Sheet.png  # Fire Warrior sprite sheet
+    - assets/images/wind_SpriteSheet_288x128.png  # Wind Warrior sprite sheet
+    - assets/images/female_knight_idle.png # female knight idle sprite sheet
+    - assets/images/blue_witch_idle.png # blue witch idle sprite sheet
+
 
 

@@ -1,5 +1,5 @@
+import 'package:first_app/battle_arena.dart';
 import 'package:flutter/material.dart';
-import 'battle_arena.dart'; // Import the BattleArena screen
 
 class Stat {
   int currentValue;
@@ -48,9 +48,93 @@ class _AvatarViewPage extends State<AvatarViewPage> {
     hp = Stat(currentValue: 100, maxValue: 200);
   }
 
+  // Method to display the correct avatar (either animated or static)
+  Widget _getAvatarWidget() {
+    return Center(
+      child: Image.asset(
+        widget.selectedAvatar,
+        height: 220,
+        width: 220,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  // Function to create a circular interactive stat
+  Widget statCard(String statName, Stat stat, Color color, IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap, // Functionality to open the stat detail
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 80, // Circular size
+            width: 80,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                CircularProgressIndicator(
+                  value: stat.currentValue / stat.maxValue,
+                  strokeWidth: 10,
+                  backgroundColor: Colors.grey[800],
+                  valueColor: AlwaysStoppedAnimation<Color>(color),
+                ),
+                Center(
+                  child: Icon(
+                    icon,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            statName,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Function to show stat details in a dialog/modal
+  void _showStatDetail(BuildContext context, String statName, Stat stat) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.black.withOpacity(0.9),
+          title: Text(
+            "$statName Details",
+            style: const TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            'Current: ${stat.currentValue}\nMax: ${stat.maxValue}',
+            style: const TextStyle(color: Colors.white),
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Close', style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 20, 20, 35), // Dark background
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 6, 38, 64),
         title: const Text(
@@ -62,152 +146,85 @@ class _AvatarViewPage extends State<AvatarViewPage> {
           ),
         ),
       ),
-      body: Stack(
+      body: Column(
         children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset(
-              'lib/assets/background.png', // Background image path
-              fit: BoxFit.cover,
-            ),
-          ),
-          // Scrollable Content
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  // Avatar Name
-                  Text(
-                    widget.avatarName,
-                    style: const TextStyle(
-                      fontSize: 28, // Standard size for the avatar name
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Avatar Image
-                  Center(
-                    child: Image.asset(
-                      widget.selectedAvatar,  // Avatar image
-                      height: 180,
-                      width: 180,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  // Stats Section
-                  const Text(
-                    'Avatar Stats',
-                    style: TextStyle(
-                      fontSize: 24, // Standard size for "Avatar Stats"
-                      fontWeight: FontWeight.bold,
-                      color: Colors.greenAccent,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // GridView for Stats
-                  GridView.count(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    shrinkWrap: true, // Important: Ensures GridView doesn't take infinite height
-                    physics: const NeverScrollableScrollPhysics(), // Disable GridView scrolling
+          const SizedBox(height: 20),
+          // Avatar in the center standing on a pedestal
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Column(
                     children: [
-                      statCard('XP', xp, Colors.blue),
-                      statCard('Strength', strength, Colors.redAccent),
-                      statCard('Intelligence', intelligence, Colors.purpleAccent),
-                      statCard('Stamina', stamina, Colors.orangeAccent),
-                      statCard('HP', hp, Colors.greenAccent),
+                      // Avatar image centered on the screen
+                      _getAvatarWidget(),
+                      const SizedBox(height: 20),
                     ],
                   ),
-                  const SizedBox(height: 20),
-
-                  // "All tasks complete" Battle Button
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const BattleArena()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 2, 11, 41),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 15,
-                        ),
-                      ),
-                      child: const Text(
-                        'All tasks complete, you may challenge the boss',
-                        style: TextStyle(fontSize: 23, color: Color.fromARGB(255, 21, 202, 27)),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+                // Stats around avatar
+                Positioned(
+                  top: 50,
+                  left: 16,
+                  child: statCard('XP', xp, Colors.blue, Icons.auto_awesome, () {
+                    _showStatDetail(context, 'XP', xp);
+                  }),
+                ),
+                Positioned(
+                  top: 50,
+                  right: 16,
+                  child: statCard('HP', hp, Colors.greenAccent, Icons.favorite, () {
+                    _showStatDetail(context, 'HP', hp);
+                  }),
+                ),
+                Positioned(
+                  top: 160,
+                  left: 16,
+                  child: statCard('Intelligence', intelligence, Colors.purpleAccent, Icons.psychology, () {
+                    _showStatDetail(context, 'Intelligence', intelligence);
+                  }),
+                ),
+                Positioned(
+                  top: 160,
+                  right: 16,
+                  child: statCard('Strength', strength, Colors.redAccent, Icons.fitness_center, () {
+                    _showStatDetail(context, 'Strength', strength);
+                  }),
+                ),
+                Positioned(
+                  bottom: 30,
+                  right: 16,
+                  child: statCard('Stamina', stamina, Colors.orangeAccent, Icons.directions_run, () {
+                    _showStatDetail(context, 'Stamina', stamina);
+                  }),
+                ),
+              ],
+            ),
+          ),
+          // Button to challenge boss
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const BattleArena()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 2, 11, 41),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 15,
+                ),
+              ),
+              child: const Text(
+                'Challenge the boss!',
+                style: TextStyle(fontSize: 23, color: Color.fromARGB(255, 21, 202, 27)),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  // Function to create a card for each stat with a circular progress bar
-  Widget statCard(String statName, Stat stat, Color color) {
-    return Card(
-      color: Colors.black.withOpacity(0.7), // Semi-transparent card background
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0), // Padding inside cards
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              statName,
-              style: const TextStyle(
-                fontSize: 18, // Standard font size for stat names
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Circular progress bar
-            SizedBox(
-              height: 70, // Standard size for progress bar
-              width: 70,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  CircularProgressIndicator(
-                    value: stat.currentValue / stat.maxValue, // Ensure this is a double
-                    strokeWidth: 10,
-                    backgroundColor: Colors.grey[800],
-                    valueColor: AlwaysStoppedAnimation<Color>(color),
-                  ),
-                  Center(
-                    child: Text(
-                      '${stat.currentValue}', // Display only the current value
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16, // Standard text inside progress bar
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10), // Spacer
-          ],
-        ),
       ),
     );
   }

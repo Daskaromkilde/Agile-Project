@@ -105,7 +105,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('Daily Quest Incomplete!'),
+                title: const Text('Daily Quest Incomplete!'),
                 content: Text(
                   'You haven\'t forgotten about your daily tasks right?\n\n'
                   'Time is running out!, you have $hours hours and $minutes minutes left!',),
@@ -332,14 +332,24 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: const Color.fromARGB(255, 1, 8, 14), // Outline color
+                    color: const Color.fromARGB(255, 0, 0, 0), // Outline color
                     width: 3.0, // Outline width
                   ),
                 ),
                 child: CircleAvatar(
-                  radius: 35,
-                  backgroundColor: Colors.transparent,
-                  child: widget.game,
+                  radius: 50,
+                  backgroundColor: const Color.fromARGB(0, 255, 255, 255),
+                  child: ClipOval(
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Transform.scale(
+                        scale: 0.35,
+                        alignment: const Alignment(0,0.5),
+                        child: widget.game,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -348,6 +358,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
       ),
     );
   }
+
 }
 
 class QuestItem extends StatelessWidget {

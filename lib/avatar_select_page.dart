@@ -46,7 +46,6 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
   }
 
   // Get the correct avatar widget based on the selected avatar
-  // Get the correct avatar widget based on the selected avatar
   GameWidget _getAvatarWidget() {
     switch (selectedAvatar) {
       case 'blue_witch':

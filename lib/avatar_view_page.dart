@@ -157,7 +157,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                   child: Column(
                     children: [
                       // Wrap GameWidget in a Container with constraints
-                      Container(
+                      SizedBox(
                         width: 300, // Set a specific width
                         height: 300, // Set a specific height
                         child: widget.game,

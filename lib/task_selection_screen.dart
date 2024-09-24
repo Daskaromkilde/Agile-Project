@@ -60,7 +60,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Tasks You Cannot Do'),
@@ -86,4 +86,6 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
       ),
     );
   }
+
 }
+

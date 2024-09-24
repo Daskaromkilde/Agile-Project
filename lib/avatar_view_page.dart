@@ -154,6 +154,8 @@ class _AvatarViewPage extends State<AvatarViewPage> {
             child: Stack(
               children: [
                 Positioned.fill(
+                  left: 170,
+                  top: 150,
                   child: Column(
                     children: [
                       // Wrap GameWidget in a Container with constraints
@@ -184,7 +186,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                   }),
                 ),
                 Positioned(
-                  top: 160,
+                  top: 170,
                   left: 16,
                   child: statCard('Intelligence', intelligence,
                       Colors.purpleAccent, Icons.psychology, () {
@@ -192,7 +194,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                   }),
                 ),
                 Positioned(
-                  top: 160,
+                  top: 170,
                   right: 16,
                   child: statCard('Strength', strength, Colors.redAccent,
                       Icons.fitness_center, () {
@@ -228,7 +230,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                 ),
               ),
               child: const Text(
-                'Challenge the boss b!',
+                'Challenge the boss!',
                 style: TextStyle(
                     fontSize: 23, color: Color.fromARGB(255, 21, 202, 27)),
               ),

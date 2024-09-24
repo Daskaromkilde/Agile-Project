@@ -23,9 +23,9 @@ class FireWarriorGame extends FlameGame {
     // Create the SpriteAnimationComponent to display the animation
     final fireWarrior = SpriteAnimationComponent(
       animation: fireWarriorAnimation,
-      size: Vector2(600, 600),  // Zoom to 600x600
+      size: Vector2(600, 500),  // Zoom to 600x500
       anchor: Anchor.center,  // Set anchor to center
-      position: Vector2(size.x / 2 + 55, size.y /2),  // Adjust position to move upwards
+      position: Vector2(size.x / 2 + 65, size.y /2),  // Adjust position to move upwards
     );
 
     // Add the animated sprite to the game

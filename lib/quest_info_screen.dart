@@ -98,7 +98,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
         }
 
         final now = DateTime.now();
-        if ((now.hour == 14 || now.hour == 20) && !allTasksDone()){
+        if ((now.hour == 14 && now.minute == 0 || now.hour == 20 && now.minute == 0) && !allTasksDone()){
           final hours = remainingTime.inHours;
           final minutes = remainingTime.inMinutes.remainder(60);
           showDialog(

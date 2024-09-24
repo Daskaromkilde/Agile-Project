@@ -4,6 +4,7 @@ import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
 import 'package:flame/game.dart';
+import 'quest_info_detail.dart';
 
 class QuestTask {
   String name;
@@ -194,14 +195,22 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                     bottomRight: Radius.circular(10),
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.white, size: 30),
-                        SizedBox(width: 10),
-                        Text(
+                        IconButton(
+                          icon: const Icon(Icons.info_outline, color: Colors.white, size: 30),
+                          onPressed: () {
+                            // Navigate to QuestDetailsPage
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => QuestDetailsPage()),
+                            );
+                          },
+                        ),
+                        const Text(
                           'QUEST INFO',
                           style: TextStyle(
                             fontSize: 28,
@@ -211,8 +220,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
-                    Text(
+                    const SizedBox(height: 10),
+                    const Text(
                       'Daily Quest - Train to Evolve',
                       style: TextStyle(
                         fontSize: 16, // Smaller font size

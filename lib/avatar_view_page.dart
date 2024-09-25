@@ -1,12 +1,7 @@
 import 'package:first_app/battle_arena.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'necromancer_game.dart'; // Import avatars from other game files
-import 'fire_warrior_game.dart';
-import 'wind_warrior_game.dart';
-import 'female_knight_game.dart';
-import 'blue_witch_game.dart';
-import 'task_selection_screen.dart';
+// Import avatars from other game files
 
 class Stat {
   int currentValue;

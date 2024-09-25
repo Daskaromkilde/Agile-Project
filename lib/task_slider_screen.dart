@@ -48,37 +48,53 @@ class _taskSliderScreenState extends State<taskSliderScreen>{
       ),
     );
   }
-
-    @override
-    Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Choose your preference of tasks!'),
-      ),
-      body: Column(
+@override
+Widget build(BuildContext context) => Scaffold(
+  appBar: AppBar(
+    title: const Text('Choose your preference of tasks!'),
+  ),
+  body: SliderTheme(
+    data: const SliderThemeData(
+      activeTickMarkColor: Colors.transparent,
+      inactiveTickMarkColor: Colors.transparent,
+    ),
+    child: Center(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: 450,
-            child: Positioned(
-
-              child: Slider(
-                value: SliderValue,
-                min: 0,
-                max: 100,
-                divisions: 4,
-                label: SliderValue.round().toString(),
-                onChanged: (value) => setState(() {
-                SliderValue = value;
-            }),
-          ),
+            width: 600,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space the children evenly
+              children: [
+                const Text('Int'), // Text on the left
+                Expanded( // Use Expanded to make the Slider take all available space
+                  child: Slider(
+                    value: SliderValue,
+                    min: 0,
+                    max: 100,
+                    divisions: 4,
+                    label: SliderValue.round().toString(),
+                    onChanged: (value) => setState(() {
+                      SliderValue = value;
+                    }),
+                  ),
+                ),
+                const Text('Str'), // Text on the right
+              ],
             ),
           ),
         ],
       ),
-    floatingActionButton: FloatingActionButton(
+    ),
+  ),
+  floatingActionButton: FloatingActionButton(
     onPressed: proceedToQuestInfoScreen,
     child: const Icon(Icons.arrow_forward),
   ),
-    );
+);
+
+
+
 
 }

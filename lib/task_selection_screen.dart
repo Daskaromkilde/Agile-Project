@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
+import 'task_slider_screen.dart';
 
 class task_selection_screen extends StatefulWidget {
   final String selectedAvatar;
@@ -42,14 +43,14 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     });
   }
 
-  void proceedToQuestInfoScreen() {
+  void proceedToTaskSliderScreen() {
     for (var task in unableTasks) {
       tasks.remove(task);
     }
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QuestInfoScreen(
+        builder: (context) => taskSliderScreen(
           selectedAvatar: widget.selectedAvatar,
           tasks: tasks,
           avatarName: widget.avatarName,
@@ -58,6 +59,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context){
@@ -81,7 +83,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: proceedToQuestInfoScreen,
+        onPressed: proceedToTaskSliderScreen,
         child: const Icon(Icons.arrow_forward),
       ),
     );

@@ -52,53 +52,82 @@ class _taskSliderScreenState extends State<taskSliderScreen>{
 @override
 Widget build(BuildContext context) => Scaffold(
   appBar: AppBar(
-    title: const Text('Choose your preference of tasks!'),
-  ),
-  body: SliderTheme(
-    data: const SliderThemeData(
-      activeTickMarkColor: Colors.transparent,
-      inactiveTickMarkColor: Colors.transparent,
+    title: Text(
+      'Choose your preference of tasks!',
+      style: GoogleFonts.medievalSharp(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
     ),
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 600,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space the children evenly
+  ),
+  body: Container(
+    // Add background image
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/Sliderbackground.png'), // Background image
+        fit: BoxFit.cover,
+        alignment: Alignment(0.0, -0.9), // Adjust alignment to move image up
+      ),
+    ),
+    child: Stack(
+      children: [
+        // Black overlay with 30% opacity
+        Container(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        // Centered Slider background
+      
+        SliderTheme(
+          data: const SliderThemeData(
+            activeTickMarkColor: Colors.transparent,
+            inactiveTickMarkColor: Colors.transparent,
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Int',
+                SizedBox(
+                  width: 600,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Int',
                         style: GoogleFonts.medievalSharp(
-                          fontSize: 20, // Change font size
-                          fontWeight: FontWeight.bold, // Change font weight
-                          color: Colors.blue, // Change text color
-                ),), // Text on the left
-                Expanded( // Use Expanded to make the Slider take all available space
-                  child: Slider(
-                    value: SliderValue,
-                    min: 0,
-                    max: 100,
-                    divisions: 4,
-                    label: SliderValue.round().toString(),
-                    onChanged: (value) => setState(() {
-                      SliderValue = value;
-                    }),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      Expanded(
+                        child: Slider(
+                          value: SliderValue,
+                          min: 0,
+                          max: 100,
+                          divisions: 4,
+                          label: SliderValue.round().toString(),
+                          onChanged: (value) => setState(() {
+                            SliderValue = value;
+                          }),
+                        ),
+                      ),
+                      Text(
+                        'Str',
+                        style: GoogleFonts.medievalSharp(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Text(
-                        'Str',
-                          style: GoogleFonts.medievalSharp(
-                          fontSize: 20, // Change font size
-                          fontWeight: FontWeight.bold, // Change font weight
-                          color: Colors.red, // Change text color
-                ),
-                ), // Text on the right
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   ),
   floatingActionButton: FloatingActionButton(

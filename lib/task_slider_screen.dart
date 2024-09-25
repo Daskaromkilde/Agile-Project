@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
 import 'task_selection_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class taskSliderScreen extends StatefulWidget{
   final String selectedAvatar;
@@ -67,7 +68,12 @@ Widget build(BuildContext context) => Scaffold(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space the children evenly
               children: [
-                const Text('Int'), // Text on the left
+                Text('Int',
+                        style: GoogleFonts.medievalSharp(
+                          fontSize: 20, // Change font size
+                          fontWeight: FontWeight.bold, // Change font weight
+                          color: Colors.blue, // Change text color
+                ),), // Text on the left
                 Expanded( // Use Expanded to make the Slider take all available space
                   child: Slider(
                     value: SliderValue,
@@ -80,7 +86,14 @@ Widget build(BuildContext context) => Scaffold(
                     }),
                   ),
                 ),
-                const Text('Str'), // Text on the right
+                Text(
+                        'Str',
+                          style: GoogleFonts.medievalSharp(
+                          fontSize: 20, // Change font size
+                          fontWeight: FontWeight.bold, // Change font weight
+                          color: Colors.red, // Change text color
+                ),
+                ), // Text on the right
               ],
             ),
           ),

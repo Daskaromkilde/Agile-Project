@@ -32,12 +32,12 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     QuestTask(name: 'Study any chosen subject', progress: '0', goal:'30MIN',type:TaskType.educational),
     QuestTask(name: 'Improve your vocabulary', progress: '0', goal:'30MIN',type:TaskType.educational),
     QuestTask(name: 'Read any book', progress: '0', goal: '1HRS',type:TaskType.educational),
-    QuestTask(name: 'Beginner math: Arithmetics', progress: '0', goal: '45MIN',type:TaskType.educational),
-    QuestTask(name: 'Intermediate math: Linear equations', progress: '0', goal: '45MIN',type:TaskType.educational),
-    QuestTask(name: 'Advanced math: Trigonometic problems', progress: '0', goal: '45MIN',type:TaskType.educational),
-    QuestTask(name: 'Expert math: differentiate/integrate functions', progress: '0', goal: '45MIN',type:TaskType.educational),
+    QuestTask(name: 'Arithmetics', progress: '0', goal: '45MIN',type:TaskType.educational),
+    QuestTask(name: 'Linear equations', progress: '0', goal: '45MIN',type:TaskType.educational),
+    QuestTask(name: 'Trigonometic problems', progress: '0', goal: '45MIN',type:TaskType.educational),
+    QuestTask(name: 'differentiate/integrate functions', progress: '0', goal: '45MIN',type:TaskType.educational),
     QuestTask(name: 'Watch any educational video/lecture', progress: '0', goal: '1',type:TaskType.educational),
-    QuestTask(name: 'Advanced math: Solve matrices (linear algebra)', progress: '0', goal: '45MIN',type:TaskType.educational),
+    QuestTask(name: 'Solve matrices', progress: '0', goal: '45MIN',type:TaskType.educational),
   ];
 
 
@@ -78,31 +78,32 @@ List<QuestTask> getPhysicalTasks() {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Tasks You Cannot Do'),
-      ),
-      body: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) {
-          final task = tasks[index];
-          return ListTile(
-            title: Text(task.name),
-            trailing: Checkbox(
-              value: unableTasks.contains(task),
-              onChanged: (bool? value) {
-                updateUnableTasks(task, value);
-              },
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: proceedToTaskSliderScreen,
-        child: const Icon(Icons.arrow_forward),
-      ),
-    );
-  }
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Select Tasks You Cannot Do'),
+    ),
+    body: ListView.builder(
+      padding: const EdgeInsets.only(bottom: 80), // Add padding at the bottom
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        final task = tasks[index];
+        return ListTile(
+          title: Text(task.name),
+          trailing: Checkbox(
+            value: unableTasks.contains(task),
+            onChanged: (bool? value) {
+              updateUnableTasks(task, value);
+            },
+          ),
+        );
+      },
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: proceedToTaskSliderScreen,
+      child: const Icon(Icons.arrow_forward),
+    ),
+  );
+}
 }

@@ -50,7 +50,11 @@ class _taskSliderScreenState extends State<taskSliderScreen>{
     );
   }
 @override
-Widget build(BuildContext context) => Scaffold(
+Widget build(BuildContext context){
+  const double thumbRadius = 14;
+  const double tickMarkRadius = 10;
+
+  return Scaffold(
   appBar: AppBar(
     title: Text(
       'Choose your preference of tasks!',
@@ -77,11 +81,26 @@ Widget build(BuildContext context) => Scaffold(
           color: Colors.black.withOpacity(0.5),
         ),
         // Centered Slider background
-      
+        //      
         SliderTheme(
           data: const SliderThemeData(
-            activeTickMarkColor: Colors.transparent,
-            inactiveTickMarkColor: Colors.transparent,
+            trackHeight: 12,
+            thumbShape: RoundSliderThumbShape(
+              enabledThumbRadius: thumbRadius,
+              disabledThumbRadius: thumbRadius,
+            ),
+            rangeThumbShape: RoundRangeSliderThumbShape(
+              enabledThumbRadius: thumbRadius,
+              disabledThumbRadius: thumbRadius,
+            ),
+            tickMarkShape: RoundSliderTickMarkShape(
+              tickMarkRadius: 10,
+            ),
+              inactiveTickMarkColor: Color.fromARGB(255,57,57,57),
+              inactiveTrackColor: Color.fromARGB(255,57,57,57),
+              activeTickMarkColor: Color.fromARGB(255, 152, 87, 189),
+              activeTrackColor: Color.fromARGB(255, 152, 87, 189),
+              thumbColor: Color.fromARGB(255, 152, 87, 189),
           ),
           child: Center(
             child: Column(
@@ -130,13 +149,10 @@ Widget build(BuildContext context) => Scaffold(
       ],
     ),
   ),
-  floatingActionButton: FloatingActionButton(
-    onPressed: proceedToQuestInfoScreen,
-    child: const Icon(Icons.arrow_forward),
-  ),
-);
-
-
-
-
+    floatingActionButton: FloatingActionButton(
+      onPressed: proceedToQuestInfoScreen,
+      child: const Icon(Icons.arrow_forward),
+    ),
+  );
+  }
 }

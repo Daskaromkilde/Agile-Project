@@ -27,7 +27,7 @@ class taskSliderScreen extends StatefulWidget{
 
 class _taskSliderScreenState extends State<taskSliderScreen>{
   List<QuestTask> tasks = [];
-  double SliderValue = 50;
+  double sliderValue = 50; // Startvalue of the slider
 
   @override 
   void initState(){
@@ -37,6 +37,7 @@ class _taskSliderScreenState extends State<taskSliderScreen>{
 
 
   void proceedToQuestInfoScreen() {
+    print('Slider value: $sliderValue'); // debug print
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -45,6 +46,7 @@ class _taskSliderScreenState extends State<taskSliderScreen>{
           tasks: tasks,
           avatarName: widget.avatarName,
           game: widget.game,
+          sliderValue: sliderValue,
         ),
       ),
     );
@@ -121,13 +123,13 @@ Widget build(BuildContext context){
                       ),
                       Expanded(
                         child: Slider(
-                          value: SliderValue,
+                          value: sliderValue,
                           min: 0,
                           max: 100,
                           divisions: 4,
-                          label: SliderValue.round().toString(),
+                          label: sliderValue.round().toString(),
                           onChanged: (value) => setState(() {
-                            SliderValue = value;
+                            sliderValue = value;
                           }),
                         ),
                       ),

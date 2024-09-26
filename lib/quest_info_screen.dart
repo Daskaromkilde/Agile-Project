@@ -25,6 +25,7 @@ class QuestInfoScreen extends StatefulWidget {
   final String avatarName;
   final List<QuestTask> tasks;
   final GameWidget game;
+  final double sliderValue;
 
   const QuestInfoScreen({
     super.key,
@@ -32,6 +33,7 @@ class QuestInfoScreen extends StatefulWidget {
     required this.tasks,
     required this.avatarName,
     required this.game,
+    required this.sliderValue,
   });
 
   @override
@@ -42,8 +44,10 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   List<QuestTask> todoTasks = [];
   Duration remainingTime = Duration.zero;
   Timer? countdownTimer;
-
-  int taskAmount = 4;
+  int taskAmount = 4; // max 4
+  late int weight; // parse sliderValue to range 0-4
+  int strAmount = 0;
+  int intAmount = 0;
 
   bool allTasksDone() {
     return todoTasks.every((task) => task.isCompleted);
@@ -57,7 +61,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
 
   void newTasks() {
     setState(() {
-      createTasks();
+      createTasks(taskAmount);
       for (var task in widget.tasks) {
         task.isCompleted = false;
         task.progress = '0';
@@ -65,7 +69,16 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     });
   }
 
-  void createTasks() {
+/// Algorith to calculate the amount n tasks of both types, value = n amount
+  calculateTaskWeight() {
+    strAmount = weight;
+    intAmount = taskAmount - strAmount;
+  }
+
+  void createTasks(int taskAmount) {
+    calculateTaskWeight();  // update both tasks weight
+    taskAmount = strAmount;// FUNKAR INTE HJÄLLLLLLLLLLLLLP
+
     if (widget.tasks.length < taskAmount) {
       taskAmount = widget.tasks.length;
     }
@@ -126,9 +139,9 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   @override
   void initState() {
     super.initState();
-
+    weight = (widget.sliderValue/25).round(); // based on sliderValue, decide the amount of types of tasks
     startCountdown(); // Start the 24-hour daily task countdown
-    createTasks(); // Generate initial tasks
+    createTasks(taskAmount); // Generate initial tasks
 
     // Set the size of the game
     // Adjust the size as needed

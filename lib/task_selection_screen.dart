@@ -20,15 +20,15 @@ class task_selection_screen extends StatefulWidget {
 
 class _TaskSelectionScreenState extends State<task_selection_screen> {
   List<QuestTask> tasks = [
-    QuestTask(name: 'Push-ups', progress: '[0/100]'),
-    QuestTask(name: 'Sit-ups', progress: '[0/100]'),
-    QuestTask(name: 'Squats', progress: '[0/100]'),
-    QuestTask(name: 'Run', progress: '[0/7KM]'),
-    QuestTask(name: 'Sprint', progress: '[1KM]'),
-    QuestTask(name: 'Walk', progress: '[0/10KM]'),
-    QuestTask(name: 'Intervalls', progress: '[0/5KM]'),
-    QuestTask(name: 'Stretch', progress: '[0/30MIN]'),
-    QuestTask(name: 'Yoga', progress: '[0/30MIN]'),
+    QuestTask(name: 'Push-ups', progress: '0', goal: '100'),
+    QuestTask(name: 'Sit-ups', progress: '0', goal: '100'),
+    QuestTask(name: 'Squats', progress: '0', goal: '100'),
+    QuestTask(name: 'Run', progress: '0', goal: '100KM'),
+    QuestTask(name: 'Sprint', progress: '0', goal: '100KM'),
+    QuestTask(name: 'Walk', progress: '0', goal: '100KM'),
+    QuestTask(name: 'Intervalls', progress: '0', goal: '100'),
+    QuestTask(name: 'Stretch', progress: '0', goal: '30MIN'),
+    QuestTask(name: 'Yoga', progress: '0', goal: '30MIN'),
   ];
 
   List<QuestTask> unableTasks = [];
@@ -60,9 +60,8 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     );
   }
 
-
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Tasks You Cannot Do'),
@@ -88,6 +87,4 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
       ),
     );
   }
-
 }
-

@@ -10,11 +10,13 @@ class QuestTask {
   String name;
   bool isCompleted;
   String progress;
+  String goal;
 
   QuestTask({
     required this.name,
     this.isCompleted = false,
     required this.progress,
+    required this.goal,
   });
 }
 
@@ -58,7 +60,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
       createTasks();
       for (var task in widget.tasks) {
         task.isCompleted = false;
-        task.progress = '[0/100]';
+        task.progress = '0';
       }
     });
   }
@@ -99,7 +101,9 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
         }
 
         final now = DateTime.now();
-        if ((now.hour == 14 && now.minute == 0 && now.second == 1 || now.hour == 20 && now.minute == 0 && now.second == 1) && !allTasksDone()){
+        if ((now.hour == 14 && now.minute == 0 && now.second == 1 ||
+                now.hour == 20 && now.minute == 0 && now.second == 1) &&
+            !allTasksDone()) {
           final hours = remainingTime.inHours;
           final minutes = remainingTime.inMinutes.remainder(60);
           showDialog(
@@ -109,12 +113,12 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 title: const Text('Daily Quest Incomplete!'),
                 content: Text(
                   'You haven\'t forgotten about your daily tasks right?\n\n'
-                  'Time is running out!, you have $hours hours and $minutes minutes left!',),
+                  'Time is running out!, you have $hours hours and $minutes minutes left!',
+                ),
               );
             },
           );
         }
-
       });
     });
   }
@@ -201,7 +205,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.info_outline, color: Colors.white, size: 30),
+                          icon: Icon(Icons.info_outline,
+                              color: Colors.white, size: 30),
                           onPressed: () {
                             // Show the dialog with quest info
                             showDialog(
@@ -209,7 +214,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text('Quest Info'),
-                                  content: const Text( // add info about quest here
+                                  content: const Text(
+                                    // add info about quest here
                                     'Here is some detailed information about the quest. \n'
                                     'You can add more content here as per your requirements.',
                                   ),
@@ -357,20 +363,20 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: const Color.fromARGB(255, 0, 0, 0), // Outline color
+                    color: const Color.fromARGB(205, 0, 0, 0), // Outline color
                     width: 3.0, // Outline width
                   ),
                 ),
                 child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: const Color.fromARGB(0, 255, 255, 255),
+                  radius: 45,
+                  backgroundColor: const Color.fromARGB(195, 12, 88, 109),
                   child: ClipOval(
                     child: SizedBox(
                       width: 100,
                       height: 100,
                       child: Transform.scale(
                         scale: 0.35,
-                        alignment: const Alignment(0,0.5),
+                        alignment: const Alignment(0, 0.5),
                         child: widget.game,
                       ),
                     ),
@@ -383,7 +389,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
       ),
     );
   }
-
 }
 
 class QuestItem extends StatelessWidget {
@@ -412,7 +417,7 @@ class QuestItem extends StatelessWidget {
             ],
           ),
           Text(
-            task.progress,
+            '[${task.progress}/${task.goal}]',
             style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ],

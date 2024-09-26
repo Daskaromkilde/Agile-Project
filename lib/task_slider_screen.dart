@@ -52,7 +52,7 @@ class _taskSliderScreenState extends State<taskSliderScreen>{
 @override
 Widget build(BuildContext context){
   const double thumbRadius = 14;
-  const double tickMarkRadius = 10;
+  const double tickMarkRadius = 12;
 
   return Scaffold(
   appBar: AppBar(
@@ -94,7 +94,7 @@ Widget build(BuildContext context){
               disabledThumbRadius: thumbRadius,
             ),
             tickMarkShape: RoundSliderTickMarkShape(
-              tickMarkRadius: 10,
+              tickMarkRadius: tickMarkRadius,
             ),
               inactiveTickMarkColor: Color.fromARGB(255,57,57,57),
               inactiveTrackColor: Color.fromARGB(255,57,57,57),

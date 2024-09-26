@@ -33,10 +33,16 @@ class _taskSliderScreenState extends State<taskSliderScreen>{
   final divisions = 4;
   double sliderValue = 50; // Startvalue of the slider
 
+  double get _sliderValue => sliderValue;
+
   @override 
   void initState(){
     super.initState();
     tasks = widget.tasks;
+  }
+
+    set _sliderValue(double value) {
+    sliderValue = value;
   }
 
 

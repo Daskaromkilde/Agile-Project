@@ -201,12 +201,28 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.info_outline, color: Colors.white, size: 30),
+                          icon: Icon(Icons.info_outline, color: Colors.white, size: 30),
                           onPressed: () {
-                            // Navigate to QuestDetailsPage
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => QuestDetailsPage()),
+                            // Show the dialog with quest info
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Quest Info'),
+                                  content: const Text( // add info about quest here
+                                    'Here is some detailed information about the quest. \n'
+                                    'You can add more content here as per your requirements.',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('Close'),
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           },
                         ),

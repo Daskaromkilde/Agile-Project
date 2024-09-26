@@ -29,6 +29,15 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     QuestTask(name: 'Intervalls', progress: '0', goal: '100'),
     QuestTask(name: 'Stretch', progress: '0', goal: '30MIN'),
     QuestTask(name: 'Yoga', progress: '0', goal: '30MIN'),
+    QuestTask(name: 'Study any chosen subject', progress: '0', goal:'30MIN'),
+    QuestTask(name: 'Improve your vocabulary', progress: '0', goal:'30MIN'),
+    QuestTask(name: 'Read any book', progress: '0', goal: '1HRS'),
+    QuestTask(name: 'Beginner math: Solve basic arithmetic problems', progress: '0', goal: '30MIN'),
+    QuestTask(name: 'Intermediate math: Solve linear equations', progress: '0', goal: '30MIN'),
+    QuestTask(name: 'Advanced math: Solve trigonometric problems', progress: '0', goal: '30MIN'),
+    QuestTask(name: 'Expert math: differentiate and integrate various functions', progress: '0', goal: '30MIN'),
+    QuestTask(name: 'Watch any educational video/lecture', progress: '0', goal: '1'),
+    QuestTask(name: 'Advanced math: Solve problems related to matrices (linear algebra)', progress: '0', goal: '30MIN'),
   ];
 
   List<QuestTask> unableTasks = [];

@@ -1,3 +1,4 @@
+import 'package:first_app/local_data_storage.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
@@ -19,6 +20,7 @@ class task_selection_screen extends StatefulWidget {
 }
 
 class _TaskSelectionScreenState extends State<task_selection_screen> {
+  late DataStorage  _dataStorage;
   List<QuestTask> tasks = [
     QuestTask(name: 'Push-ups', progress: '0', goal: '100',type:TaskType.physical),
     QuestTask(name: 'Sit-ups', progress: '0', goal: '100',type:TaskType.physical),
@@ -42,6 +44,18 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
 
 
   List<QuestTask> unableTasks = [];
+  @override
+  void initState() {
+    super.initState();
+    _dataStorage = DataStorage();
+    loadUnableTasks();
+  }
+  Future<void> loadUnableTasks() async {
+    final unableTasks = await _dataStorage.loadUnableTasks();
+    setState(() {
+      this.unableTasks = tasks.where((task) => unableTasks.contains(task.name)).toList();
+    });
+  }
 
   void updateUnableTasks(QuestTask task, bool? isUnable) {
     setState(() {
@@ -51,6 +65,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
         unableTasks.remove(task);
       }
     });
+    _dataStorage.saveUnableTasks(unableTasks.map((task) => task.name).toList());
   }
 
   List<QuestTask> getEducationalTasks() {

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:first_app/playerStats.dart';
+
 import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
@@ -180,8 +182,11 @@ void createTasks(int taskAmount) {
         if (remainingTime.isNegative || remainingTime == Duration.zero) {
           countdownTimer?.cancel();
         }
-
+        
         final now = DateTime.now();
+        if ((now.hour == 23 && now.minute == 59 && now.second == 1) && !allTasksDone()) {
+          PlayerStats.decreaseAllStats(10); // Decrease all stats by 10, might have to change depending on receive rewards system later
+        }
         if ((now.hour == 14 && now.minute == 0 && now.second == 1 ||
                 now.hour == 20 && now.minute == 0 && now.second == 1) &&
             !allTasksDone()) {

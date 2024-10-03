@@ -21,7 +21,6 @@ import 'task_selection_screen.dart';
 class QuestTask {
   String name;
   bool isCompleted;
-  String progress;
   String goal;
   TaskType type;
   TaskDiff diff;
@@ -29,7 +28,6 @@ class QuestTask {
   QuestTask({
     required this.name,
     this.isCompleted = false,
-    required this.progress,
     required this.goal,
     required this.type,
     required this.diff,
@@ -84,7 +82,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
       createTasks(taskAmount);
       for (var task in widget.tasks) {
         task.isCompleted = false;
-        task.progress = '0';
       }
     });
   }
@@ -501,7 +498,7 @@ class QuestItem extends StatelessWidget {
             ],
           ),
           Text(
-            '[${task.progress}/${task.goal}]',
+            '[${task.goal}]',
             style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ],

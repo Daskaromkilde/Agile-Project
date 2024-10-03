@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'avatar_view_page.dart'; // Import the file that contains the Stat class
+// Import the file that contains the Stat class
 
 class BattleArena extends StatefulWidget {
   final int strength;
@@ -30,7 +30,7 @@ class _BattleArenaState extends State<BattleArena> {
     int totalPlayerStats = widget.strength +
         widget.intelligence +
         widget.stamina +
-        widget.hp + 
+        widget.hp +
         widget.level;
 
     return Scaffold(

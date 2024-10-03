@@ -86,10 +86,13 @@ class Stat {
     currentValue = currentValue + amount;
   }
 
+  void increasMaxValue(int amount) {
+    maxValue += amount;
+  }
+
   void increasPlayerEXP(int amount) {
     if (currentValue + amount >= maxValue) {
       levelUp();
-      maxValue = (maxValue * 1.2).toInt();
     } else {
       currentValue = currentValue + amount;
     }

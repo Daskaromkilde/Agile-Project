@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class QuestDetailsPage extends StatelessWidget {
+  const QuestDetailsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,13 +14,13 @@ class QuestDetailsPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text( // here information can be written
+            Text(
+              // here information can be written
               'This is the quest details page where you can provide more information.',
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 20),
-          
+            SizedBox(height: 20),
           ],
         ),
       ),

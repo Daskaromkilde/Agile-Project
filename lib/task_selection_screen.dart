@@ -56,7 +56,9 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
           TaskDiff.medium: '2KM',
           TaskDiff.hard: '5KM',
         };
-      } else if (exercise == 'Yoga' || exercise == 'Stretch' || exercise == 'Breathe') {
+      } else if (exercise == 'Yoga' ||
+          exercise == 'Stretch' ||
+          exercise == 'Breathe') {
         return {
           TaskDiff.easy: '15MIN',
           TaskDiff.medium: '30MIN',
@@ -74,17 +76,17 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     // Generate tasks for each exercise with each difficulty
     for (String exercise in exercises) {
       generatedTasks.add(QuestTask(
-          name: '$exercise',
+          name: exercise,
           goal: difficultyGoals(exercise)[TaskDiff.easy]!,
           type: TaskType.physical,
           diff: TaskDiff.easy));
       generatedTasks.add(QuestTask(
-          name: '$exercise',
+          name: exercise,
           goal: difficultyGoals(exercise)[TaskDiff.medium]!,
           type: TaskType.physical,
           diff: TaskDiff.medium));
       generatedTasks.add(QuestTask(
-          name: '$exercise',
+          name: exercise,
           goal: difficultyGoals(exercise)[TaskDiff.hard]!,
           type: TaskType.physical,
           diff: TaskDiff.hard));
@@ -92,15 +94,51 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
 
     // Add educational tasks manually if needed
     generatedTasks.addAll([
-      QuestTask(name: 'Study a subject [Easy]', goal: '30MIN', type: TaskType.educational, diff: TaskDiff.easy),
-      QuestTask(name: 'Improve vocabulary [Medium]', goal: '30MIN', type: TaskType.educational, diff: TaskDiff.medium),
-      QuestTask(name: 'Read a book [Easy]', goal: '1HRS', type: TaskType.educational, diff: TaskDiff.easy),
-      QuestTask(name: 'Arithmetics [Medium]', goal: '45MIN', type: TaskType.educational, diff: TaskDiff.medium),
-      QuestTask(name: 'Linear equations [Hard]', goal: '45MIN', type: TaskType.educational, diff: TaskDiff.hard),
-      QuestTask(name: 'Trigonometric problems [Medium]', goal: '45MIN', type: TaskType.educational, diff: TaskDiff.medium),
-      QuestTask(name: 'Differentiate/integrate [Hard]', goal: '45MIN', type: TaskType.educational, diff: TaskDiff.hard),
-      QuestTask(name: 'Watch a video/lecture [Easy]', goal: '1', type: TaskType.educational, diff: TaskDiff.easy),
-      QuestTask(name: 'Solve matrices [Hard]', goal: '45MIN', type: TaskType.educational, diff: TaskDiff.hard),
+      QuestTask(
+          name: 'Study a subject [Easy]',
+          goal: '30MIN',
+          type: TaskType.educational,
+          diff: TaskDiff.easy),
+      QuestTask(
+          name: 'Improve vocabulary [Medium]',
+          goal: '30MIN',
+          type: TaskType.educational,
+          diff: TaskDiff.medium),
+      QuestTask(
+          name: 'Read a book [Easy]',
+          goal: '1HRS',
+          type: TaskType.educational,
+          diff: TaskDiff.easy),
+      QuestTask(
+          name: 'Arithmetics [Medium]',
+          goal: '45MIN',
+          type: TaskType.educational,
+          diff: TaskDiff.medium),
+      QuestTask(
+          name: 'Linear equations [Hard]',
+          goal: '45MIN',
+          type: TaskType.educational,
+          diff: TaskDiff.hard),
+      QuestTask(
+          name: 'Trigonometric problems [Medium]',
+          goal: '45MIN',
+          type: TaskType.educational,
+          diff: TaskDiff.medium),
+      QuestTask(
+          name: 'Differentiate/integrate [Hard]',
+          goal: '45MIN',
+          type: TaskType.educational,
+          diff: TaskDiff.hard),
+      QuestTask(
+          name: 'Watch a video/lecture [Easy]',
+          goal: '1',
+          type: TaskType.educational,
+          diff: TaskDiff.easy),
+      QuestTask(
+          name: 'Solve matrices [Hard]',
+          goal: '45MIN',
+          type: TaskType.educational,
+          diff: TaskDiff.hard),
     ]);
 
     return generatedTasks;

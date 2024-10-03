@@ -32,25 +32,21 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     super.initState();
     tasks = generateTasks();
   }
-
-
-  // Function to generate tasks with varying difficulty
-  List<QuestTask> generateTasks() {
-    List<QuestTask> generatedTasks = [];
-
-
-  //@override
-  //void initState() {
-    //super.initState();
-    //_dataStorage = DataStorage();
-    //loadUnableTasks();
-  //}
   Future<void> loadUnableTasks() async {
     final unableTasks = await _dataStorage.loadUnableTasks();
     setState(() {
       this.unableTasks = tasks.where((task) => unableTasks.contains(task.name)).toList();
     });
     }
+    //@override
+  //void initState() {
+    //super.initState();
+    //_dataStorage = DataStorage();
+    //loadUnableTasks();
+  //}
+  // Function to generate tasks with varying difficulty
+  List<QuestTask> generateTasks() {
+    List<QuestTask> generatedTasks = [];
 
     // List of exercises
     List<String> exercises = [

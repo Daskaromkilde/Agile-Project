@@ -192,10 +192,12 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
         if (remainingTime.isNegative || remainingTime == Duration.zero) {
           countdownTimer?.cancel();
         }
-        
+
         final now = DateTime.now();
-        if ((now.hour == 23 && now.minute == 59 && now.second == 1) && !allTasksDone()) {
-          PlayerStats.decreaseAllStats(10); // Decrease all stats by 10, might have to change depending on receive rewards system later
+        if ((now.hour == 23 && now.minute == 59 && now.second == 1) &&
+            !allTasksDone()) {
+          PlayerStats.decreaseAllStats(
+              10); // Decrease all stats by 10, might have to change depending on receive rewards system later
         }
         if ((now.hour == 14 && now.minute == 0 && now.second == 1 ||
                 now.hour == 20 && now.minute == 0 && now.second == 1) &&
@@ -387,6 +389,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 ElevatedButton(
                   onPressed: () {
                     newTasks();
+                    PlayerStats.increaseEXP(
+                        50); // Increase all stats by 10, might have to change depending on receive rewards system later
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {

@@ -79,6 +79,18 @@ class PlayerStats {
     hp.decrease(amount);
     sta.decrease(amount);
   }
+
+  static void levelupIncrease(int amount) {
+    str.increasMaxValue(amount);
+    intell.increasMaxValue(amount);
+    hp.increasMaxValue(amount);
+  }
+
+  static void levelupIncreaseByFactor(double times) {
+    str.increasMaxValue((str.maxValue * times) as int);
+    intell.increasMaxValue((str.maxValue * times) as int);
+    hp.increasMaxValue((str.maxValue * times) as int);
+  }
 }
 
 class Stat {
@@ -112,9 +124,12 @@ class Stat {
   }
 
   void levelUp() {
+    double expoFaktor = 6;
     level++;
-    currentValue = 0;
-    maxValue = (maxValue * 1.2).toInt();
+    currentValue = currentValue % maxValue;
+    maxValue = (maxValue * expoFaktor).toInt();
+    expoFaktor *= 1.4;
+    PlayerStats.levelupIncreaseByFactor(2);
   }
 
   void increaseMaxValue(int amount) {

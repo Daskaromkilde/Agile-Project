@@ -1,3 +1,4 @@
+/// A class representing the player's stats.
 class PlayerStats {
   static Stat exp = Stat(currentValue: 0, maxValue: 10000, level: 0);
   static Stat str = Stat(currentValue: 0, maxValue: 100, level: 0);
@@ -7,71 +8,72 @@ class PlayerStats {
 
   static int level = 0;
 
-  // Getters for EXP
+  /// Getter for EXP stat.
   static Stat get getEXP => exp;
 
-  // Getters for STR
+  /// Getter for STR stat.
   static Stat get getSTR => str;
 
-  // Getters for INT
+  /// Getter for INT stat.
   static Stat get getINT => intell;
 
-  // Getters for HP
+  /// Getter for HP stat.
   static Stat get getHP => hp;
 
-  // Getters for STA
+  /// Getter for STA stat.
   static Stat get getSTA => sta;
 
-  // Function to increase EXP
+  /// Increases the EXP stat by the given amount.
   static void increaseEXP(int amount) {
     exp.increasPlayerEXP(amount);
   }
 
-  // Function to increase STR
+  /// Increases the STR stat by the given amount.
   static void increaseSTR(int amount) {
     str.increase(amount);
   }
 
+  /// Increases the STA stat by the given amount.
   static void increaseSTA(int amount) {
     sta.increase(amount);
   }
 
-  // Function to increase INT
+  /// Increases the INT stat by the given amount.
   static void increaseINT(int amount) {
     intell.increase(amount);
   }
 
-  // Function to increase HP
+  /// Increases the HP stat by the given amount.
   static void increaseHP(int amount) {
     hp.increase(amount);
   }
 
-  // Function to decrease EXP
+  /// Decreases the EXP stat by the given amount.
   static void decreaseEXP(int amount) {
     exp.decrease(amount);
   }
 
-  // Function to decrease STR
+  /// Decreases the STR stat by the given amount.
   static void decreaseSTR(int amount) {
     str.decrease(amount);
   }
 
-  // Function to decrease STA
+  /// Decreases the STA stat by the given amount.
   static void decreaseSTA(int amount) {
     sta.decrease(amount);
   }
 
-  // Function to decrease INT
+  /// Decreases the INT stat by the given amount.
   static void decreaseINT(int amount) {
     intell.decrease(amount);
   }
 
-  // Function to decrease HP
+  /// Decreases the HP stat by the given amount.
   static void decreaseHP(int amount) {
     hp.decrease(amount);
   }
 
-  // Function to decrease all stats by a certain amount
+  /// Decreases all stats by the given amount.
   static void decreaseAllStats(int amount) {
     exp.decrease(amount);
     str.decrease(amount);
@@ -80,37 +82,46 @@ class PlayerStats {
     sta.decrease(amount);
   }
 
+  /// Increases the max value of STR, INT, and HP stats by the given amount.
   static void levelupIncrease(int amount) {
     str.increasMaxValue(amount);
     intell.increasMaxValue(amount);
     hp.increasMaxValue(amount);
   }
 
+  /// Increases the max value of STR, INT, and HP stats by a factor.
   static void levelupIncreaseByFactor(double times) {
-    str.increasMaxValue((str.maxValue * times) as int);
-    intell.increasMaxValue((str.maxValue * times) as int);
-    hp.increasMaxValue((str.maxValue * times) as int);
+    str.increasMaxValue((str.maxValue * times).toInt());
+    intell.increasMaxValue((str.maxValue * times).toInt());
+    hp.increasMaxValue((str.maxValue * times).toInt());
   }
 }
 
+/// A class representing a single stat.
 class Stat {
   int currentValue;
   int maxValue;
   int level;
 
-  Stat(
-      {required this.currentValue,
-      required this.maxValue,
-      required this.level});
+  /// Creates a new Stat with the given current value, max value, and level.
+  Stat({
+    required this.currentValue,
+    required this.maxValue,
+    required this.level,
+  });
 
+  /// Increases the current value by the given amount.
   void increase(int amount) {
     currentValue = currentValue + amount;
   }
 
+  /// Increases the max value by the given amount.
   void increasMaxValue(int amount) {
     maxValue += amount;
   }
 
+  /// Increases the player's EXP by the given amount.
+  /// If the current value exceeds the max value, the player levels up.
   void increasPlayerEXP(int amount) {
     if (currentValue + amount >= maxValue) {
       levelUp();
@@ -119,10 +130,12 @@ class Stat {
     }
   }
 
+  /// Decreases the current value by the given amount, ensuring it does not go below zero.
   void decrease(int amount) {
     currentValue = (currentValue - amount).clamp(0, currentValue);
   }
 
+  /// Levels up the player, increasing the max value exponentially.
   void levelUp() {
     double expoFaktor = 6;
     level++;
@@ -132,6 +145,7 @@ class Stat {
     PlayerStats.levelupIncreaseByFactor(2);
   }
 
+  /// Increases the max value by the given amount and sets the current value to the new max value.
   void increaseMaxValue(int amount) {
     maxValue += amount;
     currentValue = maxValue;

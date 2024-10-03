@@ -66,6 +66,12 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   int strAmount = 0;
   int intAmount = 0;
 
+  void givePlayerExp() {
+    // HERE you add exp to player
+    //PlayerStats.increaseEXP(10);
+    // PlayerStats.increaseHP(10);
+  }
+
   bool allTasksDone() {
     return todoTasks.every((task) => task.isCompleted);
   }
@@ -389,8 +395,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 ElevatedButton(
                   onPressed: () {
                     newTasks();
-                    PlayerStats.increaseEXP(
-                        50); // Increase all stats by 10, might have to change depending on receive rewards system later
+                    givePlayerExp(); // Increase all stats by 10, might have to change depending on receive rewards system later
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {

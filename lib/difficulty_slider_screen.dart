@@ -1,79 +1,76 @@
-import 'package:first_app/difficulty_slider_screen.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
 import 'task_selection_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'task_selection_screen.dart';
 
-class taskSliderScreen extends StatefulWidget{
+
+class DifficultySliderScreen extends StatefulWidget{
   final String selectedAvatar;
   final String avatarName;
   final GameWidget game;
   final List<QuestTask> tasks;
+  final double taskCategory;
 
-  const taskSliderScreen
-  ({
-    super.key, 
-    required this.selectedAvatar, 
-    required this.avatarName, 
-    required this.game, 
-    required this.tasks
+  const DifficultySliderScreen({
+    required this.avatarName,
+    required this.selectedAvatar,
+    required this.game,
+    required this.tasks, 
+    required this.taskCategory
   });
 
-  @override 
-  // ignore: library_private_types_in_public_api
-  _taskSliderScreenState createState() => _taskSliderScreenState();
+  @override
+  _DifficultySliderScreenState createState() => _DifficultySliderScreenState();
 
 }
 
-class _taskSliderScreenState extends State<taskSliderScreen>{
+class _DifficultySliderScreenState extends State<DifficultySliderScreen>{
   List<QuestTask> tasks = [];
-  final labels = ['0','25','50','75','100'];
-  final double min = 0;
-  final double max = 4;
-  final divisions = 4;
-  double taskCategory = 50; // Startvalue of the slider
-
+  double DifficultySlider = 50;
 
   @override 
   void initState(){
     super.initState();
     tasks = widget.tasks;
+
   }
 
-  void proceedToDifficultySliderScreen() {
-    print('Slider value: $taskCategory'); // debug print
+    void proceedToQuestInfoScreen() {
+    print('taskCategory value: $widget.taskCategory'); // debug taskCategory value
+    print('Difficulty value: $DifficultySlider'); // debug difficulty value
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DifficultySliderScreen(
+        builder: (context) => QuestInfoScreen(
           selectedAvatar: widget.selectedAvatar,
           tasks: tasks,
           avatarName: widget.avatarName,
           game: widget.game,
-          taskCategory: taskCategory,
+          taskCategory: widget.taskCategory,
+          taskDifficulty: DifficultySlider,
         ),
       ),
     );
   }
+
 @override
 Widget build(BuildContext context) {
   const double thumbRadius = 14;
   const double tickMarkRadius = 12;
-  const int divisions = 4; // Number of divisions in the slider
+  const int divisions = 2; // Number of divisions in the slider
 
     final List<String> tickLabels = [
-    'Only Education', // Label for tick mark 0
-    'In Between',      // Label for tick mark 1
-    'Balanced',   // Label for tick mark 2
-    'In Between',     // Label for tick mark 3
-    'Only Physical' // Label for tick mark 4
+    'Easy', // Label for tick mark 0
+    'Medium',      // Label for tick mark 1
+    'Hard',   // Label for tick mark 2
   ];
 
   return Scaffold(
     appBar: AppBar(
       title: Text(
-        'Choose your preference of tasks!',
+        'Choose Difficulty!',
         style: GoogleFonts.medievalSharp(
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -85,9 +82,9 @@ Widget build(BuildContext context) {
       // Add background image
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/Sliderbackground.png'), // Background image
+          image: AssetImage('assets/images/Cave.png'), // Background image
           fit: BoxFit.cover,
-          alignment: Alignment(0.0, -0.9), // Adjust alignment to move image up
+          alignment: Alignment(0.0, -0.5), // Adjust alignment to move image up
         ),
       ),
       child: Stack(
@@ -146,32 +143,16 @@ Widget build(BuildContext context) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Int',
-                        style: GoogleFonts.medievalSharp(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                      ),
                       Expanded(
                         child: Slider(
-                          value: taskCategory,
+                          value: DifficultySlider,
                           min: 0,
                           max: 100,
                           divisions: divisions,
-                          label: taskCategory.round().toString(),
+                          label: DifficultySlider.round().toString(),
                           onChanged: (value) => setState(() {
-                            taskCategory = value;
+                            DifficultySlider = value;
                           }),
-                        ),
-                      ),
-                      Text(
-                        'Str',
-                        style: GoogleFonts.medievalSharp(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
                         ),
                       ),
                     ],
@@ -184,7 +165,7 @@ Widget build(BuildContext context) {
       ),
     ),
     floatingActionButton: FloatingActionButton(
-      onPressed: proceedToDifficultySliderScreen,
+      onPressed: proceedToQuestInfoScreen,
       child: const Icon(Icons.arrow_forward),
     ),
   );

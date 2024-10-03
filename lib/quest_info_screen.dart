@@ -12,12 +12,19 @@ import 'task_selection_screen.dart';
     physical,
   }
 
+  enum TaskDiff{
+    easy,
+    medium,
+    hard,
+  }
+
 class QuestTask {
   String name;
   bool isCompleted;
   String progress;
   String goal;
   TaskType type;
+  TaskDiff diff;
 
   QuestTask({
     required this.name,
@@ -25,6 +32,7 @@ class QuestTask {
     required this.progress,
     required this.goal,
     required this.type,
+    required this.diff,
   });
 }
 
@@ -33,7 +41,8 @@ class QuestInfoScreen extends StatefulWidget {
   final String avatarName;
   final List<QuestTask> tasks;
   final GameWidget game;
-  final double sliderValue;
+  final double taskCategory;
+  final double taskDifficulty;
 
   const QuestInfoScreen({
     super.key,
@@ -41,7 +50,8 @@ class QuestInfoScreen extends StatefulWidget {
     required this.tasks,
     required this.avatarName,
     required this.game,
-    required this.sliderValue,
+    required this.taskCategory,
+    required this.taskDifficulty
   });
 
   @override
@@ -91,7 +101,7 @@ void createTasks(int taskAmount) {
   }
 
   // Calculate the proportion of physical tasks based on the slider value
-  int physicalCount = ((widget.sliderValue / 100) * taskAmount).round(); // How many physical tasks
+  int physicalCount = ((widget.taskCategory / 100) * taskAmount).round(); // How many physical tasks
   int educationalCount = taskAmount - physicalCount; // The rest should be educational
 
   // Ensure we don't exceed available tasks
@@ -187,7 +197,7 @@ void createTasks(int taskAmount) {
   @override
   void initState() {
     super.initState();
-    weight = (widget.sliderValue/25).round(); // based on sliderValue, decide the amount of types of tasks
+    weight = (widget.taskCategory/25).round(); // based on sliderValue, decide the amount of types of tasks
     startCountdown(); // Start the 24-hour daily task countdown
     createTasks(taskAmount); // Generate initial tasks
 

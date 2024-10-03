@@ -83,7 +83,7 @@ class Stat {
       required this.level});
 
   void increase(int amount) {
-    currentValue = (currentValue + amount).clamp(0, maxValue);
+    currentValue = currentValue + amount;
   }
 
   void increasPlayerEXP(int amount) {
@@ -96,7 +96,7 @@ class Stat {
   }
 
   void decrease(int amount) {
-    currentValue = (currentValue - amount).clamp(0, maxValue);
+    currentValue = (currentValue - amount).clamp(0, currentValue);
   }
 
   void levelUp() {

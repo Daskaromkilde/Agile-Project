@@ -214,7 +214,15 @@ class _AvatarViewPage extends State<AvatarViewPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const BattleArena()),
+                  MaterialPageRoute(// to do 
+                    builder: (context) => BattleArena(
+                      strength: strength.currentValue,
+                      intelligence: intelligence.currentValue,
+                      stamina: stamina.currentValue,
+                      hp: hp.currentValue,
+                      level: xp.currentValue, // xp is placeholder until we have levels
+                    ),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(

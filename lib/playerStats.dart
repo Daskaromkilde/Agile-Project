@@ -70,6 +70,15 @@ class PlayerStats {
   static void decreaseHP(int amount) {
     hp.decrease(amount);
   }
+
+  // Function to decrease all stats by a certain amount
+  static void decreaseAllStats(int amount) {
+    exp.decrease(amount);
+    str.decrease(amount);
+    intell.decrease(amount);
+    hp.decrease(amount);
+    sta.decrease(amount);
+  }
 }
 
 class Stat {

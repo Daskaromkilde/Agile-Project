@@ -1,3 +1,4 @@
+import 'package:first_app/local_data_storage.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
@@ -21,6 +22,8 @@ class task_selection_screen extends StatefulWidget {
 }
 
 class _TaskSelectionScreenState extends State<task_selection_screen> {
+  late DataStorage  _dataStorage;
+  
   List<QuestTask> tasks = [];
   List<QuestTask> unableTasks = [];
 
@@ -30,9 +33,24 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     tasks = generateTasks();
   }
 
+
   // Function to generate tasks with varying difficulty
   List<QuestTask> generateTasks() {
     List<QuestTask> generatedTasks = [];
+
+
+  //@override
+  //void initState() {
+    //super.initState();
+    //_dataStorage = DataStorage();
+    //loadUnableTasks();
+  //}
+  Future<void> loadUnableTasks() async {
+    final unableTasks = await _dataStorage.loadUnableTasks();
+    setState(() {
+      this.unableTasks = tasks.where((task) => unableTasks.contains(task.name)).toList();
+    });
+    }
 
     // List of exercises
     List<String> exercises = [
@@ -152,6 +170,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
         unableTasks.remove(task);
       }
     });
+    _dataStorage.saveUnableTasks(unableTasks.map((task) => task.name).toList());
   }
 
   List<QuestTask> getEducationalTasks() {

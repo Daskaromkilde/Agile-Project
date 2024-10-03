@@ -45,6 +45,31 @@ class PlayerStats {
   static void increaseHP(int amount) {
     hp.increase(amount);
   }
+
+  // Function to decrease EXP
+  static void decreaseEXP(int amount) {
+    exp.decrease(amount);
+  }
+
+  // Function to decrease STR
+  static void decreaseSTR(int amount) {
+    str.decrease(amount);
+  }
+
+  // Function to decrease STA
+  static void decreaseSTA(int amount) {
+    sta.decrease(amount);
+  }
+
+  // Function to decrease INT
+  static void decreaseINT(int amount) {
+    intell.decrease(amount);
+  }
+
+  // Function to decrease HP
+  static void decreaseHP(int amount) {
+    hp.decrease(amount);
+  }
 }
 
 class Stat {

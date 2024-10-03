@@ -8,6 +8,7 @@ import 'avatar_select_page.dart'; // Import the AvatarSelectPage
 import 'package:flame/game.dart';
 import 'quest_info_detail.dart';
 import 'task_selection_screen.dart';
+import 'package:flutter/material.dart';
 
 enum TaskType {
   educational,
@@ -36,6 +37,7 @@ class QuestTask {
     required this.type,
     required this.diff,
   });
+
 }
 
 class QuestInfoScreen extends StatefulWidget {
@@ -78,6 +80,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     });
   }
 
+
   void newTasks() {
     setState(() {
       createTasks(taskAmount);
@@ -97,8 +100,70 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   void createTasks(int taskAmount) {
     taskAmount = 4; // We always want 4 tasks.
 
-    if (widget.tasks.isEmpty) {
-      return;
+  if (widget.tasks.isEmpty) {
+    return;
+  }
+
+  TaskDiff selectedDiff = TaskDiff.medium;
+  if(widget.taskDifficulty < 50){
+    selectedDiff = TaskDiff.easy;
+  }
+  else if(widget.taskDifficulty == 50){
+    selectedDiff = TaskDiff.medium;
+  }
+  else if(widget.taskDifficulty > 50){
+    selectedDiff = TaskDiff.hard;
+  }
+
+  // Calculate the proportion of physical tasks based on the slider value
+  int physicalCount = ((widget.taskCategory / 100) * taskAmount).round(); // How many physical tasks
+  int educationalCount = taskAmount - physicalCount; // The rest should be educational
+
+  // Ensure we don't exceed available tasks
+  physicalCount = physicalCount.clamp(0, widget.tasks.where((task) => task.type == TaskType.physical).length);
+  educationalCount = educationalCount.clamp(0, widget.tasks.where((task) => task.type == TaskType.educational).length);
+
+  // Randomly select the tasks
+  Random random = Random();
+  List<int> randomInts = [];
+  todoTasks.clear(); // Clear the list before adding new tasks
+
+  // Add physical tasks
+  List<QuestTask> physicalTasks = widget.tasks.where((task) => task.type == TaskType.physical && task.diff == selectedDiff).toList();
+  for (var i = 0; i < physicalCount; i++) {
+    if (physicalTasks.isEmpty) break; // In case there are no more available tasks
+
+    int randomIndex = random.nextInt(physicalTasks.length);
+    while (randomInts.contains(randomIndex)) {
+      randomIndex = random.nextInt(physicalTasks.length);
+    }
+    randomInts.add(randomIndex);
+    todoTasks.add(physicalTasks[randomIndex]);
+  }
+
+  // Reset randomInts for educational tasks
+  randomInts.clear();
+
+  // Add educational tasks
+  List<QuestTask> educationalTasks = widget.tasks.where((task) => task.type == TaskType.educational && task.diff == selectedDiff).toList();
+  for (var i = 0; i < educationalCount; i++) {
+    if (educationalTasks.isEmpty) break; // In case there are no more available tasks
+
+    int randomIndex = random.nextInt(educationalTasks.length);
+    while (randomInts.contains(randomIndex)) {
+      randomIndex = random.nextInt(educationalTasks.length);
+    }
+    randomInts.add(randomIndex);
+    todoTasks.add(educationalTasks[randomIndex]);
+  }
+
+  // If we haven't filled 4 tasks, fill the remainder with any type of task (either educational or physical)
+  while (todoTasks.length < taskAmount) {
+    // Get remaining tasks of both types
+    List<QuestTask> remainingTasks = widget.tasks.where((task) => !todoTasks.contains(task)).toList();
+    
+    if (remainingTasks.isEmpty) {
+      break; // If no more tasks are available, we stop
     }
 
     // Calculate the proportion of physical tasks based on the slider value
@@ -480,6 +545,21 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   }
 }
 
+
+class QuestTask {
+  final String name;
+  final int progress;
+  final int goal;
+  final bool isCompleted;
+
+  QuestTask({
+    required this.name,
+    required this.progress,
+    required this.goal,
+    required this.isCompleted,
+  });
+}
+
 class QuestItem extends StatelessWidget {
   final QuestTask task;
   final Function(bool?)? onChanged;
@@ -513,4 +593,5 @@ class QuestItem extends StatelessWidget {
       ),
     );
   }
+}
 }

@@ -35,6 +35,7 @@ class _DifficultySliderScreenState extends State<DifficultySliderScreen>{
     super.initState();
     tasks = widget.tasks;
 
+
   }
 
     void proceedToQuestInfoScreen() {

@@ -34,6 +34,7 @@ class QuestTask {
     required this.type,
     required this.diff,
   });
+
 }
 
 class QuestInfoScreen extends StatefulWidget {
@@ -77,6 +78,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     });
   }
 
+
   void newTasks() {
     setState(() {
       createTasks(taskAmount);
@@ -100,6 +102,17 @@ void createTasks(int taskAmount) {
     return;
   }
 
+  TaskDiff selectedDiff = TaskDiff.medium;
+  if(widget.taskDifficulty < 50){
+    selectedDiff = TaskDiff.easy;
+  }
+  else if(widget.taskDifficulty == 50){
+    selectedDiff = TaskDiff.medium;
+  }
+  else if(widget.taskDifficulty > 50){
+    selectedDiff = TaskDiff.hard;
+  }
+
   // Calculate the proportion of physical tasks based on the slider value
   int physicalCount = ((widget.taskCategory / 100) * taskAmount).round(); // How many physical tasks
   int educationalCount = taskAmount - physicalCount; // The rest should be educational
@@ -114,7 +127,7 @@ void createTasks(int taskAmount) {
   todoTasks.clear(); // Clear the list before adding new tasks
 
   // Add physical tasks
-  List<QuestTask> physicalTasks = widget.tasks.where((task) => task.type == TaskType.physical).toList();
+  List<QuestTask> physicalTasks = widget.tasks.where((task) => task.type == TaskType.physical && task.diff == selectedDiff).toList();
   for (var i = 0; i < physicalCount; i++) {
     if (physicalTasks.isEmpty) break; // In case there are no more available tasks
 
@@ -130,7 +143,7 @@ void createTasks(int taskAmount) {
   randomInts.clear();
 
   // Add educational tasks
-  List<QuestTask> educationalTasks = widget.tasks.where((task) => task.type == TaskType.educational).toList();
+  List<QuestTask> educationalTasks = widget.tasks.where((task) => task.type == TaskType.educational && task.diff == selectedDiff).toList();
   for (var i = 0; i < educationalCount; i++) {
     if (educationalTasks.isEmpty) break; // In case there are no more available tasks
 

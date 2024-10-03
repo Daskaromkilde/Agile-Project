@@ -20,24 +20,24 @@ class task_selection_screen extends StatefulWidget {
 
 class _TaskSelectionScreenState extends State<task_selection_screen> {
   List<QuestTask> tasks = [
-    QuestTask(name: 'Push-ups', progress: '0', goal: '100',type:TaskType.physical,diff: TaskDiff.medium),
-    QuestTask(name: 'Sit-ups', progress: '0', goal: '100',type:TaskType.physical,diff: TaskDiff.medium),
-    QuestTask(name: 'Squats', progress: '0', goal: '100',type:TaskType.physical,diff: TaskDiff.medium),
-    QuestTask(name: 'Run', progress: '0', goal: '100KM',type:TaskType.physical,diff: TaskDiff.hard),
-    QuestTask(name: 'Sprint', progress: '0', goal: '100KM',type:TaskType.physical,diff: TaskDiff.medium),
-    QuestTask(name: 'Walk', progress: '0', goal: '100KM',type:TaskType.physical,diff: TaskDiff.easy),
-    QuestTask(name: 'Intervalls', progress: '0', goal: '100',type:TaskType.physical,diff: TaskDiff.hard),
-    QuestTask(name: 'Stretch', progress: '0', goal: '30MIN',type:TaskType.physical,diff: TaskDiff.easy),
-    QuestTask(name: 'Yoga', progress: '0', goal: '30MIN',type:TaskType.physical,diff: TaskDiff.medium),
-    QuestTask(name: 'Study any chosen subject', progress: '0', goal:'30MIN',type:TaskType.educational,diff: TaskDiff.easy),
-    QuestTask(name: 'Improve your vocabulary', progress: '0', goal:'30MIN',type:TaskType.educational,diff: TaskDiff.medium),
-    QuestTask(name: 'Read any book', progress: '0', goal: '1HRS',type:TaskType.educational,diff: TaskDiff.easy),
-    QuestTask(name: 'Arithmetics', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.medium),
-    QuestTask(name: 'Linear equations', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.hard),
-    QuestTask(name: 'Trigonometic problems', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.medium),
-    QuestTask(name: 'differentiate/integrate functions', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.hard),
-    QuestTask(name: 'Watch any educational video/lecture', progress: '0', goal: '1',type:TaskType.educational,diff: TaskDiff.easy),
-    QuestTask(name: 'Solve matrices', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.hard),
+    QuestTask(name: 'Push-ups [Medium]', progress: '0', goal: '100',type:TaskType.physical,diff: TaskDiff.medium),
+    QuestTask(name: 'Sit-ups [Medium]', progress: '0', goal: '100',type:TaskType.physical,diff: TaskDiff.medium),
+    QuestTask(name: 'Squats [Medium]', progress: '0', goal: '100',type:TaskType.physical,diff: TaskDiff.medium),
+    QuestTask(name: 'Run [Hard]', progress: '0', goal: '100KM',type:TaskType.physical,diff: TaskDiff.hard),
+    QuestTask(name: 'Sprint [Medium]', progress: '0', goal: '100KM',type:TaskType.physical,diff: TaskDiff.medium),
+    QuestTask(name: 'Walk [Easy]', progress: '0', goal: '100KM',type:TaskType.physical,diff: TaskDiff.easy),
+    QuestTask(name: 'Intervalls [Hard]', progress: '0', goal: '100',type:TaskType.physical,diff: TaskDiff.hard),
+    QuestTask(name: 'Stretch [Easy]', progress: '0', goal: '30MIN',type:TaskType.physical,diff: TaskDiff.easy),
+    QuestTask(name: 'Yoga [Medium]', progress: '0', goal: '30MIN',type:TaskType.physical,diff: TaskDiff.medium),
+    QuestTask(name: 'Study a subject [Easy]', progress: '0', goal:'30MIN',type:TaskType.educational,diff: TaskDiff.easy),
+    QuestTask(name: 'Improve vocabulary [Medium]', progress: '0', goal:'30MIN',type:TaskType.educational,diff: TaskDiff.medium),
+    QuestTask(name: 'Read a book [Easy]', progress: '0', goal: '1HRS',type:TaskType.educational,diff: TaskDiff.easy),
+    QuestTask(name: 'Arithmetics [Medium]', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.medium),
+    QuestTask(name: 'Linear equations [Hard]', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.hard),
+    QuestTask(name: 'Trigonometic problems [Medium]', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.medium),
+    QuestTask(name: 'differentiate/integrate [Hard]', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.hard),
+    QuestTask(name: 'Watch a video/lecture [Easy]', progress: '0', goal: '1',type:TaskType.educational,diff: TaskDiff.easy),
+    QuestTask(name: 'Solve matrices  [Hard]', progress: '0', goal: '45MIN',type:TaskType.educational,diff: TaskDiff.hard),
   ];
 
 
@@ -54,24 +54,24 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
   }
 
   List<QuestTask> getEducationalTasks() {
-  return tasks.where((task) => task.type == TaskType.educational).toList();
+    return tasks.where((task) => task.type == TaskType.educational).toList();
 }
 
-List<QuestTask> getPhysicalTasks() {
-  return tasks.where((task) => task.type == TaskType.physical).toList();
+  List<QuestTask> getPhysicalTasks() {
+    return tasks.where((task) => task.type == TaskType.physical).toList();
+}
+  List<QuestTask> getEasyTasks(){
+    return tasks.where((task) => task.diff == TaskDiff.easy).toList();
 }
 
-List<QuestTask> getEasyTasks(){
-  return tasks.where((task) => task.diff == TaskDiff.easy).toList();
+  List<QuestTask> getMediumTasks(){
+    return tasks.where((task) => task.diff == TaskDiff.medium).toList();
 }
 
-List<QuestTask> getMediumTasks(){
-  return tasks.where((task) => task.diff == TaskDiff.medium).toList();
+  List<QuestTask> gethardTasks(){
+    return tasks.where((task) => task.diff == TaskDiff.hard).toList();
 }
 
-List<QuestTask> gethardTasks(){
-  return tasks.where((task) => task.diff == TaskDiff.hard).toList();
-}
 
   void proceedToTaskSliderScreen() {
     for (var task in unableTasks) {

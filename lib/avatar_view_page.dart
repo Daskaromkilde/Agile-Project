@@ -35,6 +35,10 @@ class AvatarViewPage extends StatefulWidget {
   _AvatarViewPage createState() => _AvatarViewPage();
 }
 
+void giveExperience(Stat stat, int amount) {
+  stat.increase(amount);
+}
+
 class _AvatarViewPage extends State<AvatarViewPage> {
   late Stat xp;
   late Stat strength;
@@ -214,13 +218,15 @@ class _AvatarViewPage extends State<AvatarViewPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(// to do 
+                  MaterialPageRoute(
+                    // to do
                     builder: (context) => BattleArena(
                       strength: strength.currentValue,
                       intelligence: intelligence.currentValue,
                       stamina: stamina.currentValue,
                       hp: hp.currentValue,
-                      level: xp.currentValue, // xp is placeholder until we have levels
+                      level: xp
+                          .currentValue, // xp is placeholder until we have levels
                     ),
                   ),
                 );

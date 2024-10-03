@@ -1,23 +1,8 @@
 import 'package:first_app/battle_arena.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:first_app/playerStats.dart';
 // Import avatars from other game files
-
-class Stat {
-  int currentValue;
-  int maxValue;
-
-  Stat({required this.currentValue, required this.maxValue});
-
-  void increase(int amount) {
-    currentValue = (currentValue + amount).clamp(0, maxValue);
-  }
-
-  void increaseMaxValue(int amount) {
-    maxValue += amount;
-    currentValue = maxValue;
-  }
-}
 
 class AvatarViewPage extends StatefulWidget {
   final String selectedAvatar;
@@ -36,20 +21,15 @@ class AvatarViewPage extends StatefulWidget {
 }
 
 class _AvatarViewPage extends State<AvatarViewPage> {
-  late Stat xp;
-  late Stat strength;
-  late Stat intelligence;
-  late Stat stamina;
-  late Stat hp;
+  void increaseStat(Stat stat, int amount) {
+    setState(() {
+      stat.increase(amount);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    xp = Stat(currentValue: 150, maxValue: 500);
-    strength = Stat(currentValue: 70, maxValue: 100);
-    intelligence = Stat(currentValue: 80, maxValue: 100);
-    stamina = Stat(currentValue: 90, maxValue: 100);
-    hp = Stat(currentValue: 100, maxValue: 200);
   }
 
   // Method to display the correct avatar (either animated or static)
@@ -167,41 +147,52 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                 Positioned(
                   top: 50,
                   left: 16,
-                  child:
-                      statCard('XP', xp, Colors.blue, Icons.auto_awesome, () {
-                    _showStatDetail(context, 'XP', xp);
+                  child: statCard(
+                      'XP', PlayerStats.getEXP, Colors.blue, Icons.auto_awesome,
+                      () {
+                    _showStatDetail(context, 'XP', PlayerStats.getEXP);
+                  }),
+                ),
+                Positioned(
+                  top: 50,
+                  left: 16,
+                  child: statCard(
+                      'XP', PlayerStats.getEXP, Colors.blue, Icons.auto_awesome,
+                      () {
+                    _showStatDetail(context, 'XP', PlayerStats.getEXP);
                   }),
                 ),
                 Positioned(
                   top: 50,
                   right: 16,
-                  child: statCard('HP', hp, Colors.greenAccent, Icons.favorite,
-                      () {
-                    _showStatDetail(context, 'HP', hp);
+                  child: statCard('HP', PlayerStats.getHP, Colors.greenAccent,
+                      Icons.favorite, () {
+                    _showStatDetail(context, 'HP', PlayerStats.getHP);
                   }),
                 ),
                 Positioned(
                   top: 170,
                   left: 16,
-                  child: statCard('Intelligence', intelligence,
+                  child: statCard('Intelligence', PlayerStats.getINT,
                       Colors.purpleAccent, Icons.psychology, () {
-                    _showStatDetail(context, 'Intelligence', intelligence);
+                    _showStatDetail(
+                        context, 'Intelligence', PlayerStats.getINT);
                   }),
                 ),
                 Positioned(
                   top: 170,
                   right: 16,
-                  child: statCard('Strength', strength, Colors.redAccent,
-                      Icons.fitness_center, () {
-                    _showStatDetail(context, 'Strength', strength);
+                  child: statCard('Strength', PlayerStats.getSTR,
+                      Colors.redAccent, Icons.fitness_center, () {
+                    _showStatDetail(context, 'Strength', PlayerStats.getSTR);
                   }),
                 ),
                 Positioned(
                   bottom: 30,
                   right: 16,
-                  child: statCard('Stamina', stamina, Colors.orangeAccent,
-                      Icons.directions_run, () {
-                    _showStatDetail(context, 'Stamina', stamina);
+                  child: statCard('Stamina', PlayerStats.getSTA,
+                      Colors.orangeAccent, Icons.directions_run, () {
+                    _showStatDetail(context, 'Stamina', PlayerStats.getSTA);
                   }),
                 ),
               ],
@@ -214,13 +205,15 @@ class _AvatarViewPage extends State<AvatarViewPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(// to do 
+                  MaterialPageRoute(
+                    // to do
                     builder: (context) => BattleArena(
-                      strength: strength.currentValue,
-                      intelligence: intelligence.currentValue,
-                      stamina: stamina.currentValue,
-                      hp: hp.currentValue,
-                      level: xp.currentValue, // xp is placeholder until we have levels
+                      strength: PlayerStats.getSTR.currentValue,
+                      intelligence: PlayerStats.getINT.currentValue,
+                      stamina: PlayerStats.getSTA.currentValue,
+                      hp: PlayerStats.getHP.currentValue,
+                      level: PlayerStats
+                          .level, // xp is placeholder until we have levels
                     ),
                   ),
                 );

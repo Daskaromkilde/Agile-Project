@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:first_app/playerStats.dart';
+
 import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
@@ -12,20 +14,27 @@ import 'task_selection_screen.dart';
     physical,
   }
 
+  enum TaskDiff{
+    easy,
+    medium,
+    hard,
+  }
+
 class QuestTask {
   String name;
   bool isCompleted;
-  String progress;
   String goal;
   TaskType type;
+  TaskDiff diff;
 
   QuestTask({
     required this.name,
     this.isCompleted = false,
-    required this.progress,
     required this.goal,
     required this.type,
+    required this.diff,
   });
+
 }
 
 class QuestInfoScreen extends StatefulWidget {
@@ -33,7 +42,8 @@ class QuestInfoScreen extends StatefulWidget {
   final String avatarName;
   final List<QuestTask> tasks;
   final GameWidget game;
-  final double sliderValue;
+  final double taskCategory;
+  final double taskDifficulty;
 
   const QuestInfoScreen({
     super.key,
@@ -41,7 +51,8 @@ class QuestInfoScreen extends StatefulWidget {
     required this.tasks,
     required this.avatarName,
     required this.game,
-    required this.sliderValue,
+    required this.taskCategory,
+    required this.taskDifficulty
   });
 
   @override
@@ -67,12 +78,12 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     });
   }
 
+
   void newTasks() {
     setState(() {
       createTasks(taskAmount);
       for (var task in widget.tasks) {
         task.isCompleted = false;
-        task.progress = '0';
       }
     });
   }
@@ -90,8 +101,19 @@ void createTasks(int taskAmount) {
     return;
   }
 
+  TaskDiff selectedDiff = TaskDiff.medium;
+  if(widget.taskDifficulty < 50){
+    selectedDiff = TaskDiff.easy;
+  }
+  else if(widget.taskDifficulty == 50){
+    selectedDiff = TaskDiff.medium;
+  }
+  else if(widget.taskDifficulty > 50){
+    selectedDiff = TaskDiff.hard;
+  }
+
   // Calculate the proportion of physical tasks based on the slider value
-  int physicalCount = ((widget.sliderValue / 100) * taskAmount).round(); // How many physical tasks
+  int physicalCount = ((widget.taskCategory / 100) * taskAmount).round(); // How many physical tasks
   int educationalCount = taskAmount - physicalCount; // The rest should be educational
 
   // Ensure we don't exceed available tasks
@@ -104,7 +126,7 @@ void createTasks(int taskAmount) {
   todoTasks.clear(); // Clear the list before adding new tasks
 
   // Add physical tasks
-  List<QuestTask> physicalTasks = widget.tasks.where((task) => task.type == TaskType.physical).toList();
+  List<QuestTask> physicalTasks = widget.tasks.where((task) => task.type == TaskType.physical && task.diff == selectedDiff).toList();
   for (var i = 0; i < physicalCount; i++) {
     if (physicalTasks.isEmpty) break; // In case there are no more available tasks
 
@@ -120,7 +142,7 @@ void createTasks(int taskAmount) {
   randomInts.clear();
 
   // Add educational tasks
-  List<QuestTask> educationalTasks = widget.tasks.where((task) => task.type == TaskType.educational).toList();
+  List<QuestTask> educationalTasks = widget.tasks.where((task) => task.type == TaskType.educational && task.diff == selectedDiff).toList();
   for (var i = 0; i < educationalCount; i++) {
     if (educationalTasks.isEmpty) break; // In case there are no more available tasks
 
@@ -160,8 +182,11 @@ void createTasks(int taskAmount) {
         if (remainingTime.isNegative || remainingTime == Duration.zero) {
           countdownTimer?.cancel();
         }
-
+        
         final now = DateTime.now();
+        if ((now.hour == 23 && now.minute == 59 && now.second == 1) && !allTasksDone()) {
+          PlayerStats.decreaseAllStats(10); // Decrease all stats by 10, might have to change depending on receive rewards system later
+        }
         if ((now.hour == 14 && now.minute == 0 && now.second == 1 ||
                 now.hour == 20 && now.minute == 0 && now.second == 1) &&
             !allTasksDone()) {
@@ -187,7 +212,7 @@ void createTasks(int taskAmount) {
   @override
   void initState() {
     super.initState();
-    weight = (widget.sliderValue/25).round(); // based on sliderValue, decide the amount of types of tasks
+    weight = (widget.taskCategory/25).round(); // based on sliderValue, decide the amount of types of tasks
     startCountdown(); // Start the 24-hour daily task countdown
     createTasks(taskAmount); // Generate initial tasks
 
@@ -478,7 +503,7 @@ class QuestItem extends StatelessWidget {
             ],
           ),
           Text(
-            '[${task.progress}/${task.goal}]',
+            '[${task.goal}]',
             style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ],

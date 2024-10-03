@@ -35,7 +35,8 @@ flutter:
     - assets/images/wind_SpriteSheet_288x128.png  # Wind Warrior sprite sheet
     - assets/images/female_knight_idle.png # female knight idle sprite sheet
     - assets/images/blue_witch_idle.png # blue witch idle sprite sheet
-    - assets/images/Sliderbackground.png # Slider background image    
+    - assets/images/Sliderbackground.png # Slider background image for taskSliderScreen 
+    - assets/images/Cave.png # Cave background image for difficulty screen  
 
 
 

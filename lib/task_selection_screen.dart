@@ -50,6 +50,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     setState(() {
       this.unableTasks = tasks.where((task) => unableTasks.contains(task.name)).toList();
     });
+    }
 
     // List of exercises
     List<String> exercises = [

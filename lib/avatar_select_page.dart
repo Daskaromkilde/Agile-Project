@@ -6,6 +6,7 @@ import 'wind_warrior_game.dart';
 import 'female_knight_game.dart';
 import 'blue_witch_game.dart';
 import 'task_selection_screen.dart';
+import 'local_data_storage.dart';
 
 class AvatarSelectPage extends StatefulWidget {
   const AvatarSelectPage({super.key});
@@ -16,7 +17,7 @@ class AvatarSelectPage extends StatefulWidget {
 
 class _AvatarSelectPageState extends State<AvatarSelectPage> {
   final TextEditingController _nameController = TextEditingController();
-
+  late DataStorage _dataStorage;
   // List all the avatars
   final List<String> _avatars = [
     'necromancer', // Necromancer animation
@@ -37,6 +38,17 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _dataStorage = DataStorage();
+    _dataStorage.loadAvatarSaveName().then((value) {
+      setState(() {
+        selectedAvatar = value['avatar']!;
+        _nameController.text = value['name']!;
+      });
+    });
+  }
   // Navigate to the previous avatar in the list
   void _previousAvatar() {
     setState(() {
@@ -126,6 +138,7 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
           ElevatedButton(
             onPressed: () {
               String enteredName = _nameController.text;
+              _dataStorage.saveAvatarSaveName(selectedAvatar, enteredName);
 
               // Navigate to task selection screen
               Navigator.push(

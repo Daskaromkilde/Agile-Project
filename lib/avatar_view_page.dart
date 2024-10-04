@@ -221,6 +221,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                       stamina: stamina.currentValue,
                       hp: hp.currentValue,
                       level: xp.currentValue, // xp is placeholder until we have levels
+                      selectedAvatar: widget.selectedAvatar,
                     ),
                   ),
                 );

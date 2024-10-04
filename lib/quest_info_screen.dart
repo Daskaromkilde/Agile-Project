@@ -4,7 +4,6 @@ import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
 import 'package:flame/game.dart';
-import 'quest_info_detail.dart';
 import 'task_selection_screen.dart';
 
   enum TaskType{

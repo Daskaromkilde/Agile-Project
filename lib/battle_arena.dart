@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import 'avatar_view_page.dart'; // Import the file that contains the Stat class
+import 'package:flame/game.dart';
+import 'boss_game.dart'; // Import your BossGame
+import 'necromancer_game.dart'; // Import avatars from other game files
+import 'fire_warrior_game.dart';
+import 'wind_warrior_game.dart';
+import 'female_knight_game.dart';
+import 'blue_witch_game.dart';
+import 'task_selection_screen.dart';
 
 class BattleArena extends StatefulWidget {
   final int strength;
@@ -7,6 +14,7 @@ class BattleArena extends StatefulWidget {
   final int stamina;
   final int hp;
   final int level;
+  final String selectedAvatar; // Add avatar path
 
   const BattleArena({
     super.key,
@@ -15,8 +23,12 @@ class BattleArena extends StatefulWidget {
     required this.stamina,
     required this.hp,
     required this.level,
+    required this.selectedAvatar, // Required avatar path
   });
-
+  
+  final String selectedAvatar2 = 'assets/necromancer.png';
+  
+  
   @override
   _BattleArenaState createState() => _BattleArenaState();
 }
@@ -30,7 +42,7 @@ class _BattleArenaState extends State<BattleArena> {
     int totalPlayerStats = widget.strength +
         widget.intelligence +
         widget.stamina +
-        widget.hp + 
+        widget.hp +
         widget.level;
 
     return Scaffold(
@@ -38,33 +50,79 @@ class _BattleArenaState extends State<BattleArena> {
         title: const Text('Battle Arena'),
         backgroundColor: const Color.fromARGB(255, 80, 18, 206),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Boss Battle',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            // Player Stats on the Left
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Adjust padding to wrap the Text widget
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50.0),
+                    child: Text(
+                      'Your total stats: $totalPlayerStats',
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  const SizedBox(height: 20), // Space between text and image
+
+                  // Avatar image
+                  Image.asset(
+                    widget.selectedAvatar2, // Display selected avatar image
+                    height: 150,
+                    width: 150,
+                    fit: BoxFit.contain,
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Your total stats: $totalPlayerStats',
-              style: const TextStyle(fontSize: 18),
+            // Boss HP and Animation on the Right
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50.0), // Move down by 50 pixels
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Boss HP: $bossHP',
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Container for Boss Animation (BossGame)
+                        SizedBox(
+                          height: 300, // Set height for the boss animation container
+                          width: 200,  // Set width for the boss animation container
+                          child: GameWidget(
+                            game: BossGame(), // Your boss animation game
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Text(
-              'Boss HP: $bossHP',
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 40),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
             ElevatedButton(
               onPressed: () {
                 if (totalPlayerStats > bossHP) {
                   setState(() {
-                    // Player wins, increase boss HP for the next round
-                    bossHP += hpIncrement;
+                    bossHP += hpIncrement; // Increase boss HP after win
                   });
 
                   showDialog(
@@ -88,14 +146,11 @@ class _BattleArenaState extends State<BattleArena> {
                   );
                 }
               },
-              child: const Text('Battle'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context); // Return to the previous screen
-              },
-              child: const Text('Exit Arena'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                backgroundColor: Colors.redAccent,
+              ),
+              child: const Text('Fight!'),
             ),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:first_app/local_data_storage.dart';
 import 'package:first_app/playerStats.dart';
 
 import 'avatar_view_page.dart';
@@ -65,11 +66,12 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   late int weight; // parse sliderValue to range 0-4
   int strAmount = 0;
   int intAmount = 0;
+  late DataStorage dataStorage;
 
-  void givePlayerExp() {
+  void givePlayerExp(int amount) {
     // HERE you add exp to player
-    //PlayerStats.increaseEXP(10);
-    // PlayerStats.increaseHP(10);
+    PlayerStats.increaseAllStats(amount);
+    dataStorage.savePlayerStats();
   }
 
   bool allTasksDone() {
@@ -230,10 +232,12 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   @override
   void initState() {
     super.initState();
+    DataStorage dataStorage = DataStorage();
     weight = (widget.taskCategory / 25)
         .round(); // based on sliderValue, decide the amount of types of tasks
     startCountdown(); // Start the 24-hour daily task countdown
     createTasks(taskAmount); // Generate initial tasks
+    dataStorage.loadPlayerStats(); // Loads PlayerStats
 
     // Set the size of the game
     // Adjust the size as needed
@@ -395,7 +399,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 ElevatedButton(
                   onPressed: () {
                     newTasks();
-                    givePlayerExp(); // Increase all stats by 10, might have to change depending on receive rewards system later
+                    givePlayerExp(
+                        100); // Increase all stats by 5, might have to change depending on receive rewards system later
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {

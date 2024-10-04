@@ -82,6 +82,14 @@ class PlayerStats {
     sta.decrease(amount);
   }
 
+  static void increaseAllStats(int amount) {
+    exp.increase(amount);
+    str.increase(amount);
+    intell.increase(amount);
+    hp.increase(amount);
+    sta.increase(amount);
+  }
+
   /// Increases the max value of STR, INT, and HP stats by the given amount.
   static void levelupIncrease(int amount) {
     str.increasMaxValue(amount);

@@ -22,35 +22,30 @@ class task_selection_screen extends StatefulWidget {
 }
 
 class _TaskSelectionScreenState extends State<task_selection_screen> {
-  late DataStorage  _dataStorage;
-  
+  late DataStorage _dataStorage;
+
   List<QuestTask> tasks = [];
   List<QuestTask> unableTasks = [];
 
   @override
   void initState() {
     super.initState();
+    _dataStorage = DataStorage();
     tasks = generateTasks();
+    loadUnableTasks();
   }
 
+  Future<void> loadUnableTasks() async {
+    final unableTasks = await _dataStorage.loadUnableTasks();
+    setState(() {
+      this.unableTasks =
+          tasks.where((task) => unableTasks.contains(task.name)).toList();
+    });
+  }
 
   // Function to generate tasks with varying difficulty
   List<QuestTask> generateTasks() {
     List<QuestTask> generatedTasks = [];
-
-
-  //@override
-  //void initState() {
-    //super.initState();
-    //_dataStorage = DataStorage();
-    //loadUnableTasks();
-  //}
-  Future<void> loadUnableTasks() async {
-    final unableTasks = await _dataStorage.loadUnableTasks();
-    setState(() {
-      this.unableTasks = tasks.where((task) => unableTasks.contains(task.name)).toList();
-    });
-    }
 
     // List of exercises
     List<String> exercises = [

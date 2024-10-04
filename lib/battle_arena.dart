@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'local_data_storage.dart';
 // Import the file that contains the Stat class
 
 class BattleArena extends StatefulWidget {
@@ -22,8 +23,21 @@ class BattleArena extends StatefulWidget {
 }
 
 class _BattleArenaState extends State<BattleArena> {
+  late DataStorage dataStorage;
   int bossHP = 300; // Initial boss HP
   int hpIncrement = 100; // Increment boss HP after each victory
+
+  @override
+  void initState() {
+    super.initState();
+    dataStorage = DataStorage();
+
+    dataStorage.loadBossHP().then((loadedBossHP) {
+      setState(() {
+        bossHP = loadedBossHP;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +79,7 @@ class _BattleArenaState extends State<BattleArena> {
                   setState(() {
                     // Player wins, increase boss HP for the next round
                     bossHP += hpIncrement;
+                    dataStorage.saveBossHP(bossHP);
                   });
 
                   showDialog(

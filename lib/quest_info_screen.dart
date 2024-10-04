@@ -66,9 +66,13 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   int intAmount = 0;
 
   void givePlayerExp() {
-    // HERE you add exp to player
-    //PlayerStats.increaseEXP(10);
-    // PlayerStats.increaseHP(10);
+    PlayerStats.increaseEXP(35);
+    PlayerStats.increaseHP(35);
+    PlayerStats.increaseINT(35);
+    PlayerStats.increaseSTR(35);
+    PlayerStats.increaseSTA(35);
+
+  
   }
 
   bool allTasksDone() {

@@ -1,4 +1,8 @@
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'boss_game.dart'; // Import your BossGame
+import 'necromancer_game.dart'; // Import avatars from other game files
+
 // Import the file that contains the Stat class
 
 class BattleArena extends StatefulWidget {

@@ -71,7 +71,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     // HERE you add exp to player
     PlayerStats.increaseAllStats(35);
     dataStorage.savePlayerStats();
-
+  }
 
   bool allTasksDone() {
     return todoTasks.every((task) => task.isCompleted);

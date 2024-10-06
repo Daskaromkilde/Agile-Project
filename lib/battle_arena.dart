@@ -23,7 +23,7 @@ class BattleArena extends StatefulWidget {
     required this.selectedAvatar, // Required avatar path
   });
   
-  final String selectedAvatar2 = 'assets/necromancer.png';
+  final String selectedAvatar2 = 'assets/images/Necromancer.png';
   
   
   @override

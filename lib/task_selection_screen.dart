@@ -48,7 +48,7 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     List<QuestTask> generatedTasks = [];
 
     // List of exercises
-    List<String> exercises = [
+    List<String> physicalExercises = [
       'Stretch',
       'Breathe',
       'Walk',
@@ -61,100 +61,105 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
       'Run'
     ];
 
+    List<String> educationalSubjects = [
+        'Study a subject',
+        'Improve vocabulary',
+        'Read a book',
+        'Arithmetics',
+        'Linear equations',
+        'Trigonometric problems',
+        'Differentiate/integrate',
+        'Watch a video/lecture',
+        'Solve matrices'
+    ];
+
     // Define goals for each difficulty
-    Map<TaskDiff, String> difficultyGoals(String exercise) {
-      if (exercise == 'Walk' || exercise == 'Sprint' || exercise == 'Run') {
-        return {
-          TaskDiff.easy: '1KM',
-          TaskDiff.medium: '2KM',
-          TaskDiff.hard: '5KM',
-        };
-      } else if (exercise == 'Yoga' ||
-          exercise == 'Stretch' ||
-          exercise == 'Breathe') {
-        return {
-          TaskDiff.easy: '15MIN',
-          TaskDiff.medium: '30MIN',
-          TaskDiff.hard: '45MIN',
-        };
-      } else {
-        return {
-          TaskDiff.easy: '50',
-          TaskDiff.medium: '100',
-          TaskDiff.hard: '150',
-        };
-      }
-    }
+Map<TaskDiff, String> difficultyGoals(String exercise) {
+  if (exercise == 'Walk' || exercise == 'Sprint' || exercise == 'Run') {
+    return {
+      TaskDiff.easy: '1KM',
+      TaskDiff.medium: '2KM',
+      TaskDiff.hard: '5KM',
+    };
+  } else if (exercise == 'Yoga' ||
+      exercise == 'Stretch' ||
+      exercise == 'Breathe') {
+    return {
+      TaskDiff.easy: '15MIN',
+      TaskDiff.medium: '30MIN',
+      TaskDiff.hard: '45MIN',
+    };
+  } else {
+    return {
+      TaskDiff.easy: '50',
+      TaskDiff.medium: '100',
+      TaskDiff.hard: '150',
+    };
+  }
+}
 
-    // Generate tasks for each exercise with each difficulty
-    for (String exercise in exercises) {
-      generatedTasks.add(QuestTask(
-          name: exercise,
-          goal: difficultyGoals(exercise)[TaskDiff.easy]!,
-          type: TaskType.physical,
-          diff: TaskDiff.easy));
-      generatedTasks.add(QuestTask(
-          name: exercise,
-          goal: difficultyGoals(exercise)[TaskDiff.medium]!,
-          type: TaskType.physical,
-          diff: TaskDiff.medium));
-      generatedTasks.add(QuestTask(
-          name: exercise,
-          goal: difficultyGoals(exercise)[TaskDiff.hard]!,
-          type: TaskType.physical,
-          diff: TaskDiff.hard));
-    }
+Map<TaskDiff, String> educationalGoals(String subject) {
+  if (subject == 'Study a subject' || subject == 'Watch a video/lecture') {
+    return {
+      TaskDiff.easy: '15MIN',
+      TaskDiff.medium: '30MIN',
+      TaskDiff.hard: '45MIN',
+    };
+  } else if (subject == 'Improve vocabulary' ||
+      subject == 'Arithmetics' ||
+      subject == 'Trigonometric problems') {
+    return {
+      TaskDiff.easy: '15MIN',
+      TaskDiff.medium: '30MIN',
+      TaskDiff.hard: '45MIN',
+    };
+  } else {
+    return {
+      TaskDiff.easy: '15MIN',
+      TaskDiff.medium: '30MIN',
+      TaskDiff.hard: '45MIN',
+    };
+  }
+}
 
-    // Add educational tasks manually if needed
-    generatedTasks.addAll([
-      QuestTask(
-          name: 'Study a subject [Easy]',
-          goal: '30MIN',
-          type: TaskType.educational,
-          diff: TaskDiff.easy),
-      QuestTask(
-          name: 'Improve vocabulary [Medium]',
-          goal: '30MIN',
-          type: TaskType.educational,
-          diff: TaskDiff.medium),
-      QuestTask(
-          name: 'Read a book [Easy]',
-          goal: '1HRS',
-          type: TaskType.educational,
-          diff: TaskDiff.easy),
-      QuestTask(
-          name: 'Arithmetics [Medium]',
-          goal: '45MIN',
-          type: TaskType.educational,
-          diff: TaskDiff.medium),
-      QuestTask(
-          name: 'Linear equations [Hard]',
-          goal: '45MIN',
-          type: TaskType.educational,
-          diff: TaskDiff.hard),
-      QuestTask(
-          name: 'Trigonometric problems [Medium]',
-          goal: '45MIN',
-          type: TaskType.educational,
-          diff: TaskDiff.medium),
-      QuestTask(
-          name: 'Differentiate/integrate [Hard]',
-          goal: '45MIN',
-          type: TaskType.educational,
-          diff: TaskDiff.hard),
-      QuestTask(
-          name: 'Watch a video/lecture [Easy]',
-          goal: '1',
-          type: TaskType.educational,
-          diff: TaskDiff.easy),
-      QuestTask(
-          name: 'Solve matrices [Hard]',
-          goal: '45MIN',
-          type: TaskType.educational,
-          diff: TaskDiff.hard),
-    ]);
+// Generate tasks for each exercise and educational task with each difficulty
+for (String exercise in physicalExercises) {
+  generatedTasks.add(QuestTask(
+      name: exercise,
+      goal: difficultyGoals(exercise)[TaskDiff.easy]!,
+      type: TaskType.physical,
+      diff: TaskDiff.easy));
+  generatedTasks.add(QuestTask(
+      name: exercise,
+      goal: difficultyGoals(exercise)[TaskDiff.medium]!,
+      type: TaskType.physical,
+      diff: TaskDiff.medium));
+  generatedTasks.add(QuestTask(
+      name: exercise,
+      goal: difficultyGoals(exercise)[TaskDiff.hard]!,
+      type: TaskType.physical,
+      diff: TaskDiff.hard));
+}
 
-    return generatedTasks;
+for (String subject in educationalSubjects) {
+  generatedTasks.add(QuestTask(
+      name: subject,
+      goal: educationalGoals(subject)[TaskDiff.easy]!,
+      type: TaskType.educational,
+      diff: TaskDiff.easy));
+  generatedTasks.add(QuestTask(
+      name: subject,
+      goal: educationalGoals(subject)[TaskDiff.medium]!,
+      type: TaskType.educational,
+      diff: TaskDiff.medium));
+  generatedTasks.add(QuestTask(
+      name: subject,
+      goal: educationalGoals(subject)[TaskDiff.hard]!,
+      type: TaskType.educational,
+      diff: TaskDiff.hard));
+}
+
+return generatedTasks;
   }
 
   void updateUnableTasks(QuestTask task, bool? isUnable) {

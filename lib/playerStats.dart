@@ -1,10 +1,10 @@
 /// A class representing the player's stats.
 class PlayerStats {
-  static Stat exp = Stat(currentValue: 0, maxValue: 10000, level: 0);
-  static Stat str = Stat(currentValue: 0, maxValue: 100, level: 0);
-  static Stat intell = Stat(currentValue: 0, maxValue: 100, level: 0);
-  static Stat hp = Stat(currentValue: 0, maxValue: 100, level: 0);
-  static Stat sta = Stat(currentValue: 0, maxValue: 100, level: 0);
+  static Stat exp = Stat(currentValue: 0, maxValue: 100, level: 0);
+  static Stat str = Stat(currentValue: 0, maxValue: 150, level: 0);
+  static Stat intell = Stat(currentValue: 0, maxValue: 150, level: 0);
+  static Stat hp = Stat(currentValue: 0, maxValue: 150, level: 0);
+  static Stat sta = Stat(currentValue: 0, maxValue: 150, level: 0);
 
   static int level = 0;
 
@@ -51,6 +51,7 @@ class PlayerStats {
   /// Decreases the EXP stat by the given amount.
   static void decreaseEXP(int amount) {
     exp.decrease(amount);
+
   }
 
   /// Decreases the STR stat by the given amount.
@@ -145,11 +146,11 @@ class Stat {
 
   /// Levels up the player, increasing the max value exponentially.
   void levelUp() {
-    double expoFaktor = 6;
+    double expoFaktor = 4;
     level++;
     currentValue = currentValue % maxValue;
     maxValue = (maxValue * expoFaktor).toInt();
-    expoFaktor *= 1.4;
+    expoFaktor *= 1.2;
     PlayerStats.levelupIncreaseByFactor(2);
   }
 

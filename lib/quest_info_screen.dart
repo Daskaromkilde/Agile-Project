@@ -7,7 +7,6 @@ import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
 import 'package:flame/game.dart';
-import 'quest_info_detail.dart';
 import 'task_selection_screen.dart';
 
 enum TaskType {
@@ -68,11 +67,11 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   int intAmount = 0;
   late DataStorage dataStorage;
 
-  void givePlayerExp(int amount) {
+  void givePlayerExp() {
     // HERE you add exp to player
-    PlayerStats.increaseAllStats(amount);
+    PlayerStats.increaseAllStats(35);
     dataStorage.savePlayerStats();
-  }
+
 
   bool allTasksDone() {
     return todoTasks.every((task) => task.isCompleted);
@@ -399,8 +398,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 ElevatedButton(
                   onPressed: () {
                     newTasks();
-                    givePlayerExp(
-                        100); // Increase all stats by 5, might have to change depending on receive rewards system later
+                    givePlayerExp(); // Hardcoded to 35 points
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {

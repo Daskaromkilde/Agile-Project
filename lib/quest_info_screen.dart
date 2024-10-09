@@ -305,8 +305,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(195, 12, 88,
-                      109), // This is 50% opacity (alpha value = 128),
+                  color: Color.fromARGB(255, 120, 89, 192), // This is 50% opacity (alpha value = 128),
                   // borderRadius: BorderRadius.only(
                   //   bottomLeft: Radius.circular(10),
                   //   bottomRight: Radius.circular(10),
@@ -438,7 +437,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 7, horizontal: 9),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 255, 1, 1), // Background color with opacity
+                  color: Color.fromARGB(255, 120, 89, 192), // Background color with opacity
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50),
                     topRight: Radius.circular(50),
@@ -525,7 +524,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 ),
                 child: CircleAvatar(
                   radius: 140,
-                  backgroundColor: const Color.fromARGB(195, 12, 88, 109),
+                  backgroundColor: const Color.fromARGB(169, 12, 88, 109),
                   child: ClipOval(
                     child: SizedBox(
                       width: 280,

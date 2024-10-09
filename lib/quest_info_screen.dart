@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 import 'package:first_app/local_data_storage.dart';
 import 'package:first_app/playerStats.dart';
-
+import 'package:stroke_text/stroke_text.dart';
 import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
@@ -281,10 +282,14 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             ),
           ),
 
+          BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+              child: Container()),
+
           // Semi-Transparent Background for the entire screen
           Container(
             color: Colors.black
-                .withOpacity(0.3), // Covers the whole screen with 50% opacity
+                .withOpacity(0.5), // Covers the whole screen with 50% opacity
           ),
 
           // Your content
@@ -293,19 +298,19 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
               // Add the game widget here
               const SizedBox(
                   height:
-                      40), // Added space to move the quest info section down
+                      20), // Added space to move the quest info section down
 
               // Title section with background and icon
               Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(128, 6, 38,
-                      64), // This is 50% opacity (alpha value = 128),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
+                  color: Color.fromARGB(195, 12, 88,
+                      109), // This is 50% opacity (alpha value = 128),
+                  // borderRadius: BorderRadius.only(
+                  //   bottomLeft: Radius.circular(10),
+                  //   bottomRight: Radius.circular(10),
+                  // ),
                 ),
                 child: Column(
                   children: [
@@ -321,11 +326,11 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text('Quest Info'),
+                                  title: const Text('Tasks Info'),
                                   content: const Text(
                                     // add info about quest here
-                                    'Here is some detailed information about the quest. \n'
-                                    'You can add more content here as per your requirements.',
+                                    'You progress by completing tasks through filling in the checkboxes. \n \n'
+                                    'When all daily tasks are completed, you will be rewarded with an increase in your stats.',
                                   ),
                                   actions: [
                                     TextButton(
@@ -340,43 +345,49 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                             );
                           },
                         ),
+                        // const Text(
+                        //   'QUEST INFO',
+                        //   style: TextStyle(
+                        //     fontSize: 28,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.white,
+                        //   ),
+                        // ),
                         const Text(
-                          'QUEST INFO',
+                          'Daily Tasks - Train to Evolve',
                           style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 27, // Smaller font size
+                            fontWeight: FontWeight.w400,
                             color: Colors.white,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Daily Quest - Train to Evolve',
-                      style: TextStyle(
-                        fontSize: 16, // Smaller font size
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      ),
-                    ),
+                    // const SizedBox(height: 1),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 45),
+              const SizedBox(height: 320),
 
-              // "Goals" heading in green
-              const Text(
-                'Goals',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(57, 233, 63, 1),
-                ),
-              ),
+              // // "Goals" heading in green
+              // const Text(
+              //   'Tasks',
+              //   textAlign: TextAlign.center,
+              //   style: TextStyle(
+              //     fontSize: 40,
+              //     fontWeight: FontWeight.bold,
+              //     color: Color.fromRGBO(57, 233, 63, 1),
+              //   ),
+              // ),
 
-              const SizedBox(height: 30),
+              // const StrokeText(
+              //   text: "Tasks",
+              //   textStyle: TextStyle(
+              //       fontSize: 40, color: Color.fromRGBO(57, 233, 63, 1)),
+              //   strokeColor: Colors.black,
+              //   strokeWidth: 5,
+              // ),
 
               // Goals list section with checkboxes
               Expanded(
@@ -391,7 +402,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(
+                  height: 5), // padding between recieve rewards and tasks
 
               // Conditionally display the button if all tasks are done
               if (allTasksDone())
@@ -413,47 +425,82 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 50, vertical: 20),
                     textStyle: const TextStyle(
-                        fontSize: 18), // Making the button text bigger
+                        fontSize: 22), // Making the button text bigger
                   ),
                   child: const Text('Receive Rewards'),
                 ),
 
-              const SizedBox(height: 20),
+              const SizedBox(
+                  height: 15), // move "revieve rewards" up with larger number
 
-              // Caution text section
-              const Text(
-                'CAUTION! - If the daily quest\nremains incomplete, penalties\nwill be given accordingly.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.redAccent,
+              // Timer row at the bottom
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 7, horizontal: 9),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 255, 1, 1), // Background color with opacity
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                    bottomLeft: Radius.circular(50),
+                    bottomRight: Radius.circular(50),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.info_outline, color: Colors.white),
+                      onPressed: () {
+                        // Show the information dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('CAUTION!'),
+                              content: const Text(
+                                  'If any task is incomplete when the timer reaches zero, penalties will be applied.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                        width: 2), // Space between info icon and timer
+                    const Icon(Icons.timer, color: Colors.white, size: 28),
+                    const SizedBox(
+                        width: 10), // Space between timer and countdown
+                    Text(
+                      '${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
+                      style: const TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                    const SizedBox(
+                      width: 7,
+                    )
+                  ],
                 ),
               ),
 
-              const SizedBox(height: 30),
-
-              // Timer row at the bottom
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.timer, color: Colors.white, size: 28),
-                  const SizedBox(
-                      width: 10), // Space between timer and countdown
-                  Text(
-                    '${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
-                    style: const TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
+              const SizedBox(
+                  height: 8), // padding under timer, up with higher number
             ],
           ),
 
           // Avatar positioned in the top-right corner
           Positioned(
-            top: 170,
-            right: 10,
+            top: 105,
+            left: 0,
+            right: 0,
             child: GestureDetector(
               onTap: () {
                 widget.game.game?.detach();
@@ -477,15 +524,15 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                   ),
                 ),
                 child: CircleAvatar(
-                  radius: 45,
+                  radius: 140,
                   backgroundColor: const Color.fromARGB(195, 12, 88, 109),
                   child: ClipOval(
                     child: SizedBox(
-                      width: 100,
-                      height: 100,
+                      width: 280,
+                      height: 280,
                       child: Transform.scale(
-                        scale: 0.35,
-                        alignment: const Alignment(0, 0.5),
+                        scale: 0.9,
+                        alignment: const Alignment(0, 3.2),
                         child: widget.game,
                       ),
                     ),

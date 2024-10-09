@@ -15,11 +15,13 @@ fonts:
 dependencies:
   font_awesome_flutter: ^10.1.0
   awesome_notifications: ^0.9.3+1
+  stroke_text: any
   flutter:
     sdk: flutter
   flame: ^1.19.0
   google_fonts: ^6.2.1
   shared_preferences: ^2.3.2
+
 
 dev_dependencies:
   flutter_test:
@@ -37,6 +39,7 @@ flutter:
     - assets/images/blue_witch_idle.png # blue witch idle sprite sheet
     - assets/images/Sliderbackground.png # Slider background image for taskSliderScreen 
     - assets/images/Cave.png # Cave background image for difficulty screen  
+    
 
 
 

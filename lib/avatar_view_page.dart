@@ -123,13 +123,14 @@ class _AvatarViewPage extends State<AvatarViewPage> {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           // Avatar in the center standing on a pedestal
           Expanded(
             child: Stack(
               children: [
                 Positioned.fill(
-                  left: 170,
+                  left: 0,
+                  right: 0,
                   top: 150,
                   child: Column(
                     children: [
@@ -144,8 +145,8 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                   ),
                 ),
                 // Stats around avatar
-                Positioned(
-                  top: 50,
+                Positioned( //XP
+                  bottom: 150,
                   left: 16,
                   child: statCard(
                       'XP', PlayerStats.getEXP, Colors.blue, Icons.auto_awesome,
@@ -153,25 +154,17 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                     _showStatDetail(context, 'XP', PlayerStats.getEXP);
                   }),
                 ),
-                Positioned(
-                  top: 50,
-                  left: 16,
-                  child: statCard(
-                      'XP', PlayerStats.getEXP, Colors.blue, Icons.auto_awesome,
-                      () {
-                    _showStatDetail(context, 'XP', PlayerStats.getEXP);
-                  }),
-                ),
-                Positioned(
-                  top: 50,
-                  right: 16,
+                Positioned( // HP
+                  bottom: 30,
+                  right: 0,
+                  left: 0,
                   child: statCard('HP', PlayerStats.getHP, Colors.greenAccent,
                       Icons.favorite, () {
                     _showStatDetail(context, 'HP', PlayerStats.getHP);
                   }),
                 ),
-                Positioned(
-                  top: 170,
+                Positioned( //INT
+                  bottom: 30,
                   left: 16,
                   child: statCard('Intelligence', PlayerStats.getINT,
                       Colors.purpleAccent, Icons.psychology, () {
@@ -179,15 +172,15 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                         context, 'Intelligence', PlayerStats.getINT);
                   }),
                 ),
-                Positioned(
-                  top: 170,
+                Positioned( //STR
+                  bottom: 150,
                   right: 16,
                   child: statCard('Strength', PlayerStats.getSTR,
                       Colors.redAccent, Icons.fitness_center, () {
                     _showStatDetail(context, 'Strength', PlayerStats.getSTR);
                   }),
                 ),
-                Positioned(
+                Positioned( // STAMINA
                   bottom: 30,
                   right: 16,
                   child: statCard('Stamina', PlayerStats.getSTA,

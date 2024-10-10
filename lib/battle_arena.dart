@@ -1,11 +1,8 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'local_data_storage.dart';
 import 'boss_game.dart'; // Import your BossGame
-import 'necromancer_game.dart'; // Import avatars from other game files
 
 
-// Import the file that contains the Stat class
 
 class BattleArena extends StatefulWidget {
   final int strength;
@@ -13,7 +10,9 @@ class BattleArena extends StatefulWidget {
   final int stamina;
   final int hp;
   final int level;
-  final String selectedAvatar; // Add avatar path
+  final String selectedAvatar; // Pass selected avatar path from AvatarViewPage
+  final String avatarName;
+  final GameWidget avatar; // Pass game instance from outside, which is the selected avatar
 
   const BattleArena({
     super.key,
@@ -22,31 +21,32 @@ class BattleArena extends StatefulWidget {
     required this.stamina,
     required this.hp,
     required this.level,
-    required this.selectedAvatar, // Required avatar path
+    required this.selectedAvatar,
+    required this.avatarName,
+    required this.avatar,
   });
-  
-  final String selectedAvatar2 = 'assets/images/Necromancer.png';
-  
-  
+
   @override
   _BattleArenaState createState() => _BattleArenaState();
 }
 
 class _BattleArenaState extends State<BattleArena> {
-  late DataStorage dataStorage;
+  late BossGame game;  // Declare the game instance for Boss
+  late GameWidget avatarGame; // GameWidget passed from widget
   int bossHP = 300; // Initial boss HP
   int hpIncrement = 100; // Increment boss HP after each victory
 
   @override
   void initState() {
     super.initState();
-    dataStorage = DataStorage();
+    game = BossGame();  // Initialize the main game (BossGame)
+    avatarGame = widget.avatar;  // Use the passed GameWidget instance
+  }
 
-    dataStorage.loadBossHP().then((loadedBossHP) {
-      setState(() {
-        bossHP = loadedBossHP;
-      });
-    });
+  @override
+  void dispose() {
+    game.onDetach();// Properly detach the boss game when the widget is disposed
+    super.dispose();
   }
 
   @override
@@ -72,7 +72,6 @@ class _BattleArenaState extends State<BattleArena> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Adjust padding to wrap the Text widget
                   Padding(
                     padding: const EdgeInsets.only(top: 50.0),
                     child: Text(
@@ -80,14 +79,16 @@ class _BattleArenaState extends State<BattleArena> {
                       style: const TextStyle(fontSize: 20),
                     ),
                   ),
-                  const SizedBox(height: 20), // Space between text and image
+                  const SizedBox(height: 140), // Space between text and image
 
-                  // Avatar image
-                  Image.asset(
-                    widget.selectedAvatar2, // Display selected avatar image
-                    height: 150,
-                    width: 150,
-                    fit: BoxFit.contain,
+                  // Avatar image using selected avatar from AvatarViewPage
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30.0), // Adjust the left padding to move it right
+                    child: SizedBox(
+                      width: 250, // Set a specific width
+                      height: 200, // Set a specific height
+                      child: avatarGame,  // Use the passed game widget (avatar)
+                    ),
                   ),
                 ],
               ),
@@ -95,30 +96,24 @@ class _BattleArenaState extends State<BattleArena> {
             // Boss HP and Animation on the Right
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  // Move down by 50 pixels
                   Padding(
-                    padding: const EdgeInsets.only(top: 50.0), // Move down by 50 pixels
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Boss HP: $bossHP',
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Container for Boss Animation (BossGame)
-                        SizedBox(
-                          height: 300, // Set height for the boss animation container
-                          width: 200,  // Set width for the boss animation container
-                          child: GameWidget(
-                            game: BossGame(), // Your boss animation game
-                          ),
-                        ),
-                      ],
+                    padding: const EdgeInsets.only(top: 50.0, right: 20),
+                      child: Text(
+                        'Boss HP: $bossHP',
+                        style: const TextStyle(fontSize: 20),
+                      ),
                     ),
-                  ),
+                        const SizedBox(height: 80),
+                  
+                    // Container for Boss Animation (BossGame)
+                     SizedBox(
+                      height: 300, // Set height for the boss animation container
+                      width: 150,  // Set width for the boss animation container
+                      child: GameWidget(game: game),  // Use the game instance for the boss            
+                    ),
                 ],
               ),
             ),
@@ -134,11 +129,7 @@ class _BattleArenaState extends State<BattleArena> {
               onPressed: () {
                 if (totalPlayerStats > bossHP) {
                   setState(() {
-
-                    // Player wins, increase boss HP for the next round
-                    bossHP += hpIncrement;
-                    dataStorage.saveBossHP(bossHP);
-                    
+                    bossHP += hpIncrement; // Increase boss HP after win
                   });
 
                   showDialog(

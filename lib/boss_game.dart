@@ -7,16 +7,16 @@ class BossGame extends FlameGame {
   Future<void> onLoad() async {
     super.onLoad();
 
-    // Load the sprite sheet image for Necromancer from assets
-    final spriteSheet = await images.load('Necromancer.png');
+    // Load the sprite sheet image for the boss from assets
+    final spriteSheet = await images.load('boss_demon_slime_FREE_v1.0/spritesheets/demon_slime_FREE_v1.0_288x160_spritesheet.png');
 
     // Create the animation from the sprite sheet
     final bossAnimation = SpriteAnimation.fromFrameData(
       spriteSheet,
       SpriteAnimationData.sequenced(
-        amount: 8,  // Number of frames in the top row
+        amount: 6,  // Number of frames in the top row
         stepTime: 0.15,  // Time between frames for smooth animation
-        textureSize: Vector2(160, 128),  // Each frame size for Necromancer
+        textureSize: Vector2(288, 160),  // Each frame size for tthe boss
       ),
     );
 

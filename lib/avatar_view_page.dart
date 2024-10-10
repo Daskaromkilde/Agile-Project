@@ -2,6 +2,7 @@ import 'package:first_app/battle_arena.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:first_app/playerStats.dart';
+
 // Import avatars from other game files
 
 class AvatarViewPage extends StatefulWidget {
@@ -203,6 +204,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () {
+                widget.game.game?.detach();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -212,8 +214,10 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                       intelligence: PlayerStats.getINT.currentValue,
                       stamina: PlayerStats.getSTA.currentValue,
                       hp: PlayerStats.getHP.currentValue,
-                      level: PlayerStats.level, // xp is placeholder until we have levels
+                      level: PlayerStats.level, 
                       selectedAvatar: widget.selectedAvatar,
+                      avatarName: widget.avatarName,
+                      avatar: widget.game,
                     ),
                   ),
                 );

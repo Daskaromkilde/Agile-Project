@@ -39,6 +39,7 @@ flutter:
     - assets/images/blue_witch_idle.png # blue witch idle sprite sheet
     - assets/images/Sliderbackground.png # Slider background image for taskSliderScreen 
     - assets/images/Cave.png # Cave background image for difficulty screen  
+    - assets/images/stonePedestal.png # Pedestal for questinfo screen
     
 
 

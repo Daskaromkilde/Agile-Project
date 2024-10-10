@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import 'package:first_app/assets/blue_witch_game.dart';
 import 'package:first_app/local_data_storage.dart';
 import 'package:first_app/playerStats.dart';
 import 'package:stroke_text/stroke_text.dart';
@@ -67,6 +68,11 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   int strAmount = 0;
   int intAmount = 0;
   late DataStorage dataStorage;
+  late String avatarName;
+
+  bool checkIfWitch() {
+    return avatarName == 'blue_witch';
+  }
 
   void givePlayerExp() {
     // HERE you add exp to player
@@ -232,6 +238,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   @override
   void initState() {
     super.initState();
+    debugPrint('Selected Avatar Name: ${widget.selectedAvatar}');
+    avatarName = widget.selectedAvatar;
     DataStorage dataStorage = DataStorage();
     weight = (widget.taskCategory / 25)
         .round(); // based on sliderValue, decide the amount of types of tasks
@@ -292,6 +300,27 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 .withOpacity(0.5), // Covers the whole screen with 50% opacity
           ),
 
+          Stack(
+            children: [
+              // Other content in the background
+              Positioned(
+                bottom: -40, // Adjust the distance from the bottom
+                left: 0,
+                right: 0, // Adjust the horizontal position
+                child: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/stonePedestal.png'),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  height: 400, // Manually control height to resize it
+                  width: 400, // Manually control width to resize it
+                ),
+              ),
+            ],
+          ),
+
           // Your content
           Column(
             children: [
@@ -305,11 +334,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 120, 89, 192), // This is 50% opacity (alpha value = 128),
-                  // borderRadius: BorderRadius.only(
-                  //   bottomLeft: Radius.circular(10),
-                  //   bottomRight: Radius.circular(10),
-                  // ),
+                  color: Color.fromARGB(128, 6, 38, 64),
                 ),
                 child: Column(
                   children: [
@@ -344,14 +369,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                             );
                           },
                         ),
-                        // const Text(
-                        //   'QUEST INFO',
-                        //   style: TextStyle(
-                        //     fontSize: 28,
-                        //     fontWeight: FontWeight.bold,
-                        //     color: Colors.white,
-                        //   ),
-                        // ),
                         const Text(
                           'Daily Tasks - Train to Evolve',
                           style: TextStyle(
@@ -362,31 +379,25 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                         ),
                       ],
                     ),
-                    // const SizedBox(height: 1),
+                    Row(
+                        mainAxisAlignment:
+                            MainAxisAlignment.center, // Align to center
+                        children: [
+                          const Icon(Icons.timer, color: Colors.white),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            '${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.white),
+                          ),
+                        ]),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 320),
-
-              // // "Goals" heading in green
-              // const Text(
-              //   'Tasks',
-              //   textAlign: TextAlign.center,
-              //   style: TextStyle(
-              //     fontSize: 40,
-              //     fontWeight: FontWeight.bold,
-              //     color: Color.fromRGBO(57, 233, 63, 1),
-              //   ),
-              // ),
-
-              // const StrokeText(
-              //   text: "Tasks",
-              //   textStyle: TextStyle(
-              //       fontSize: 40, color: Color.fromRGBO(57, 233, 63, 1)),
-              //   strokeColor: Colors.black,
-              //   strokeWidth: 5,
-              // ),
+              const SizedBox(height: 50), // Move task list
 
               // Goals list section with checkboxes
               Expanded(
@@ -400,9 +411,6 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                   },
                 ),
               ),
-
-              const SizedBox(
-                  height: 5), // padding between recieve rewards and tasks
 
               // Conditionally display the button if all tasks are done
               if (allTasksDone())
@@ -422,82 +430,26 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 20),
+                        horizontal: 20, vertical: 20),
                     textStyle: const TextStyle(
-                        fontSize: 22), // Making the button text bigger
+                        fontSize: 22),
+                         // Making the button text bigger
+                         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                    backgroundColor: const Color.fromARGB(255, 63, 61, 61),
+                    iconColor: Colors.white,
                   ),
                   child: const Text('Receive Rewards'),
                 ),
 
               const SizedBox(
                   height: 15), // move "revieve rewards" up with larger number
-
-              // Timer row at the bottom
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 7, horizontal: 9),
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 120, 89, 192), // Background color with opacity
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.info_outline, color: Colors.white),
-                      onPressed: () {
-                        // Show the information dialog
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('CAUTION!'),
-                              content: const Text(
-                                  'If any task is incomplete when the timer reaches zero, penalties will be applied.'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    const SizedBox(
-                        width: 2), // Space between info icon and timer
-                    const Icon(Icons.timer, color: Colors.white, size: 28),
-                    const SizedBox(
-                        width: 10), // Space between timer and countdown
-                    Text(
-                      '${remainingTime.inHours}:${remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0')}:${remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0')}',
-                      style: const TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                    const SizedBox(
-                      width: 7,
-                    )
-                  ],
-                ),
-              ),
-
-              const SizedBox(
-                  height: 8), // padding under timer, up with higher number
             ],
           ),
 
-          // Avatar positioned in the top-right corner
+          // Avatar positioned in middlebottom
+          // GameWidget(game: BlueWitchGame()) == GameWidgetState ? 500 : 450, //450 standard 500 for witch
           Positioned(
-            top: 105,
+            top: checkIfWitch() ? 500 : 450,
             left: 0,
             right: 0,
             child: GestureDetector(
@@ -518,13 +470,13 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: const Color.fromARGB(205, 0, 0, 0), // Outline color
+                    color: const Color.fromARGB(0, 0, 0, 0), // Outline color
                     width: 3.0, // Outline width
                   ),
                 ),
                 child: CircleAvatar(
                   radius: 140,
-                  backgroundColor: const Color.fromARGB(169, 12, 88, 109),
+                  backgroundColor: const Color.fromARGB(0, 12, 88, 109),
                   child: ClipOval(
                     child: SizedBox(
                       width: 280,
@@ -564,6 +516,7 @@ class QuestItem extends StatelessWidget {
               Checkbox(
                 value: task.isCompleted,
                 onChanged: onChanged,
+                activeColor: const Color.fromARGB(255, 56, 163, 252), //HÄR
               ),
               Text(
                 task.name,

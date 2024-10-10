@@ -146,8 +146,9 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                 ),
                 // Stats around avatar
                 Positioned( //XP
-                  bottom: 150,
-                  left: 16,
+                  bottom: 30,
+                  right: 0,
+                  left: 0,
                   child: statCard(
                       'XP', PlayerStats.getEXP, Colors.blue, Icons.auto_awesome,
                       () {
@@ -155,9 +156,8 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                   }),
                 ),
                 Positioned( // HP
-                  bottom: 30,
-                  right: 0,
-                  left: 0,
+                  bottom: 150,
+                  left: 16,
                   child: statCard('HP', PlayerStats.getHP, Colors.greenAccent,
                       Icons.favorite, () {
                     _showStatDetail(context, 'HP', PlayerStats.getHP);

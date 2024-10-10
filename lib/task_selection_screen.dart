@@ -9,11 +9,14 @@ class task_selection_screen extends StatefulWidget {
   final String avatarName;
   final GameWidget game;
 
+  final double taskDiff;
+
   const task_selection_screen({
     super.key,
     required this.selectedAvatar,
     required this.avatarName,
     required this.game,
+    required this.taskDiff
   });
 
   @override
@@ -32,14 +35,29 @@ class _TaskSelectionScreenState extends State<task_selection_screen> {
     super.initState();
     _dataStorage = DataStorage();
     tasks = generateTasks();
+    filterTasksByDifficulty();
     loadUnableTasks();
+  }
+
+  void filterTasksByDifficulty() {
+    TaskDiff selectedDiff;
+    if (widget.taskDiff == 0) {
+      selectedDiff = TaskDiff.easy;
+    } else if (widget.taskDiff == 50) {
+      selectedDiff = TaskDiff.medium;
+    } else if (widget.taskDiff == 100) {
+      selectedDiff = TaskDiff.hard;
+    } else {
+      return; // If taskDiff is not 0, 50, or 100, do nothing
+    }
+
+    tasks = tasks.where((task) => task.diff == selectedDiff).toList();
   }
 
   Future<void> loadUnableTasks() async {
     final unableTasks = await _dataStorage.loadUnableTasks();
     setState(() {
-      this.unableTasks =
-          tasks.where((task) => unableTasks.contains(task.name)).toList();
+      this.unableTasks = tasks.where((task) => unableTasks.contains(task.name)).toList();
     });
   }
 
@@ -205,6 +223,7 @@ return generatedTasks;
           tasks: tasks,
           avatarName: widget.avatarName,
           game: widget.game,
+          taskDiff: widget.taskDiff
         ),
       ),
     );

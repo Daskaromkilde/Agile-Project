@@ -1,4 +1,3 @@
-import 'package:first_app/difficulty_slider_screen.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
@@ -9,13 +8,16 @@ class taskSliderScreen extends StatefulWidget {
   final String avatarName;
   final GameWidget game;
   final List<QuestTask> tasks;
+  final double taskDiff;
 
   const taskSliderScreen(
       {super.key,
       required this.selectedAvatar,
       required this.avatarName,
       required this.game,
-      required this.tasks});
+      required this.tasks,
+      required this.taskDiff
+      });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -36,17 +38,18 @@ class _taskSliderScreenState extends State<taskSliderScreen> {
     tasks = widget.tasks;
   }
 
-  void proceedToDifficultySliderScreen() {
+  void proceedToQuestInfoScreen() {
     print('Slider value: $taskCategory'); // debug print
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DifficultySliderScreen(
+        builder: (context) => QuestInfoScreen(
           selectedAvatar: widget.selectedAvatar,
           tasks: tasks,
           avatarName: widget.avatarName,
           game: widget.game,
           taskCategory: taskCategory,
+          taskDifficulty: widget.taskDiff
         ),
       ),
     );
@@ -183,7 +186,7 @@ class _taskSliderScreenState extends State<taskSliderScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: proceedToDifficultySliderScreen,
+        onPressed: proceedToQuestInfoScreen,
         child: const Icon(Icons.arrow_forward),
       ),
     );

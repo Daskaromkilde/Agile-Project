@@ -1,22 +1,20 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
+import 'task_selection_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DifficultySliderScreen extends StatefulWidget {
   final String selectedAvatar;
   final String avatarName;
   final GameWidget game;
-  final List<QuestTask> tasks;
-  final double taskCategory;
+  final double taskCategory =0;
 
   const DifficultySliderScreen(
       {super.key,
       required this.avatarName,
       required this.selectedAvatar,
-      required this.game,
-      required this.tasks,
-      required this.taskCategory});
+      required this.game});
 
   @override
   _DifficultySliderScreenState createState() => _DifficultySliderScreenState();
@@ -29,24 +27,21 @@ class _DifficultySliderScreenState extends State<DifficultySliderScreen> {
   @override
   void initState() {
     super.initState();
-    tasks = widget.tasks;
   }
 
-  void proceedToQuestInfoScreen() {
+  void proceedToTaskSelectionScreen() {
     print(
         'taskCategory value: $widget.taskCategory'); // debug taskCategory value
     print('Difficulty value: $DifficultySlider'); // debug difficulty value
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QuestInfoScreen(
+        builder: (context) => task_selection_screen(
           selectedAvatar: widget.selectedAvatar,
-          tasks: tasks,
           avatarName: widget.avatarName,
           game: widget.game,
-          taskCategory: widget.taskCategory,
-          taskDifficulty: DifficultySlider,
-        ),
+          taskDiff: DifficultySlider,
+          ),
       ),
     );
   }
@@ -163,7 +158,7 @@ class _DifficultySliderScreenState extends State<DifficultySliderScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: proceedToQuestInfoScreen,
+        onPressed: proceedToTaskSelectionScreen,
         child: const Icon(Icons.arrow_forward),
       ),
     );

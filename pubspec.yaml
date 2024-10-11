@@ -15,11 +15,13 @@ fonts:
 dependencies:
   font_awesome_flutter: ^10.1.0
   awesome_notifications: ^0.9.3+1
+  stroke_text: any
   flutter:
     sdk: flutter
   flame: ^1.19.0
   google_fonts: ^6.2.1
   shared_preferences: ^2.3.2
+
 
 dev_dependencies:
   flutter_test:
@@ -39,3 +41,7 @@ flutter:
     - assets/images/Cave.png # Cave background image for difficulty screen  
     - assets/images/boss_demon_slime_FREE_v1.0/individual sprites/01_demon_idle/demon_idle_1.png # Boss image 
     - assets/images/boss_demon_slime_FREE_v1.0/spritesheets/demon_slime_FREE_v1.0_288x160_spritesheet.png
+    - assets/images/stonePedestal.png # Pedestal for questinfo screen
+
+
+

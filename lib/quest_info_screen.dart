@@ -354,7 +354,9 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                                   content: const Text(
                                     // add info about quest here
                                     'You progress by completing tasks through filling in the checkboxes. \n \n'
-                                    'When all daily tasks are completed, you will be rewarded with an increase in your stats.',
+                                    'When all daily tasks are completed, you will be rewarded with an increase in your stats.\n \n'
+                                     'If any task is incomplete when the timer reaches zero, penalties will be applied.\n \n' 
+                                     'Press your character to view stats and fight the boss',
                                   ),
                                   actions: [
                                     TextButton(

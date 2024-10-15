@@ -2,8 +2,6 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'boss_game.dart'; // Import your BossGame
 
-
-
 class BattleArena extends StatefulWidget {
   final int strength;
   final int intelligence;
@@ -12,7 +10,8 @@ class BattleArena extends StatefulWidget {
   final int level;
   final String selectedAvatar; // Pass selected avatar path from AvatarViewPage
   final String avatarName;
-  final GameWidget avatar; // Pass game instance from outside, which is the selected avatar
+  final GameWidget
+      avatar; // Pass game instance from outside, which is the selected avatar
 
   const BattleArena({
     super.key,
@@ -31,7 +30,7 @@ class BattleArena extends StatefulWidget {
 }
 
 class _BattleArenaState extends State<BattleArena> {
-  late BossGame game;  // Declare the game instance for Boss
+  late BossGame game; // Declare the game instance for Boss
   late GameWidget avatarGame; // GameWidget passed from widget
   int bossHP = 300; // Initial boss HP
   int hpIncrement = 100; // Increment boss HP after each victory
@@ -39,13 +38,13 @@ class _BattleArenaState extends State<BattleArena> {
   @override
   void initState() {
     super.initState();
-    game = BossGame();  // Initialize the main game (BossGame)
-    avatarGame = widget.avatar;  // Use the passed GameWidget instance
+    game = BossGame(); // Initialize the main game (BossGame)
+    avatarGame = widget.avatar; // Use the passed GameWidget instance
   }
 
   @override
   void dispose() {
-    game.onDetach();// Properly detach the boss game when the widget is disposed
+    game.onDetach(); // Properly detach the boss game when the widget is disposed
     super.dispose();
   }
 
@@ -57,109 +56,102 @@ class _BattleArenaState extends State<BattleArena> {
         widget.hp +
         widget.level;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Battle Arena'),
-        backgroundColor: const Color.fromARGB(255, 80, 18, 206),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/pxArt.png'), // Your background image
+          fit: BoxFit.cover, // Covers the whole screen
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: Scaffold(
+        backgroundColor:
+            Colors.transparent, // Make the scaffold background transparent
+        appBar: AppBar(
+          title: const Text('Battle Arena'),
+          backgroundColor: const Color.fromARGB(255, 80, 18, 206),
+        ),
+        body: Stack(
           children: [
             // Player Stats on the Left
-            Expanded(
+            Positioned(
+              bottom:
+                  100.0, // Adjusted margin from the bottom to move it higher
+              left: 20.0, // Adjusted margin from the left
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50.0),
-                    child: Text(
-                      'Your total stats: $totalPlayerStats',
-                      style: const TextStyle(fontSize: 20),
-                    ),
+                  Text(
+                    'Your total stats: $totalPlayerStats',
+                    style: const TextStyle(fontSize: 20),
                   ),
-                  const SizedBox(height: 140), // Space between text and image
-
-                  // Avatar image using selected avatar from AvatarViewPage
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30.0), // Adjust the left padding to move it right
-                    child: SizedBox(
-                      width: 250, // Set a specific width
-                      height: 200, // Set a specific height
-                      child: avatarGame,  // Use the passed game widget (avatar)
-                    ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: 100, // Set a specific width
+                    height: 100, // Set a specific height
+                    child: avatarGame, // Use the passed game widget (avatar)
                   ),
                 ],
               ),
             ),
             // Boss HP and Animation on the Right
-            Expanded(
+            Positioned(
+              top: 30.0, // Adjusted margin from the top
+              right: 20.0, // Adjusted margin from the right
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  // Move down by 50 pixels
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50.0, right: 20),
-                      child: Text(
-                        'Boss HP: $bossHP',
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                        const SizedBox(height: 80),
-                  
-                    // Container for Boss Animation (BossGame)
-                     SizedBox(
-                      height: 300, // Set height for the boss animation container
-                      width: 150,  // Set width for the boss animation container
-                      child: GameWidget(game: game),  // Use the game instance for the boss            
-                    ),
+                  Text(
+                    'Boss HP: $bossHP',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 150, // Set height for the boss animation container
+                    width: 150, // Set width for the boss animation container
+                    child: GameWidget(
+                        game: game), // Use the game instance for the boss
+                  ),
                 ],
               ),
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                if (totalPlayerStats > bossHP) {
-                  setState(() {
-                    bossHP += hpIncrement; // Increase boss HP after win
-                  });
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed: () {
+              if (totalPlayerStats > bossHP) {
+                setState(() {
+                  bossHP += hpIncrement; // Increase boss HP after win
+                });
 
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const AlertDialog(
-                        title: Text('Victory!'),
-                        content: Text('You defeated the boss!'),
-                      );
-                    },
-                  );
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const AlertDialog(
-                        title: Text('Defeat!'),
-                        content: Text('You lost the battle...'),
-                      );
-                    },
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
-                backgroundColor: Colors.redAccent,
-              ),
-              child: const Text('Fight!'),
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      title: Text('Victory!'),
+                      content: Text('You defeated the boss!'),
+                    );
+                  },
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      title: Text('Defeat!'),
+                      content: Text('You lost the battle...'),
+                    );
+                  },
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+              backgroundColor: Colors.redAccent,
             ),
-          ],
+            child: const Text('Fight!'),
+          ),
         ),
       ),
     );

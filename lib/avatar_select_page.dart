@@ -42,11 +42,14 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
   void initState() {
     super.initState();
     _dataStorage = DataStorage();
-    _dataStorage.loadAvatarSaveName().then((value) {
-      setState(() {
-        selectedAvatar = value['avatar']!;
-        _nameController.text = value['name']!;
-      });
+    _loadSavedData();
+    }
+  
+  Future<void> _loadSavedData() async {
+    final savedData = await _dataStorage.loadAvatarSaveName();
+    setState(() {
+      selectedAvatar = savedData['avatar']!;
+      _nameController.text = savedData['name']!;
     });
   }
   // Navigate to the previous avatar in the list
@@ -139,6 +142,7 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
             onPressed: () {
               String enteredName = _nameController.text;
               _dataStorage.saveAvatarSaveName(selectedAvatar, enteredName);
+              _dataStorage.setCompleteSetup(true);
 
               // Navigate to task selection screen
               Navigator.push(

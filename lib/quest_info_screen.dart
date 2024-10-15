@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:first_app/playerStats.dart';
-
+import 'local_data_storage.dart';
 import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
@@ -35,6 +35,36 @@ class QuestTask {
     required this.diff,
   });
 
+  String taskTypeToString(TaskType type) {
+    return type.toString().split('.').last;
+  }
+
+  // Convert TaskDiff to string
+  String taskDiffToString(TaskDiff diff) {
+    return diff.toString().split('.').last;
+  }
+
+  // Convert JSON to QuestTask object
+  factory QuestTask.fromJson(Map<String, dynamic> json) {
+    return QuestTask(
+      name: json['name'],
+      isCompleted: json['isCompleted'],
+      goal: json['goal'],
+      type: TaskType.values.firstWhere((e) => e.toString() == 'TaskType.${json['type']}'),
+      diff: TaskDiff.values.firstWhere((e) => e.toString() == 'TaskDiff.${json['diff']}'),
+    );
+  }
+
+  // Convert QuestTask object to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'isCompleted': isCompleted,
+      'goal': goal,
+      'type': taskTypeToString(type),
+      'diff': taskDiffToString(diff),
+    };
+  }
 }
 
 class QuestInfoScreen extends StatefulWidget {
@@ -60,6 +90,7 @@ class QuestInfoScreen extends StatefulWidget {
 }
 
 class _QuestInfoScreenState extends State<QuestInfoScreen> {
+  
   List<QuestTask> todoTasks = [];
   Duration remainingTime = Duration.zero;
   Timer? countdownTimer;
@@ -67,6 +98,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   late int weight; // parse sliderValue to range 0-4
   int strAmount = 0;
   int intAmount = 0;
+  late DataStorage dataStorage;
 
   bool allTasksDone() {
     return todoTasks.every((task) => task.isCompleted);
@@ -152,6 +184,7 @@ void createTasks(int taskAmount) {
     }
     randomInts.add(randomIndex);
     todoTasks.add(educationalTasks[randomIndex]);
+    
   }
 
   // If we haven't filled 4 tasks, fill the remainder with any type of task (either educational or physical)
@@ -165,7 +198,9 @@ void createTasks(int taskAmount) {
 
     int randomIndex = random.nextInt(remainingTasks.length);
     todoTasks.add(remainingTasks[randomIndex]);
+
   }
+  dataStorage.saveTaskList(todoTasks);
 }
 
   // Calculates the remaining time to midnight
@@ -212,6 +247,7 @@ void createTasks(int taskAmount) {
   @override
   void initState() {
     super.initState();
+    DataStorage dataStorage = DataStorage();
     weight = (widget.taskCategory/25).round(); // based on sliderValue, decide the amount of types of tasks
     startCountdown(); // Start the 24-hour daily task countdown
     createTasks(taskAmount); // Generate initial tasks
@@ -376,6 +412,7 @@ void createTasks(int taskAmount) {
                 ElevatedButton(
                   onPressed: () {
                     newTasks();
+
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {

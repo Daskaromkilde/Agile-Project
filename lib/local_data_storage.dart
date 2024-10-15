@@ -1,4 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'quest_info_screen.dart';
+import 'dart:convert';
 
 class DataStorage {
   
@@ -25,6 +27,8 @@ class DataStorage {
   static const String _bosslevel = 'bosslevel';
   static const String _avatarlevel = 'avatarlevel';
   static const String _unableTaskKey = 'unableTaskKey';
+  static const String _completeSetup = 'completeSetup';
+  static const String _taskList = 'taskList';
 
 
   // Save the avatar/name to local storage
@@ -74,5 +78,43 @@ class DataStorage {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getStringList(_unableTaskKey) ?? [];
   }
+
+  Future<void> setCompleteSetup(bool completeSetup) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_completeSetup, completeSetup);
+  }
+
+  Future<bool> checkCompleteSetup() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_completeSetup) ?? false;
+  }
+
+  Future<void> saveTaskList(List<QuestTask> taskList) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> jsonList = taskList.map((task) => task.toJson().toString()).toList();
+    await prefs.setStringList(_taskList, jsonList);
+  }
+
+  Future<List<QuestTask>> loadTaskList() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final List<String>? jsonTaskList = prefs.getStringList(_taskList);
+
+    if (jsonTaskList != null) {
+      // Convert the list of JSON strings back into QuestTask objects
+      return jsonTaskList.map((jsonTask) {
+        final Map<String, dynamic> taskMap = jsonDecode(jsonTask);
+        return QuestTask.fromJson(taskMap);
+      }).toList();
+    }
+    return [];
+  }
+
+
+// In the main class we need to load QuestInfoScreen() but with the correct parameters
+// In order to do that we need to store and Load the necessary parameters to extract from storage to 
+// currently ive managed to create a way to store the TODO Task list in the local storage
+// SelectedAvatar and avatar name is also stored correctly
+// TODO: Implement the rest of the parameters, taskDifficulty & taskCategory. 
+
 
 }

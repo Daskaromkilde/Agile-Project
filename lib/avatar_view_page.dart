@@ -146,7 +146,8 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                   ),
                 ),
                 // Stats around avatar
-                Positioned( //XP
+                Positioned(
+                  //XP
                   bottom: 30,
                   right: 0,
                   left: 0,
@@ -156,7 +157,8 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                     _showStatDetail(context, 'XP', PlayerStats.getEXP);
                   }),
                 ),
-                Positioned( // HP
+                Positioned(
+                  // HP
                   bottom: 150,
                   left: 16,
                   child: statCard('HP', PlayerStats.getHP, Colors.greenAccent,
@@ -164,7 +166,8 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                     _showStatDetail(context, 'HP', PlayerStats.getHP);
                   }),
                 ),
-                Positioned( //INT
+                Positioned(
+                  //INT
                   bottom: 30,
                   left: 16,
                   child: statCard('Intelligence', PlayerStats.getINT,
@@ -173,7 +176,8 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                         context, 'Intelligence', PlayerStats.getINT);
                   }),
                 ),
-                Positioned( //STR
+                Positioned(
+                  //STR
                   bottom: 150,
                   right: 16,
                   child: statCard('Strength', PlayerStats.getSTR,
@@ -181,7 +185,8 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                     _showStatDetail(context, 'Strength', PlayerStats.getSTR);
                   }),
                 ),
-                Positioned( // STAMINA
+                Positioned(
+                  // STAMINA
                   bottom: 30,
                   right: 16,
                   child: statCard('Stamina', PlayerStats.getSTA,
@@ -207,7 +212,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                       intelligence: PlayerStats.getINT.currentValue,
                       stamina: PlayerStats.getSTA.currentValue,
                       hp: PlayerStats.getHP.currentValue,
-                      level: PlayerStats.level, 
+                      level: PlayerStats.level,
                       selectedAvatar: widget.selectedAvatar,
                       avatarName: widget.avatarName,
                       avatar: widget.game,

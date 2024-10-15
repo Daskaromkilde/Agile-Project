@@ -246,6 +246,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
     startCountdown(); // Start the 24-hour daily task countdown
     createTasks(taskAmount); // Generate initial tasks
     dataStorage.loadPlayerStats(); // Loads PlayerStats
+    //dataStorage.savePlayerStats(); // Saves PlayerStats
 
     // Set the size of the game
     // Adjust the size as needed
@@ -355,8 +356,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                                     // add info about quest here
                                     'You progress by completing tasks through filling in the checkboxes. \n \n'
                                     'When all daily tasks are completed, you will be rewarded with an increase in your stats.\n \n'
-                                     'If any task is incomplete when the timer reaches zero, penalties will be applied.\n \n' 
-                                     'Press your character to view stats and fight the boss',
+                                    'If any task is incomplete when the timer reaches zero, penalties will be applied.\n \n'
+                                    'Press your character to view stats and fight the boss',
                                   ),
                                   actions: [
                                     TextButton(
@@ -433,10 +434,9 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 20),
-                    textStyle: const TextStyle(
-                        fontSize: 22),
-                         // Making the button text bigger
-                         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                    textStyle: const TextStyle(fontSize: 22),
+                    // Making the button text bigger
+                    foregroundColor: const Color.fromARGB(255, 255, 255, 255),
                     backgroundColor: const Color.fromARGB(255, 63, 61, 61),
                     iconColor: Colors.white,
                   ),

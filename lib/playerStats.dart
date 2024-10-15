@@ -1,10 +1,10 @@
 /// A class representing the player's stats.
 class PlayerStats {
   static Stat exp = Stat(currentValue: 0, maxValue: 100, level: 0);
-  static Stat str = Stat(currentValue: 0, maxValue: 150, level: 0);
-  static Stat intell = Stat(currentValue: 0, maxValue: 150, level: 0);
-  static Stat hp = Stat(currentValue: 0, maxValue: 150, level: 0);
-  static Stat sta = Stat(currentValue: 0, maxValue: 150, level: 0);
+  static Stat str = Stat(currentValue: 50, maxValue: 50, level: 0);
+  static Stat intell = Stat(currentValue: 50, maxValue: 50, level: 0);
+  static Stat hp = Stat(currentValue: 200, maxValue: 200, level: 0);
+  static Stat sta = Stat(currentValue: 50, maxValue: 50, level: 0);
 
   static int level = 0;
 
@@ -23,55 +23,93 @@ class PlayerStats {
   /// Getter for STA stat.
   static Stat get getSTA => sta;
 
-  /// Increases the EXP stat by the given amount.
   static void increaseEXP(int amount) {
-    exp.increasPlayerEXP(amount);
+    if (exp.currentValue + amount > exp.maxValue) {
+      exp.currentValue = exp.maxValue;
+    } else {
+      exp.increasPlayerEXP(amount);
+    }
   }
 
   /// Increases the STR stat by the given amount.
   static void increaseSTR(int amount) {
-    str.increase(amount);
+    if (str.currentValue + amount > str.maxValue) {
+      str.currentValue = str.maxValue;
+    } else {
+      str.increase(amount);
+    }
   }
 
   /// Increases the STA stat by the given amount.
   static void increaseSTA(int amount) {
-    sta.increase(amount);
+    if (sta.currentValue + amount > sta.maxValue) {
+      sta.currentValue = sta.maxValue;
+    } else {
+      sta.increase(amount);
+    }
   }
 
   /// Increases the INT stat by the given amount.
   static void increaseINT(int amount) {
-    intell.increase(amount);
+    if (intell.currentValue + amount > intell.maxValue) {
+      intell.currentValue = intell.maxValue;
+    } else {
+      intell.increase(amount);
+    }
   }
 
   /// Increases the HP stat by the given amount.
   static void increaseHP(int amount) {
-    hp.increase(amount);
+    if (hp.currentValue + amount > hp.maxValue) {
+      hp.currentValue = hp.maxValue;
+    } else {
+      hp.increase(amount);
+    }
   }
 
   /// Decreases the EXP stat by the given amount.
   static void decreaseEXP(int amount) {
-    exp.decrease(amount);
-
+    if (exp.currentValue - amount < 0) {
+      exp.currentValue = 0;
+    } else {
+      exp.decrease(amount);
+    }
   }
 
   /// Decreases the STR stat by the given amount.
   static void decreaseSTR(int amount) {
-    str.decrease(amount);
+    if (str.currentValue - amount < 0) {
+      str.currentValue = 0;
+    } else {
+      str.decrease(amount);
+    }
   }
 
   /// Decreases the STA stat by the given amount.
   static void decreaseSTA(int amount) {
-    sta.decrease(amount);
+    if (sta.currentValue - amount < 0) {
+      sta.currentValue = 0;
+    } else {
+      sta.decrease(amount);
+    }
   }
 
   /// Decreases the INT stat by the given amount.
   static void decreaseINT(int amount) {
-    intell.decrease(amount);
+    if (intell.currentValue - amount < 0) {
+      intell.currentValue = 0;
+    } else {
+      intell.decrease(amount);
+    }
   }
 
   /// Decreases the HP stat by the given amount.
   static void decreaseHP(int amount) {
-    hp.decrease(amount);
+    if (hp.currentValue - amount < 0) {
+      hp.currentValue = 0;
+    } else {
+      hp.decrease(amount);
+    }
   }
 
   /// Decreases all stats by the given amount.

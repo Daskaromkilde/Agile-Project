@@ -31,18 +31,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/background.png # background pic
-    - assets/images/Necromancer.png  # Necromancer sprite sheet
-    - assets/images/Fire_WarriorFireSword-Sheet.png  # Fire Warrior sprite sheet
-    - assets/images/wind_SpriteSheet_288x128.png  # Wind Warrior sprite sheet
-    - assets/images/female_knight_idle.png # female knight idle sprite sheet
-    - assets/images/blue_witch_idle.png # blue witch idle sprite sheet
-    - assets/images/Sliderbackground.png # Slider background image for taskSliderScreen 
-    - assets/images/Cave.png # Cave background image for difficulty screen  
-    - assets/images/boss_demon_slime_FREE_v1.0/individual sprites/01_demon_idle/demon_idle_1.png # Boss image 
-    - assets/images/boss_demon_slime_FREE_v1.0/spritesheets/demon_slime_FREE_v1.0_288x160_spritesheet.png
-    - assets/images/stonePedestal.png # Pedestal for questinfo screen
-    - assets/images/pxArt.png # Sand area image for questinfo screen
+    - assets/images/
+    - assets/images/items/Equipment/
+    - assets/images/items/Food/
+    - assets/images/items/Material/
+    - assets/images/items/Misc/
+    - assets/images/items/Monster Part/
+    - assets/images/items/Ore & Gem/
+    - assets/images/items/Potion/
 
 
 

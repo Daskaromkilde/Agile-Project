@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "874180898186",
+    "project_id": "agile-pro-d2309",
+    "storage_bucket": "agile-pro-d2309.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874180898186:android:1969bac999107f43b86c73",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4RwDt73SG63fMIIZODY0dDRF1HpKUZbM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874180898186:android:8f74d90f9512aa51b86c73",
+        "android_client_info": {
+          "package_name": "com.example.todo_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4RwDt73SG63fMIIZODY0dDRF1HpKUZbM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
-import 'package:first_app/assets/blue_witch_game.dart';
 import 'package:first_app/local_data_storage.dart';
 import 'package:first_app/playerStats.dart';
-import 'package:stroke_text/stroke_text.dart';
 import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
 import 'package:flame/game.dart';
-import 'task_selection_screen.dart';
+import 'api_service.dart';
+import 'dart:ui';
 
 enum TaskType {
   educational,
@@ -69,6 +68,8 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   int intAmount = 0;
   late DataStorage dataStorage;
   late String avatarName;
+  final FirestoreService _firestoreService = FirestoreService();
+  late Future<List<Map<String, dynamic>>> futureTasks;
 
   bool checkIfWitch() {
     return avatarName == 'blue_witch';
@@ -238,6 +239,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   @override
   void initState() {
     super.initState();
+    futureTasks = _firestoreService.fetchTasks();
     debugPrint('Selected Avatar Name: ${widget.selectedAvatar}');
     avatarName = widget.selectedAvatar;
     DataStorage dataStorage = DataStorage();
@@ -280,6 +282,36 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
       ),
       body: Stack(
         children: [
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: futureTasks,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return ListView.builder(
+                  itemCount: snapshot.data?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    var task = snapshot.data![index];
+                    return ListTile(
+                      title: Text(task['title']),
+                      trailing: Checkbox(
+                        value: task['isCompleted'],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            task['isCompleted'] = value!;
+                          });
+                          _firestoreService.saveTask(task['title'], value!);
+                        },
+                      ),
+                    );
+                  },
+                );
+              }
+            },
+          ),
+
           // Background Image
           Container(
             decoration: const BoxDecoration(
@@ -495,6 +527,15 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await _firestoreService.saveTask('New Task', false);
+          setState(() {
+            futureTasks = _firestoreService.fetchTasks();
+          });
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

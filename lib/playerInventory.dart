@@ -44,7 +44,7 @@ class ItemContainer {
 }
 
 class PlayerInventory {
-  static List<ItemContainer> _items = [];
+  static final List<ItemContainer> _items = [];
 
   // Predefined item containers
   static final ItemContainer healthPotion = ItemContainer(

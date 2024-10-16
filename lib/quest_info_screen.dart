@@ -9,6 +9,7 @@ import 'avatar_select_page.dart'; // Import the AvatarSelectPage
 import 'package:flame/game.dart';
 import 'api_service.dart';
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 
 enum TaskType {
   educational,
@@ -70,6 +71,9 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   late String avatarName;
   final FirestoreService _firestoreService = FirestoreService();
   late Future<List<Map<String, dynamic>>> futureTasks;
+  late Future<List<Map<String, dynamic>>> futureLeaderboard;
+  final String userId = FirebaseAuth.instance.currentUser?.uid ??
+      'user123'; // Replace with actual user ID
 
   bool checkIfWitch() {
     return avatarName == 'blue_witch';

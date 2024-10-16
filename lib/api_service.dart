@@ -16,4 +16,22 @@ class FirestoreService {
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
   }
+
+  Future<void> saveLevel(String userId, int level) async {
+    await _db.collection('leaderboard').doc(userId).set({
+      'level': level,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> fetchLeaderboard() async {
+    QuerySnapshot snapshot = await _db
+        .collection('leaderboard')
+        .orderBy('score', descending: true)
+        .limit(10)
+        .get();
+    return snapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
 }

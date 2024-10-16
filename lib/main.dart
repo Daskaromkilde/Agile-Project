@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'authenticator_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding
@@ -28,7 +30,7 @@ class QuestApp extends StatelessWidget {
         primaryColor: Colors.blueGrey[900],
         scaffoldBackgroundColor: Colors.blueGrey[900],
       ),
-      home: const AvatarSelectPage(), // Avatar selection is the first screen
+      home: AvatarSelectPage(), // Avatar selection is the first screen
     );
   }
 }

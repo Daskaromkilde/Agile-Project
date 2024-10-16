@@ -12,7 +12,12 @@
           "package_name": "com.example.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "874180898186-kshno64ar1uvgegc3tl26b0u66o3g91e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA4RwDt73SG63fMIIZODY0dDRF1HpKUZbM"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "874180898186-kshno64ar1uvgegc3tl26b0u66o3g91e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "874180898186-huatgiahhc2qjfhmhksn4n8so03pkgdh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.todoApp"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +48,12 @@
           "package_name": "com.example.todo_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "874180898186-kshno64ar1uvgegc3tl26b0u66o3g91e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA4RwDt73SG63fMIIZODY0dDRF1HpKUZbM"
@@ -39,7 +61,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "874180898186-kshno64ar1uvgegc3tl26b0u66o3g91e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "874180898186-huatgiahhc2qjfhmhksn4n8so03pkgdh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.todoApp"
+              }
+            }
+          ]
         }
       }
     }

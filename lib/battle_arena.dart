@@ -1,5 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'battle_arena.dart';
 import 'boss_game.dart';
 import 'playerInventory.dart'; // Import your PlayerInventory
 import 'playerStats.dart'; // Import your PlayerStats
@@ -48,6 +49,42 @@ class _BattleArenaState extends State<BattleArena> {
     PlayerInventory.addItem(PlayerInventory.healthPotion, 5);
     PlayerInventory.addItem(PlayerInventory.slimeGel, 8);
     PlayerInventory.addItem(PlayerInventory.monsterEye, 2);
+
+    attack_class attack1 = attack_class(
+      name: 'Fireball',
+      damage: 20,
+      statusEffectOn: true,
+      statCost: 5,
+      statAffected: PlayerStats.getINT,
+      effect: statusEffect.burn,
+      effectDuration: 5, // Example duration
+      effectDPS: 10, // Example damage per second
+    );
+    attack_class attack2 = attack_class(
+      name: 'Ice Shard',
+      damage: 15,
+      statusEffectOn: true,
+      statCost: 4,
+      statAffected: PlayerStats.getINT,
+      effect: statusEffect.freeze,
+      effectDuration: 4, // Example duration
+      effectDPS: 8, // Example damage per second
+    );
+
+    attack_class attack3 = attack_class(
+      name: 'Punch',
+      damage: 25,
+      statusEffectOn: false,
+      statCost: 6,
+      statAffected: PlayerStats.getSTA,
+      effect: statusEffect.stun,
+      effectDuration: 3, // Example duration
+      effectDPS: 12, // Example damage per second
+    );
+
+    PlayerStats.addAttack(attack1);
+    PlayerStats.addAttack(attack2);
+    PlayerStats.addAttack(attack3);
   }
 
   @override
@@ -160,7 +197,7 @@ class _BattleArenaState extends State<BattleArena> {
     }
   }
 
-  void handleAttack() {
+  void handleAttack(attack_class attack) {
     if (PlayerStats.getSTA.currentValue >= 20) {
       PlayerStats.decreaseSTA(20);
       // Handle attack action
@@ -194,6 +231,7 @@ class _BattleArenaState extends State<BattleArena> {
 
   @override
   Widget build(BuildContext context) {
+    List<attack_class> attacks = PlayerStats.getPlayerAttacks();
     int totalPlayerStats = widget.strength +
         widget.intelligence +
         widget.stamina +
@@ -270,83 +308,57 @@ class _BattleArenaState extends State<BattleArena> {
             children: [
               if (showAttackOptions)
                 Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: handleAttack,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 30),
-                            backgroundColor: Colors.redAccent,
-                          ),
-                          child: const Text(
-                            'Attack 1 (20 STA)',
-                            style: TextStyle(
-                              fontSize: 18, // Increase font size
-                              color: Colors.white, // Set text color to white
+                    if (showAttackOptions)
+                      GridView.count(
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
+                        childAspectRatio: 4,
+                        children: [
+                          for (var attack in attacks.take(3))
+                            ElevatedButton(
+                              onPressed: () {
+                                handleAttack(attack);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 6, horizontal: 15),
+                                backgroundColor: Colors.redAccent,
+                              ),
+                              child: Text(
+                                '${attack.name}\n(${attack.damage} DMG)\n(${attack.statCost} ${attack.statAffected.name})',
+                                style: const TextStyle(
+                                  fontSize: 10, // Increase font size
+                                  color:
+                                      Colors.white, // Set text color to white
+                                ),
+                              ),
+                            ),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                showAttackOptions =
+                                    false; // Go back to main buttons
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 15),
+                              backgroundColor: Colors.grey,
+                            ),
+                            child: const Text(
+                              'Back',
+                              style: TextStyle(
+                                fontSize: 10, // Increase font size
+                                color: Colors.white, // Set text color to white
+                              ),
                             ),
                           ),
-                        ),
-                        ElevatedButton(
-                          onPressed: handleAttack,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 30),
-                            backgroundColor: Colors.redAccent,
-                          ),
-                          child: const Text(
-                            'Attack 2 (20 STA)',
-                            style: TextStyle(
-                              fontSize: 18, // Increase font size
-                              color: Colors.white, // Set text color to white
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: handleAttack,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 30),
-                            backgroundColor: Colors.redAccent,
-                          ),
-                          child: const Text(
-                            'Attack 3 (20 STA)',
-                            style: TextStyle(
-                              fontSize: 18, // Increase font size
-                              color: Colors.white, // Set text color to white
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              showAttackOptions =
-                                  false; // Go back to main buttons
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 30),
-                            backgroundColor: Colors.grey,
-                          ),
-                          child: const Text(
-                            'Back',
-                            style: TextStyle(
-                              fontSize: 18, // Increase font size
-                              color: Colors.white, // Set text color to white
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                   ],
                 )
               else

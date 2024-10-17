@@ -1,10 +1,13 @@
 /// A class representing the player's stats.
 class PlayerStats {
-  static Stat exp = Stat(currentValue: 0, maxValue: 100, level: 0);
-  static Stat str = Stat(currentValue: 50, maxValue: 50, level: 0);
-  static Stat intell = Stat(currentValue: 50, maxValue: 50, level: 0);
-  static Stat hp = Stat(currentValue: 200, maxValue: 200, level: 0);
-  static Stat sta = Stat(currentValue: 50, maxValue: 50, level: 0);
+  static Stat exp = Stat(currentValue: 0, maxValue: 100, level: 0, name: 'EXP');
+  static Stat str = Stat(currentValue: 50, maxValue: 50, level: 0, name: 'STR');
+  static Stat intell =
+      Stat(currentValue: 50, maxValue: 50, level: 0, name: 'INT');
+  static Stat hp = Stat(currentValue: 200, maxValue: 200, level: 0, name: 'HP');
+  static Stat sta = Stat(currentValue: 50, maxValue: 50, level: 0, name: 'STA');
+
+  static List<attack_class> playerAttacks = [];
 
   static int level = 0;
 
@@ -22,6 +25,18 @@ class PlayerStats {
 
   /// Getter for STA stat.
   static Stat get getSTA => sta;
+
+  static List<attack_class> getPlayerAttacks() {
+    return playerAttacks;
+  }
+
+  static void addAttack(attack_class attack) {
+    playerAttacks.add(attack);
+  }
+
+  static void removeAttack(attack_class attack) {
+    playerAttacks.remove(attack);
+  }
 
   static void increaseEXP(int amount) {
     if (exp.currentValue + amount > exp.maxValue) {
@@ -146,12 +161,14 @@ class PlayerStats {
 
 /// A class representing a single stat.
 class Stat {
+  String name;
   int currentValue;
   int maxValue;
   int level;
 
   /// Creates a new Stat with the given current value, max value, and level.
   Stat({
+    required this.name,
     required this.currentValue,
     required this.maxValue,
     required this.level,
@@ -197,4 +214,42 @@ class Stat {
     maxValue += amount;
     currentValue = maxValue;
   }
+}
+
+enum statusEffect {
+  posion,
+  burn,
+  freeze,
+  stun,
+  confusion,
+  fear,
+  blind,
+  bleed,
+  curse,
+  slow,
+}
+
+class attack_class {
+  String name;
+  int damage;
+  bool statusEffectOn;
+
+  int statCost;
+  Stat statAffected;
+
+  statusEffect effect;
+
+  int effectDuration;
+  int effectDPS;
+
+  attack_class({
+    required this.name,
+    required this.damage,
+    required this.statusEffectOn,
+    required this.statCost,
+    required this.statAffected,
+    required this.effect,
+    required this.effectDuration,
+    required this.effectDPS,
+  });
 }

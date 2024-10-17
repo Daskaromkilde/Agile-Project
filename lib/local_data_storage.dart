@@ -63,26 +63,31 @@ class DataStorage {
       currentValue: prefs.getInt('exp') ?? 0,
       maxValue: prefs.getInt('exp_max') ?? 10000,
       level: 0, // or load level if necessary
+      name: 'EXP',
     );
     PlayerStats.str = Stat(
       currentValue: prefs.getInt('str') ?? 0,
       maxValue: prefs.getInt('str_max') ?? 100,
       level: 0,
+      name: 'STR',
     );
     PlayerStats.intell = Stat(
       currentValue: prefs.getInt('intell') ?? 0,
       maxValue: prefs.getInt('intell_max') ?? 100,
       level: 0,
+      name: 'INTELL',
     );
     PlayerStats.hp = Stat(
       currentValue: prefs.getInt('hp') ?? 0,
       maxValue: prefs.getInt('hp_max') ?? 100,
       level: 0,
+      name: 'HP',
     );
     PlayerStats.sta = Stat(
       currentValue: prefs.getInt('sta') ?? 0,
       maxValue: prefs.getInt('sta_max') ?? 100,
       level: 0,
+      name: 'STA',
     );
 
     PlayerStats.level = prefs.getInt('player_level') ?? 0;

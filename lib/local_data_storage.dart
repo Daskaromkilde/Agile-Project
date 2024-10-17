@@ -29,8 +29,25 @@ class DataStorage {
   static const String _unableTaskKey = 'unableTaskKey';
   static const String _completeSetup = 'completeSetup';
   static const String _taskList = 'taskList';
+  static const String _taskDifficulty = 'taskDifficulty';
+  static const String _taskCategory = 'taskCategory';
 
-
+  Future<void> saveTaskCategory(double taskCategory) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_taskCategory, taskCategory);
+  }
+  Future<void> saveTaskDifficulty(double taskDifficulty) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_taskDifficulty, taskDifficulty);
+  }
+  Future<double> loadTaskCategory() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_taskCategory) ?? 0.0;
+  }
+  Future<double> loadTaskDifficulty() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_taskDifficulty) ?? 0.0;
+  }
   // Save the avatar/name to local storage
   Future<void> saveAvatarSaveName(String avatar, String name) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -108,6 +125,7 @@ class DataStorage {
     }
     return [];
   }
+
 
 
 // In the main class we need to load QuestInfoScreen() but with the correct parameters

@@ -100,6 +100,18 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   int intAmount = 0;
   late DataStorage dataStorage;
 
+  @override
+  void initState() {
+    super.initState();
+    dataStorage = DataStorage();
+    weight = (widget.taskCategory/25).round(); // based on sliderValue, decide the amount of types of tasks
+    startCountdown(); // Start the 24-hour daily task countdown
+    createTasks(taskAmount); // Generate initial tasks
+
+    // Set the size of the game
+    // Adjust the size as needed
+  }
+
   bool allTasksDone() {
     return todoTasks.every((task) => task.isCompleted);
   }
@@ -244,17 +256,7 @@ void createTasks(int taskAmount) {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    DataStorage dataStorage = DataStorage();
-    weight = (widget.taskCategory/25).round(); // based on sliderValue, decide the amount of types of tasks
-    startCountdown(); // Start the 24-hour daily task countdown
-    createTasks(taskAmount); // Generate initial tasks
 
-    // Set the size of the game
-    // Adjust the size as needed
-  }
 
   @override
   void dispose() {

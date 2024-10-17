@@ -1,3 +1,4 @@
+import 'package:first_app/avatar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'necromancer_game.dart'; // Import avatars from other game files
@@ -62,22 +63,7 @@ class _AvatarSelectPageState extends State<AvatarSelectPage> {
 
   // Get the correct avatar widget based on the selected avatar
   GameWidget _getAvatarWidget() {
-    switch (selectedAvatar) {
-      case 'blue_witch':
-        return GameWidget(game: BlueWitchGame());
-      case 'female_knight': // Correct case name for Female Knight
-        return GameWidget(game: FemaleKnightGame());
-      case 'necromancer':
-        return GameWidget(game: NecromancerGame());
-      case 'fire_warrior':
-        return GameWidget(game: FireWarriorGame());
-      case 'wind_warrior':
-        return GameWidget(game: WindWarriorGame());
-      default:
-        return GameWidget(
-            game:
-                NecromancerGame()); // Default to NecromancerGame if no avatar is selected
-    }
+     return AvatarUtils.getAvatarWidget(selectedAvatar);
   }
 
   @override

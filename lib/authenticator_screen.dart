@@ -1,87 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'quest_info_screen.dart';
 import 'avatar_select_page.dart';
 
 class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
+
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
 
 class _AuthScreenState extends State<AuthScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _smsController = TextEditingController();
-  String _verificationId = '';
 
-  Future<void> _signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser!.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-        accessToken: googleAuth.accessToken,
-      );
-      UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AvatarSelectPage()),
-      );
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
-  Future<void> _signInWithPhone() async {
-    try {
-      await _auth.verifyPhoneNumber(
-        phoneNumber: _phoneController.text,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await _auth.signInWithCredential(credential);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => AvatarSelectPage()),
-          );
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          print('Error: $e');
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          setState(() {
-            _verificationId = verificationId;
-          });
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          setState(() {
-            _verificationId = verificationId;
-          });
-        },
-      );
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
-  Future<void> _verifySMSCode() async {
-    try {
-      final AuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: _verificationId,
-        smsCode: _smsController.text,
-      );
-      UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AvatarSelectPage()),
-      );
-    } catch (e) {
-      print('Error: $e');
+  @override
+  void initState() {
+    super.initState();
+    // Check if user is signed in
+    User? currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateUI(currentUser);
+      });
     }
   }
 
@@ -91,28 +32,37 @@ class _AuthScreenState extends State<AuthScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AvatarSelectPage()),
-      );
+
+      // Sign in success, update UI with the signed-in user's information
+      User? user = userCredential.user;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateUI(user);
+      });
     } catch (e) {
-      print('Error: $e');
+      // If sign in fails, display a message to the user.
+      print('signInWithEmail:failure: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Authentication failed.')),
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateUI(null);
+      });
     }
   }
 
-  Future<void> _register() async {
-    try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
+  Future<void> _signOut() async {
+    await _auth.signOut();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Signed out successfully.')),
+    );
+  }
+
+  void _updateUI(User? user) {
+    if (user != null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => AvatarSelectPage()),
+        MaterialPageRoute(builder: (context) => const AvatarSelectPage()),
       );
-    } catch (e) {
-      print('Error: $e');
     }
   }
 
@@ -120,7 +70,13 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Auth Screen'),
+        title: const Text('Auth Screen'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _signOut,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -128,41 +84,17 @@ class _AuthScreenState extends State<AuthScreen> {
           children: [
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _signIn,
-              child: Text('Sign In'),
-            ),
-            ElevatedButton(
-              onPressed: _register,
-              child: Text('Register'),
-            ),
-            ElevatedButton(
-              onPressed: _signInWithGoogle,
-              child: Text('Sign In with Google'),
-            ),
-            TextField(
-              controller: _phoneController,
-              decoration: InputDecoration(labelText: 'Phone Number'),
-            ),
-            ElevatedButton(
-              onPressed: _signInWithPhone,
-              child: Text('Sign In with Phone'),
-            ),
-            TextField(
-              controller: _smsController,
-              decoration: InputDecoration(labelText: 'SMS Code'),
-            ),
-            ElevatedButton(
-              onPressed: _verifySMSCode,
-              child: Text('Verify SMS Code'),
+              child: const Text('Sign In with Email/Password'),
             ),
           ],
         ),

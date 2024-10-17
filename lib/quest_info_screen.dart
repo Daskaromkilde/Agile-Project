@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
 import 'package:flame/game.dart';
 import 'api_service.dart';
-import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 
 enum TaskType {
@@ -290,7 +289,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             future: futureTasks,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
@@ -539,7 +538,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             futureTasks = _firestoreService.fetchTasks();
           });
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

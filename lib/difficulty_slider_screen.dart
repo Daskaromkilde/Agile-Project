@@ -1,9 +1,8 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'quest_info_screen.dart';
-import 'task_selection_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'task_selection_screen.dart';
+
 
 
 class DifficultySliderScreen extends StatefulWidget{
@@ -28,7 +27,7 @@ class DifficultySliderScreen extends StatefulWidget{
 
 class _DifficultySliderScreenState extends State<DifficultySliderScreen>{
   List<QuestTask> tasks = [];
-  double DifficultySlider = 50;
+  double difficultySlider = 50;
 
   @override 
   void initState(){
@@ -40,7 +39,7 @@ class _DifficultySliderScreenState extends State<DifficultySliderScreen>{
 
     void proceedToQuestInfoScreen() {
     print('taskCategory value: $widget.taskCategory'); // debug taskCategory value
-    print('Difficulty value: $DifficultySlider'); // debug difficulty value
+    print('Difficulty value: $difficultySlider'); // debug difficulty value
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -50,7 +49,7 @@ class _DifficultySliderScreenState extends State<DifficultySliderScreen>{
           avatarName: widget.avatarName,
           game: widget.game,
           taskCategory: widget.taskCategory,
-          taskDifficulty: DifficultySlider,
+          taskDifficulty: difficultySlider,
         ),
       ),
     );
@@ -146,13 +145,13 @@ Widget build(BuildContext context) {
                     children: [
                       Expanded(
                         child: Slider(
-                          value: DifficultySlider,
+                          value: difficultySlider,
                           min: 0,
                           max: 100,
                           divisions: divisions,
-                          label: DifficultySlider.round().toString(),
+                          label: difficultySlider.round().toString(),
                           onChanged: (value) => setState(() {
-                            DifficultySlider = value;
+                            difficultySlider = value;
                           }),
                         ),
                       ),

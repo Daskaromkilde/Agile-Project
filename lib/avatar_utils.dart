@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'necromancer_game.dart'; // Import avatars from other game files
 import 'fire_warrior_game.dart';

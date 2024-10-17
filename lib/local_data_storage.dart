@@ -108,7 +108,7 @@ class DataStorage {
 
   Future<void> saveTaskList(List<QuestTask> taskList) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> jsonList = taskList.map((task) => task.toJson().toString()).toList();
+    List<String> jsonList = taskList.map((task) => jsonEncode(task.toJson())).toList();
     await prefs.setStringList(_taskList, jsonList);
   }
 

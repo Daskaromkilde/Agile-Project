@@ -32,6 +32,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/boss_demon_slime/spritesheets/
+    - assets/images/boss_demon_slime/spritesheetsdemon_slime_FREE_v1.0_288x160_spritesheet.png
     - assets/images/items/Equipment/
     - assets/images/items/Food/
     - assets/images/items/Material/

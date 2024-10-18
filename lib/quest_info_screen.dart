@@ -1,15 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
-import 'package:first_app/assets/blue_witch_game.dart';
 import 'package:first_app/local_data_storage.dart';
 import 'package:first_app/playerStats.dart';
-import 'package:stroke_text/stroke_text.dart';
 import 'avatar_view_page.dart';
 import 'package:flutter/material.dart';
 import 'avatar_select_page.dart'; // Import the AvatarSelectPage
 import 'package:flame/game.dart';
-import 'task_selection_screen.dart';
 
 enum TaskType {
   educational,

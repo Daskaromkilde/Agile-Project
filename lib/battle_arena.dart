@@ -1,6 +1,5 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'battle_arena.dart';
 import 'boss_game.dart';
 import 'playerInventory.dart'; // Import your PlayerInventory
 import 'playerStats.dart'; // Import your PlayerStats
@@ -232,11 +231,7 @@ class _BattleArenaState extends State<BattleArena> {
   @override
   Widget build(BuildContext context) {
     List<attack_class> attacks = PlayerStats.getPlayerAttacks();
-    int totalPlayerStats = widget.strength +
-        widget.intelligence +
-        widget.stamina +
-        widget.hp +
-        widget.level;
+    attacks.shuffle(); // Shuffle the attacks for random order
 
     return Container(
       decoration: const BoxDecoration(
@@ -263,7 +258,7 @@ class _BattleArenaState extends State<BattleArena> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Your total stats: $totalPlayerStats',
+                    'Your total stats: $PlayerStats.getSTR.currentValue STR, $PlayerStats.getINT.currentValue INT, $PlayerStats.getSTA.currentValue STA, $PlayerStats.getHP.currentValue HP',
                     style: const TextStyle(fontSize: 20),
                   ),
                   const SizedBox(height: 16),

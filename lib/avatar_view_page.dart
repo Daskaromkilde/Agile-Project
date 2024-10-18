@@ -208,11 +208,6 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                   MaterialPageRoute(
                     // to do
                     builder: (context) => BattleArena(
-                      strength: PlayerStats.getSTR.currentValue,
-                      intelligence: PlayerStats.getINT.currentValue,
-                      stamina: PlayerStats.getSTA.currentValue,
-                      hp: PlayerStats.getHP.currentValue,
-                      level: PlayerStats.level,
                       selectedAvatar: widget.selectedAvatar,
                       avatarName: widget.avatarName,
                       avatar: widget.game,

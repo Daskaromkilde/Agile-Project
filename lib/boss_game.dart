@@ -9,7 +9,7 @@ class BossGame extends FlameGame {
 
     // Load the sprite sheet image for the boss from assets
     final spriteSheet = await images.load(
-        'assets/images/boss_demon_slime/spritesheetsdemon_slime_FREE_v1.0_288x160_spritesheet.png');
+        'boss_demon_slime/spritesheets/demon_slime_FREE_v1.0_288x160_spritesheet.png');
 
     // Create the animation from the sprite sheet
     final bossAnimation = SpriteAnimation.fromFrameData(

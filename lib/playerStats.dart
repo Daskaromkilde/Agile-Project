@@ -26,6 +26,23 @@ class PlayerStats {
   /// Getter for STA stat.
   static Stat get getSTA => sta;
 
+  static Stat playerUnknowStat(String statName) {
+    switch (statName) {
+      case 'EXP':
+        return exp;
+      case 'STR':
+        return str;
+      case 'INT':
+        return intell;
+      case 'HP':
+        return hp;
+      case 'STA':
+        return sta;
+      default:
+        return exp;
+    }
+  }
+
   static List<attack_class> getPlayerAttacks() {
     return playerAttacks;
   }

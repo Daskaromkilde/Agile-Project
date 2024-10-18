@@ -1,3 +1,4 @@
+import 'package:first_app/avatar_view_page.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'boss_game.dart';
@@ -5,25 +6,16 @@ import 'playerInventory.dart'; // Import your PlayerInventory
 import 'playerStats.dart'; // Import your PlayerStats
 
 class BattleArena extends StatefulWidget {
-  final int strength;
-  final int intelligence;
-  final int stamina;
-  final int hp;
-  final int level;
-  final String selectedAvatar; // Pass selected avatar path from AvatarViewPage
+  // Pass selected avatar path from AvatarViewPage
   final String avatarName;
+  final String selectedAvatar;
   final GameWidget
       avatar; // Pass game instance from outside, which is the selected avatar
 
   const BattleArena({
     super.key,
-    required this.strength,
-    required this.intelligence,
-    required this.stamina,
-    required this.hp,
-    required this.level,
-    required this.selectedAvatar,
     required this.avatarName,
+    required this.selectedAvatar,
     required this.avatar,
   });
 
@@ -173,7 +165,17 @@ class _BattleArenaState extends State<BattleArena> {
   void handleFlee() {
     if (PlayerStats.getSTA.currentValue >= 20) {
       PlayerStats.decreaseSTA(20);
-      // Handle flee action
+      widget.avatar.game?.detach();
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AvatarViewPage(
+                  selectedAvatar: widget.selectedAvatar,
+                  avatarName: widget.avatarName,
+                  game: widget.avatar,
+                )),
+      );
       print('Fled the battle');
     } else {
       showDialog(
@@ -196,19 +198,21 @@ class _BattleArenaState extends State<BattleArena> {
     }
   }
 
-  void handleAttack(attack_class attack) {
-    if (PlayerStats.getSTA.currentValue >= 20) {
-      PlayerStats.decreaseSTA(20);
+  bool handleAttack(attack_class attack) {
+    if (PlayerStats.playerUnknowStat(attack.statAffected.name).currentValue >=
+        attack.statCost) {
+      PlayerStats.playerUnknowStat(attack.statAffected.name)
+          .decrease(attack.statCost);
       // Handle attack action
       print('Attacked the boss');
+      return true;
     } else {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Not enough stamina'),
-            content:
-                const Text('You need at least 20 stamina points to attack.'),
+            title: Text('Not enough ${attack.statAffected.name}' ' points'),
+            content: const Text('EMPTY '),
             actions: [
               TextButton(
                 onPressed: () {
@@ -220,6 +224,7 @@ class _BattleArenaState extends State<BattleArena> {
           );
         },
       );
+      return false;
     }
   }
 
@@ -258,10 +263,11 @@ class _BattleArenaState extends State<BattleArena> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Your total stats: $PlayerStats.getSTR.currentValue STR, $PlayerStats.getINT.currentValue INT, $PlayerStats.getSTA.currentValue STA, $PlayerStats.getHP.currentValue HP',
-                    style: const TextStyle(fontSize: 20),
+                    'Your total stats: ${PlayerStats.getHP.currentValue} HP',
+                    style:
+                        const TextStyle(fontSize: 20, color: Colors.redAccent),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 50),
                   SizedBox(
                     width: 100, // Set a specific width
                     height: 100, // Set a specific height
@@ -316,7 +322,11 @@ class _BattleArenaState extends State<BattleArena> {
                           for (var attack in attacks.take(3))
                             ElevatedButton(
                               onPressed: () {
-                                handleAttack(attack);
+                                if (handleAttack(attack)) {
+                                  // attack successful, do next turn
+                                } else {
+                                  // attack failed, do nothing
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(

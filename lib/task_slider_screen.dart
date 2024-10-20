@@ -81,14 +81,11 @@ class _taskSliderScreenState extends State<taskSliderScreen> {
         ),
       ),
       body: Container(
-        // Add background image
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                'assets/images/Sliderbackground.png'), // Background image
+            image: AssetImage('assets/images/Sliderbackground.png'),
             fit: BoxFit.cover,
-            alignment:
-                Alignment(0.0, -0.9), // Adjust alignment to move image up
+            alignment: Alignment(0.0, -0.9),
           ),
         ),
         child: Stack(
@@ -118,68 +115,80 @@ class _taskSliderScreenState extends State<taskSliderScreen> {
                 activeTrackColor: Color.fromARGB(255, 152, 87, 189),
                 thumbColor: Color.fromARGB(255, 152, 87, 189),
               ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Create a Row for the labels above the slider
-                    SizedBox(
-                      width: 700,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate(divisions + 1, (index) {
-                          return SizedBox(
-                            width: 80, // Set a fixed width for labels
-                            child: Text(
-                              tickLabels[index],
-                              style: GoogleFonts.medievalSharp(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
-                    const SizedBox(
-                        height: 10), // Add some space between labels and slider
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Dynamically calculate label width based on available screen size
+                  double labelWidth = constraints.maxWidth / (divisions + 2);
+                  
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'Int',
-                          style: GoogleFonts.medievalSharp(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
-                        Expanded(
-                          child: Slider(
-                            value: taskCategory,
-                            min: 0,
-                            max: 100,
-                            divisions: divisions,
-                            label: taskCategory.round().toString(),
-                            onChanged: (value) => setState(() {
-                              taskCategory = value;
+                        // Create a Row for the labels above the slider
+                        SizedBox(
+                          width: constraints.maxWidth,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List.generate(divisions + 1, (index) {
+                              return SizedBox(
+                                width: labelWidth, // Dynamically adjust label width
+                                child: Text(
+                                  tickLabels[index],
+                                  style: GoogleFonts.medievalSharp(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
                             }),
                           ),
                         ),
-                        Text(
-                          'Str',
-                          style: GoogleFonts.medievalSharp(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                          ),
+                        const SizedBox(
+                            height: 10), // Add space between labels and slider
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Slider(
+                                value: taskCategory,
+                                min: 0,
+                                max: 100,
+                                divisions: divisions,
+                                label: taskCategory.round().toString(),
+                                onChanged: (value) => setState(() {
+                                  taskCategory = value;
+                                }),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Intelligence',
+                              style: GoogleFonts.medievalSharp(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            Text(
+                              'Strength',
+                              style: GoogleFonts.medievalSharp(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           ],

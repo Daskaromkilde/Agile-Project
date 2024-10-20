@@ -106,18 +106,23 @@ class _DifficultySliderScreenState extends State<DifficultySliderScreen> {
                 activeTrackColor: Color.fromARGB(255, 152, 87, 189),
                 thumbColor: Color.fromARGB(255, 152, 87, 189),
               ),
-              child: Center(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Dynamically calculate label width based on available screen size
+                  double labelWidth = constraints.maxWidth / (divisions + 5);
+
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Create a Row for the labels above the slider
                     SizedBox(
-                      width: 700,
+                      width: constraints.maxWidth,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: List.generate(divisions + 1, (index) {
                           return SizedBox(
-                            width: 80, // Set a fixed width for labels
+                            width: labelWidth, // Set a fixed width for labels
                             child: Text(
                               tickLabels[index],
                               style: GoogleFonts.medievalSharp(
@@ -152,7 +157,9 @@ class _DifficultySliderScreenState extends State<DifficultySliderScreen> {
                     ),
                   ],
                 ),
-              ),
+              );
+              }
+            ),
             ),
           ],
         ),

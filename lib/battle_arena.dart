@@ -6,6 +6,11 @@ import 'boss_game.dart';
 import 'playerInventory.dart'; // Import your PlayerInventory
 import 'playerStats.dart'; // Import your PlayerStats
 
+import 'package:particles_flutter/component/particle/particle.dart';
+import 'package:particles_flutter/core/runner.dart';
+import 'package:particles_flutter/painters/circular_painter.dart';
+import 'package:particles_flutter/particles_engine.dart';
+
 class BattleArena extends StatefulWidget {
   // Pass selected avatar path from AvatarViewPage
   final String avatarName;
@@ -24,7 +29,8 @@ class BattleArena extends StatefulWidget {
   _BattleArenaState createState() => _BattleArenaState();
 }
 
-class _BattleArenaState extends State<BattleArena> {
+class _BattleArenaState extends State<BattleArena>
+    with SingleTickerProviderStateMixin {
   late BossGame game; // Declare the game instance for Boss
   late GameWidget avatarGame; // GameWidget passed from widget
   int bossHP = 300; // Current bossHP
@@ -32,6 +38,10 @@ class _BattleArenaState extends State<BattleArena> {
   int hpIncrement = 100; // Increment boss HP after each victory
   bool showAttackOptions =
       false; // Toggle between main buttons and attack options
+  bool isPlayerTurn = true; // Track whose turn it is
+  List<attack_class> attacks = PlayerStats.getPlayerAttacks();
+  late AnimationController _shakeController;
+  late Animation<double> _shakeAnimation;
 
   @override
   void initState() {
@@ -39,13 +49,28 @@ class _BattleArenaState extends State<BattleArena> {
     game = BossGame(); // Initialize the main game (BossGame)
     avatarGame = widget.avatar; // Use the passed GameWidget instance
 
+    _shakeController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _shakeAnimation = Tween<double>(begin: 0, end: 20)
+        .chain(CurveTween(curve: Curves.elasticIn))
+        .animate(_shakeController);
+
+    _shakeController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _shakeController.reverse();
+      }
+    });
+
     DataStorage().loadBossHP().then((hp) {
       setState(() {
         bossHP = hp; // Set the loaded HP from persistent storage
         initialBossHP = hp;
-
       });
     });
+    attacks.shuffle();
 
     PlayerInventory.addItem(PlayerInventory.healthPotion, 5);
     PlayerInventory.addItem(PlayerInventory.slimeGel, 8);
@@ -91,6 +116,7 @@ class _BattleArenaState extends State<BattleArena> {
   @override
   void dispose() {
     game.onDetach(); // Properly detach the boss game when the widget is disposed
+    _shakeController.dispose();
     super.dispose();
   }
 
@@ -209,24 +235,21 @@ class _BattleArenaState extends State<BattleArena> {
   }
 
   bool handleAttack(attack_class attack) {
-    if (PlayerStats.playerUnknowStat(attack.statAffected.name).currentValue >=
-        attack.statCost) {
-      PlayerStats.playerUnknowStat(attack.statAffected.name)
-          .decrease(attack.statCost);
-      setState((){
+    final stat = PlayerStats.playerUnknowStat(attack.statAffected.name);
+    if (stat.currentValue >= attack.statCost) {
+      stat.decrease(attack.statCost);
+      setState(() {
         bossHP -= attack.damage;
         DataStorage().saveBossHP(bossHP);
       });
-      // Handle attack action
       print('Attacked the boss');
       if (bossHP <= 0) {
-        // Boss defeated, increment boss HP for next round
         setState(() {
-          initialBossHP += hpIncrement;  // Increase bossHP by hpIncrement, preserving its current value
+          initialBossHP += hpIncrement;
           bossHP = initialBossHP;
-          DataStorage().saveBossHP(bossHP); // Save the new boss HP to persistent storage
+          DataStorage().saveBossHP(bossHP);
           print("New bossHP: $bossHP");
-        }); // Save the new boss HP to persistent storage
+        });
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -236,7 +259,7 @@ class _BattleArenaState extends State<BattleArena> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.of(context).pop();
                   },
                   child: const Text('OK'),
                 ),
@@ -245,19 +268,20 @@ class _BattleArenaState extends State<BattleArena> {
           },
         );
       }
-
+      endPlayerTurn();
       return true;
     } else {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Not enough ${attack.statAffected.name}' ' points'),
-            content: const Text('EMPTY '),
+            title: const Text('Not enough points'),
+            content: Text(
+                'You need more ${attack.statAffected.name} points to perform this attack. ${PlayerStats.getINT.currentValue} ${attack.statAffected.name} points left.'),
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                 },
                 child: const Text('OK'),
               ),
@@ -269,71 +293,182 @@ class _BattleArenaState extends State<BattleArena> {
     }
   }
 
+  void endPlayerTurn() {
+    setState(() {
+      isPlayerTurn = false;
+    });
+    Future.delayed(Duration(seconds: 1), bossAttack);
+  }
+
+  void bossAttack() {
+    setState(() {
+      // Boss attack logic here
+      PlayerStats.decreaseHP(10); // Example damage
+      print('Boss attacked the player');
+      isPlayerTurn = true;
+    });
+    _shakeController.forward();
+  }
+
   void handleRecover() {
-    PlayerStats.increaseSTA(20);
-    print('Recovered 20 stamina points');
+    if (isPlayerTurn) {
+      PlayerStats.increaseSTA(20);
+      print('Recovered 20 stamina points');
+      endPlayerTurn();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    List<attack_class> attacks = PlayerStats.getPlayerAttacks();
-    attacks.shuffle(); // Shuffle the attacks for random order
-
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/pxArt.png'), // Your background image
-          fit: BoxFit.cover, // Covers the whole screen
+          image: AssetImage('assets/images/pxArt.png'),
+          fit: BoxFit.cover,
         ),
       ),
       child: Scaffold(
-        backgroundColor:
-            Colors.transparent, // Make the scaffold background transparent
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text('Battle Arena'),
           backgroundColor: const Color.fromARGB(255, 80, 18, 206),
         ),
         body: Stack(
           children: [
-            // Player Stats on the Left
+            // Add a placeholder or any other widget here
             Positioned(
-              bottom:
-                  150.0, // Adjusted margin from the bottom to move it higher
-              left: 20.0, // Adjusted margin from the left
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Your total stats: ${PlayerStats.getHP.currentValue} HP',
-                    style:
-                        const TextStyle(fontSize: 20, color: Colors.redAccent),
-                  ),
-                  const SizedBox(height: 50),
-                  SizedBox(
-                    width: 100, // Set a specific width
-                    height: 100, // Set a specific height
-                    child: avatarGame, // Use the passed game widget (avatar)
-                  ),
-                ],
+              top: 10.0,
+              left: 10.0,
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2E2E2E),
+                  borderRadius: BorderRadius.circular(15.0),
+                  border: Border.all(color: Colors.brown, width: 3),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PlayerStatsDisplay(
+                      stat: PlayerStats.getHP,
+                      icon: Icons.favorite,
+                      color: Colors.red,
+                    ),
+                    PlayerStatsDisplay(
+                      stat: PlayerStats.getSTA,
+                      icon: Icons.flash_on,
+                      color: Colors.yellow,
+                    ),
+                    PlayerStatsDisplay(
+                      stat: PlayerStats.getSTR,
+                      icon: Icons.fitness_center,
+                      color: Colors.blue,
+                    ),
+                    PlayerStatsDisplay(
+                      stat: PlayerStats.getINT,
+                      icon: Icons.school,
+                      color: Colors.green,
+                    ),
+                  ],
+                ),
               ),
             ),
-            // Boss HP and Animation on the Right
+
             Positioned(
-              top: 50.0, // Adjusted margin from the top to lower the boss
-              right: 20.0, // Adjusted margin from the right
+              bottom: 150.0,
+              left: 20.0,
+              child: AnimatedBuilder(
+                animation: _shakeAnimation,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(_shakeAnimation.value, 0),
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: avatarGame,
+                    ),
+                  );
+                },
+              ),
+            ),
+            Positioned(
+              top: 125.0,
+              right: 20.0,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    'Boss HP: $bossHP',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  const SizedBox(height: 16),
                   SizedBox(
-                    height: 150, // Set height for the boss animation container
-                    width: 150, // Set width for the boss animation container
-                    child: GameWidget(
-                        game: game), // Use the game instance for the boss
+                    height: 150,
+                    width: 150,
+                    child: GameWidget(game: game),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(
+                        3.0), // Padding for the gold border
+                    decoration: BoxDecoration(
+                      color: Colors.amber, // Pure gold color
+                      borderRadius:
+                          BorderRadius.circular(5), // Ensure rectangular shape
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.amber.withOpacity(0.5),
+                          spreadRadius: 3,
+                          blurRadius: 5,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
+                    ),
+                    child: Container(
+                      width: 150,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.red.shade900, Colors.red.shade400],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                            5), // Ensure rectangular shape
+                        border:
+                            Border.all(color: Colors.red.shade900, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.shade900.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 5,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: LinearProgressIndicator(
+                              value: bossHP / initialBossHP,
+                              backgroundColor: Colors.transparent,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.red.shade900),
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              '${(bossHP / initialBossHP * 100).toInt()}%',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.black,
+                                    offset: Offset(2.0, 2.0),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -341,10 +476,7 @@ class _BattleArenaState extends State<BattleArena> {
           ],
         ),
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.only(
-              bottom: 50.0,
-              left: 16.0,
-              right: 16.0), // Adjusted padding to make the buttons higher
+          padding: const EdgeInsets.only(bottom: 50.0, left: 16.0, right: 16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -362,13 +494,15 @@ class _BattleArenaState extends State<BattleArena> {
                         children: [
                           for (var attack in attacks.take(3))
                             ElevatedButton(
-                              onPressed: () {
-                                if (handleAttack(attack)) {
-                                  // attack successful, do next turn
-                                } else {
-                                  // attack failed, do nothing
-                                }
-                              },
+                              onPressed: isPlayerTurn
+                                  ? () {
+                                      if (handleAttack(attack)) {
+                                        // attack successful, do next turn
+                                      } else {
+                                        // attack failed, do nothing
+                                      }
+                                    }
+                                  : null,
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 6, horizontal: 15),
@@ -377,19 +511,19 @@ class _BattleArenaState extends State<BattleArena> {
                               child: Text(
                                 '${attack.name}\n(${attack.damage} DMG)\n(${attack.statCost} ${attack.statAffected.name})',
                                 style: const TextStyle(
-                                  fontSize: 10, // Increase font size
-                                  color:
-                                      Colors.white, // Set text color to white
+                                  fontSize: 10,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                           ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                showAttackOptions =
-                                    false; // Go back to main buttons
-                              });
-                            },
+                            onPressed: isPlayerTurn
+                                ? () {
+                                    setState(() {
+                                      showAttackOptions = false;
+                                    });
+                                  }
+                                : null,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 6, horizontal: 15),
@@ -398,8 +532,8 @@ class _BattleArenaState extends State<BattleArena> {
                             child: const Text(
                               'Back',
                               style: TextStyle(
-                                fontSize: 10, // Increase font size
-                                color: Colors.white, // Set text color to white
+                                fontSize: 10,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -414,11 +548,13 @@ class _BattleArenaState extends State<BattleArena> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              showAttackOptions = true; // Show attack options
-                            });
-                          },
+                          onPressed: isPlayerTurn
+                              ? () {
+                                  setState(() {
+                                    showAttackOptions = true;
+                                  });
+                                }
+                              : null,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 30),
@@ -427,13 +563,13 @@ class _BattleArenaState extends State<BattleArena> {
                           child: const Text(
                             'Attack',
                             style: TextStyle(
-                              fontSize: 18, // Increase font size
-                              color: Colors.white, // Set text color to white
+                              fontSize: 18,
+                              color: Colors.white,
                             ),
                           ),
                         ),
                         ElevatedButton(
-                          onPressed: showInventory, // Show inventory popup
+                          onPressed: isPlayerTurn ? showInventory : null,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 30),
@@ -442,8 +578,8 @@ class _BattleArenaState extends State<BattleArena> {
                           child: const Text(
                             'Inventory',
                             style: TextStyle(
-                              fontSize: 18, // Increase font size
-                              color: Colors.white, // Set text color to white
+                              fontSize: 18,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -454,7 +590,7 @@ class _BattleArenaState extends State<BattleArena> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: handleFlee,
+                          onPressed: isPlayerTurn ? handleFlee : null,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 30),
@@ -463,13 +599,13 @@ class _BattleArenaState extends State<BattleArena> {
                           child: const Text(
                             'Flee (20 STA)',
                             style: TextStyle(
-                              fontSize: 18, // Increase font size
-                              color: Colors.white, // Set text color to white
+                              fontSize: 18,
+                              color: Colors.white,
                             ),
                           ),
                         ),
                         ElevatedButton(
-                          onPressed: handleRecover,
+                          onPressed: isPlayerTurn ? handleRecover : null,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 30),
@@ -478,8 +614,8 @@ class _BattleArenaState extends State<BattleArena> {
                           child: const Text(
                             'Recover',
                             style: TextStyle(
-                              fontSize: 18, // Increase font size
-                              color: Colors.white, // Set text color to white
+                              fontSize: 18,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -490,6 +626,37 @@ class _BattleArenaState extends State<BattleArena> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class PlayerStatsDisplay extends StatelessWidget {
+  final Stat stat;
+  final IconData icon;
+  final Color color;
+
+  const PlayerStatsDisplay({
+    Key? key,
+    required this.stat,
+    required this.icon,
+    required this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(width: 8),
+          Text(
+            '${stat.name}: ${stat.currentValue}/${stat.maxValue}',
+            style: const TextStyle(color: Colors.white),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
     );
   }

@@ -108,21 +108,33 @@ class _AvatarViewPage extends State<AvatarViewPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 20, 20, 35), // Dark background
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 6, 38, 64),
-        title: const Text(
-          'Avatar View',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color.fromARGB(255, 20, 20, 35), // Dark background
+    appBar: AppBar(
+      backgroundColor: const Color.fromARGB(255, 6, 38, 64),
+      title: const Text(
+        'Avatar View',
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    ),
+    body: Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: const AssetImage('images/UIbackground.png'), // Background image
+          fit: BoxFit.cover,
+          alignment: const Alignment(0.0, -0.5), // Adjust alignment to move image up
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.5), // Semi-transparent black overlay
+            BlendMode.darken, // Blend mode
           ),
         ),
       ),
-      body: Column(
+      child: Column(
         children: [
           const SizedBox(height: 10),
           // Avatar in the center standing on a pedestal
@@ -135,7 +147,6 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                   top: 150,
                   child: Column(
                     children: [
-                      // Wrap GameWidget in a Container with constraints
                       SizedBox(
                         width: 300, // Set a specific width
                         height: 300, // Set a specific height
@@ -206,7 +217,6 @@ class _AvatarViewPage extends State<AvatarViewPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    // to do
                     builder: (context) => BattleArena(
                       selectedAvatar: widget.selectedAvatar,
                       avatarName: widget.avatarName,
@@ -231,6 +241,7 @@ class _AvatarViewPage extends State<AvatarViewPage> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

@@ -1,4 +1,5 @@
 import 'package:first_app/avatar_view_page.dart';
+import 'package:first_app/local_data_storage.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'boss_game.dart';
@@ -26,7 +27,8 @@ class BattleArena extends StatefulWidget {
 class _BattleArenaState extends State<BattleArena> {
   late BossGame game; // Declare the game instance for Boss
   late GameWidget avatarGame; // GameWidget passed from widget
-  int bossHP = 300; // Initial boss HP
+  int bossHP = 300; // Current bossHP
+  int initialBossHP = 300; // Initial bossHP
   int hpIncrement = 100; // Increment boss HP after each victory
   bool showAttackOptions =
       false; // Toggle between main buttons and attack options
@@ -36,6 +38,14 @@ class _BattleArenaState extends State<BattleArena> {
     super.initState();
     game = BossGame(); // Initialize the main game (BossGame)
     avatarGame = widget.avatar; // Use the passed GameWidget instance
+
+    DataStorage().loadBossHP().then((hp) {
+      setState(() {
+        bossHP = hp; // Set the loaded HP from persistent storage
+        initialBossHP = hp;
+
+      });
+    });
 
     PlayerInventory.addItem(PlayerInventory.healthPotion, 5);
     PlayerInventory.addItem(PlayerInventory.slimeGel, 8);
@@ -203,8 +213,39 @@ class _BattleArenaState extends State<BattleArena> {
         attack.statCost) {
       PlayerStats.playerUnknowStat(attack.statAffected.name)
           .decrease(attack.statCost);
+      setState((){
+        bossHP -= attack.damage;
+        DataStorage().saveBossHP(bossHP);
+      });
       // Handle attack action
       print('Attacked the boss');
+      if (bossHP <= 0) {
+        // Boss defeated, increment boss HP for next round
+        setState(() {
+          initialBossHP += hpIncrement;  // Increase bossHP by hpIncrement, preserving its current value
+          bossHP = initialBossHP;
+          DataStorage().saveBossHP(bossHP); // Save the new boss HP to persistent storage
+          print("New bossHP: $bossHP");
+        }); // Save the new boss HP to persistent storage
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('You won!'),
+              content: const Text('Boss HP increases!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+
       return true;
     } else {
       showDialog(

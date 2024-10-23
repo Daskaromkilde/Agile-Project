@@ -323,7 +323,7 @@ class _BattleArenaState extends State<BattleArena>
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/pxArt.png'),
+          image: AssetImage('images/battlebg.png'),
           fit: BoxFit.cover,
         ),
       ),
@@ -375,8 +375,8 @@ class _BattleArenaState extends State<BattleArena>
             ),
 
             Positioned(
-              bottom: 150.0,
-              left: 20.0,
+              bottom: 350,
+              right: 450,
               child: AnimatedBuilder(
                 animation: _shakeAnimation,
                 builder: (context, child) {
@@ -392,8 +392,8 @@ class _BattleArenaState extends State<BattleArena>
               ),
             ),
             Positioned(
-              top: 125.0,
-              right: 20.0,
+              top: 380,
+              right: 35,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [

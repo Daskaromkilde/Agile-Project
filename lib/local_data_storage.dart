@@ -75,7 +75,7 @@ class DataStorage {
       currentValue: prefs.getInt('intell') ?? 0,
       maxValue: prefs.getInt('intell_max') ?? 100,
       level: 0,
-      name: 'INTELL',
+      name: 'INT',
     );
     PlayerStats.hp = Stat(
       currentValue: prefs.getInt('hp') ?? 0,

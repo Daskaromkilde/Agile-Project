@@ -74,7 +74,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   void givePlayerExp() {
     // HERE you add exp to player
     PlayerStats.increaseAllStats(35);
-    dataStorage.savePlayerStats();
+    DataStorage().savePlayerStats();
   }
 
   bool allTasksDone() {
@@ -209,6 +209,9 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
             !allTasksDone()) {
           PlayerStats.decreaseAllStats(
               10); // Decrease all stats by 10, might have to change depending on receive rewards system later
+        }
+        if (now.hour == 00 && now.minute == 00 && now.second == 1) {
+          DataStorage().loadPlayerStats();
         }
         if ((now.hour == 14 && now.minute == 0 && now.second == 1 ||
                 now.hour == 20 && now.minute == 0 && now.second == 1) &&

@@ -262,19 +262,7 @@ class _QuestInfoScreenState extends State<QuestInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Back button at the top-left corner
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    const AvatarSelectPage(), // Navigates back to AvatarSelectPage
-              ),
-            );
-          },
-        ),
+        automaticallyImplyLeading: false,
         title: const Text('Quest Info'),
         backgroundColor: Colors.blueGrey[900],
       ),

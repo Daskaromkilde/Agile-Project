@@ -235,6 +235,30 @@ class _BattleArenaState extends State<BattleArena>
   }
 
   bool handleAttack(attack_class attack) {
+    // If you dont want this logic, delete from here
+    if (PlayerStats.getHP.currentValue <= 0) {
+      // Display a popup if the player has no HP
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Not enough HP'),
+            content: const Text('Your HP is 0. Try again tomorrow!'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return false;
+    }
+    // To here
+
     final stat = PlayerStats.playerUnknowStat(attack.statAffected.name);
     if (stat.currentValue >= attack.statCost) {
       stat.decrease(attack.statCost);

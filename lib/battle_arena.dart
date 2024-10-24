@@ -2,6 +2,7 @@ import 'package:first_app/avatar_view_page.dart';
 import 'package:first_app/local_data_storage.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'boss_game.dart';
 import 'playerInventory.dart'; // Import your PlayerInventory
 import 'playerStats.dart'; // Import your PlayerStats
@@ -234,7 +235,7 @@ class _BattleArenaState extends State<BattleArena>
     }
   }
 
-  bool handleAttack(attack_class attack) {
+  Future<bool> handleAttack(attack_class attack) async {
     // If you dont want this logic, delete from here
     if (PlayerStats.getHP.currentValue <= 0) {
       // Display a popup if the player has no HP
@@ -274,6 +275,11 @@ class _BattleArenaState extends State<BattleArena>
           DataStorage().saveBossHP(bossHP);
           print("New bossHP: $bossHP");
         });
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('lastVictoryTime', DateTime.now().millisecondsSinceEpoch);
+
+
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -284,6 +290,7 @@ class _BattleArenaState extends State<BattleArena>
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    Navigator.pop(context,true);
                   },
                   child: const Text('OK'),
                 ),
@@ -519,8 +526,8 @@ class _BattleArenaState extends State<BattleArena>
                           for (var attack in attacks.take(3))
                             ElevatedButton(
                               onPressed: isPlayerTurn
-                                  ? () {
-                                      if (handleAttack(attack)) {
+                                  ? () async {
+                                      if (await handleAttack(attack)) {
                                         // attack successful, do next turn
                                       } else {
                                         // attack failed, do nothing

@@ -2,6 +2,9 @@ import 'package:first_app/battle_arena.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:first_app/playerStats.dart';
+import 'dart:async';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Import avatars from other game files
 
@@ -22,15 +25,64 @@ class AvatarViewPage extends StatefulWidget {
 }
 
 class _AvatarViewPage extends State<AvatarViewPage> {
-  void increaseStat(Stat stat, int amount) {
-    setState(() {
-      stat.increase(amount);
-    });
+  bool canChallengeBoss = true;
+  int secondsUntilNextChallenge = 0;
+  Timer? timer;
+
+  @override
+  void initState(){
+    super.initState();
+    _checkChallengeAvailability();
   }
 
   @override
-  void initState() {
-    super.initState();
+  void dispose(){
+    timer?.cancel();
+    super.dispose();
+  }
+
+  void _checkChallengeAvailability() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? lastVictoryTime = prefs.getInt('lastVictoryTime');
+
+    if (lastVictoryTime != null) {
+      int currentTime = DateTime.now().millisecondsSinceEpoch;
+      int elapsedTime = currentTime - lastVictoryTime;
+
+      // Check if 24 hours have passed (24 * 60 * 60 * 1000 milliseconds)
+      if (elapsedTime < 86400000) {
+        setState(() {
+          canChallengeBoss = false;
+          secondsUntilNextChallenge = (86400000 - elapsedTime) ~/ 1000;
+        });
+
+        // Start a countdown timer
+        timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+          setState(() {
+            secondsUntilNextChallenge--;
+            if (secondsUntilNextChallenge <= 0) {
+              canChallengeBoss = true;
+              timer?.cancel();
+            }
+          });
+        });
+      }
+    }
+  }
+
+    String _formatTime(int totalSeconds) {
+    int hours = totalSeconds ~/ 3600;
+    int minutes = (totalSeconds % 3600) ~/ 60;
+    int seconds = totalSeconds % 60;
+    return '${hours.toString().padLeft(2, '0')}:'
+        '${minutes.toString().padLeft(2, '0')}:'
+        '${seconds.toString().padLeft(2, '0')}';
+  }
+
+  void increaseStat(Stat stat, int amount) {
+    setState(() {
+      stat.increase(amount);  
+    });
   }
 
   // Method to display the correct avatar (either animated or static)
@@ -209,36 +261,55 @@ Widget build(BuildContext context) {
             ),
           ),
           // Button to challenge boss
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                widget.game.game?.detach();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BattleArena(
-                      selectedAvatar: widget.selectedAvatar,
-                      avatarName: widget.avatarName,
-                      avatar: widget.game,
-                    ),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 2, 11, 41),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 15,
-                ),
-              ),
-              child: const Text(
-                'Challenge the boss!',
-                style: TextStyle(
-                    fontSize: 23, color: Color.fromARGB(255, 21, 202, 27)),
+Padding(
+  padding: const EdgeInsets.all(16.0),
+  child: ElevatedButton(
+    onPressed: canChallengeBoss
+      ? () async {
+          widget.game.game?.detach();
+
+          // Navigate to BattleArena and wait for the result
+          var result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BattleArena(
+                selectedAvatar: widget.selectedAvatar,
+                avatarName: widget.avatarName,
+                avatar: widget.game,
               ),
             ),
+          );
+
+          // Check if the result is true (player won), and refresh the state
+          if (result == true) {
+            _checkChallengeAvailability();  // Refresh the button state immediately
+          }
+        }
+      : null,  // Disable the button if not allowed
+    style: ElevatedButton.styleFrom(
+      backgroundColor: canChallengeBoss
+          ? const Color.fromARGB(255, 2, 11, 41)
+          : Colors.grey,  // Change color when disabled
+      padding: const EdgeInsets.symmetric(
+        horizontal: 30,
+        vertical: 15,
+      ),
+    ),
+    child: canChallengeBoss
+        ? const Text(
+            'Challenge the boss!',
+            style: TextStyle(
+                fontSize: 23, color: Color.fromARGB(255, 21, 202, 27)),
+          )
+        : Text(
+            'Wait ${(secondsUntilNextChallenge ~/ 3600).toString().padLeft(2, '0')}:'
+            '${((secondsUntilNextChallenge % 3600) ~/ 60).toString().padLeft(2, '0')}:'
+            '${(secondsUntilNextChallenge % 60).toString().padLeft(2, '0')}',
+            style: const TextStyle(
+                fontSize: 23, color: Colors.redAccent),
           ),
+          ),
+        )
         ],
       ),
     ),
